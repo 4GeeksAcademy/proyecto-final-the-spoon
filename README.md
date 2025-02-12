@@ -10,7 +10,7 @@ Set up autolinting for JS and Python with Prettier and Ruff
 
 Inside the web subdirectories
 
-### Install a React template
+### Install a React templateasdfasdfasdf
 
 From the Vite [docs](https://vite.dev/guide/#scaffolding-your-first-vite-project)
 
