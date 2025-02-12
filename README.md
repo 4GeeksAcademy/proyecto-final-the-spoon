@@ -1,4 +1,4 @@
-# Final Project Boilerplate
+# Final Project - The Spoon Boilerplate
 
 Create the subdirectories for each section of the app
 
