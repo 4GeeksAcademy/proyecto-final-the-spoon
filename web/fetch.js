@@ -1,30 +1,47 @@
-export const baseUrl =
-  "";
-export const usersUrl = "users/";
-export const loginUrl = "login/";
-export const registerUrl = "register/";
-//Con Feed me refiero a la pantalla general//
-export const feedUrl = "feed/";
-//No me acuerdo como era esto revisarlo//
-export const restauranteespecficoUrl = "main/:id";
-export const userFavsUrl = "main/:id/favs/";
-export const userReseñasUrl = "main/:id/resenas/";
-export const userReservasUrl = "main/:id/reservas/";
-export const userPuntosUrl = "users/:id/puntos/";
+export const baseUrl = "http://127.0.0.1:8080/"; // Backend Flask
 
+export const loginUrl = `${baseUrl}login`;
+export const registerUrl = `${baseUrl}signup`;
+export const privateUrl = `${baseUrl}private`; // Ruta protegida
 
-export const fetchWrapper = async (input, init) => {
-  return await fetch(input, init)
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
+// Pantalla principal de restaurantes 
+export const feedUrl = `${baseUrl}feed`;
+
+// Ajustar según backend
+export const restauranteEspecificoUrl = (id) => `${baseUrl}feed/${id}`;
+export const userFavsUrl = (id) => `${baseUrl}feed/${id}/favs`;
+export const userReseñasUrl = (id) => `${baseUrl}feed/${id}/resenas`;
+export const userReservasUrl = (id) => `${baseUrl}feed/${id}/reservas`;
+export const userPuntosUrl = (id) => `${baseUrl}users/${id}/puntos`;
+
+// 🔹 Para hacer peticiones al backend
+export const fetchWrapper = async (url, options = {}) => {
+  try {
+    // Petición  protegida, añadimos el token JWT
+    const token = localStorage.getItem("token");
+    if (token) {
+      options.headers = {
+        ...options.headers,
+        Authorization: `Bearer ${token}`,
+      };
+    }
+
+    // Hacer la petición
+    const response = await fetch(url, options);
+
+    // Si la respuesta es 401 (no autorizado), eliminar el token y redirigir
+    if (response.status === 401) {
+      localStorage.removeItem("token");
+      window.location.href = "/login"; // Redirigir al login
+    }
+
+    if (!response.ok) {
       throw new Error(response.statusText || response.status);
-    })
-    .then((data) => {
-      return data;
-    })
-    .catch((error) => {
-      return error;
-    });
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error en fetchWrapper:", error);
+    return { error: error.message };
+  }
 };
