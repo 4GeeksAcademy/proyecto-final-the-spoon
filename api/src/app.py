@@ -12,7 +12,7 @@ start_time = time.time()
 # Configuración de la base de datos
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['JWT_SECRET_KEY'] = 'supersecretkey'  # Cambiar
- esto en producción
+#  esto en producción
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
