@@ -1,5 +1,9 @@
 import { Routes, Route } from 'react-router'
 import './App.css'
+import NavigateBar from './components/NavigateBar.jsx';
+import Footer from './components/Footer.jsx'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
 
@@ -7,7 +11,7 @@ function App() {
     <>
       <div>
       <NavigateBar />
-      <Routes>
+      {/* <Routes>
         <Route path="/feed" element={<Feed />} />
         <Route path="/feed/:id" element={<FeedRestaurants />} />
         <Route path="/login" element={<Login />} />
@@ -17,7 +21,7 @@ function App() {
         <Route path="/users/:id/resenas" element={<UserReseñas />} />
         <Route path="/users/:id/reservas" element={<UserReservas />} />
         <Route path="/users/:id/puntos" element={<UserPuntos />} />
-      </Routes>
+      </Routes> */}
       <Footer />
       </div>
     </>
