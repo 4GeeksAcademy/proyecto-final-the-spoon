@@ -1,31 +1,37 @@
-import { Routes, Route } from 'react-router'
+import { Routes, Route } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
+import NavigateBar from './components/NavigateBar'
+import Footer from './components/Footer'
 import './App.css'
 import NavigateBar from './components/NavigateBar.jsx';
 import Footer from './components/Footer.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-function App() {
 
+const App = () => {
   return (
-    <>
-      <div>
-      <NavigateBar />
-      {/* <Routes>
-        <Route path="/feed" element={<Feed />} />
-        <Route path="/feed/:id" element={<FeedRestaurants />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/users/:id/favs" element={<UserFavs />} />
-        <Route path="/users/:id/resenas" element={<UserReseñas />} />
-        <Route path="/users/:id/reservas" element={<UserReservas />} />
-        <Route path="/users/:id/puntos" element={<UserPuntos />} />
-      </Routes> */}
-      <Footer />
-      </div>
-    </>
-  )
+    <div className="App">
+      <header id='header'>
+        <NavigateBar />
+      </header>
+      {/* <main>
+          <AppHero />
+          <AppAbout />
+          <AppServices />
+          <AppWorks />
+          <AppTeams />
+          <AppTestimonials />
+          <AppBlog />
+          <AppContact />
+        </main> */}
+      <footer id="footer">
+        <Footer />
+      </footer>
+    </div>
+  );
 }
+
 
 export default App

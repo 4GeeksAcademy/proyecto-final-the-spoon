@@ -1,26 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Container from 'react-bootstrap/Container';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
-function Footer() {
-  const [showTopBtn, setShowTopBtn] = useState(false);
 
-  useEffect(() => {
-      window.addEventListener("scroll", () => {
-          if (window.scrollY > 400) {
-              setShowTopBtn(true);
-          } else {
-              setShowTopBtn(false);
-          }
-      });
-  }, []);
-
-  function goTop() {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }
-
+const Footer = ()=> {
   return (
     <Container fluid>
       <div className="copyright">&copy; 2025 The Spoon. All rights reserved.</div>
@@ -31,11 +14,6 @@ function Footer() {
           <li><a href="https://wa.me/+34618227935?text=Diegooo aceptate un pull request!"><i className="fab fa-whatsapp"></i></a></li>
         </ul>
       </div>
-      {
-        showTopBtn && (
-          <div className="go-top" onClick={goTop}></div>
-        )
-      }
     </Container>
   )
 }
