@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 
 function Reservas() {
-    const [reservas, setResevas] = useState([]);
+    const [reservas, setReservas] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         fetch(`/reservas`)
             .then((response) => response.json())
             .then((data) => {
-                setReviews(data);
+                setReservas(data);
                 setLoading(false);
             })
             .catch((error) => {
