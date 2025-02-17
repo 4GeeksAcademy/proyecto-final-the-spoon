@@ -4,6 +4,10 @@ import 'font-awesome/css/font-awesome.min.css';
 import NavigateBar from './components/NavigateBar'
 import Footer from './components/Footer'
 import './App.css'
+import NavigateBar from './components/NavigateBar.jsx';
+import Footer from './components/Footer.jsx'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 
 const App = () => {
