@@ -8,10 +8,10 @@ export const privateUrl = `${baseUrl}private`; // Ruta protegida
 export const feedUrl = `${baseUrl}feed`;
 
 // Ajustar según backend
-export const restauranteEspecificoUrl = (id) => `${baseUrl}main/${id}`;
-export const userFavsUrl = (id) => `${baseUrl}main/${id}/favs`;
-export const userReseñasUrl = (id) => `${baseUrl}main/${id}/resenas`;
-export const userReservasUrl = (id) => `${baseUrl}main/${id}/reservas`;
+export const restauranteEspecificoUrl = (id) => `${baseUrl}feed/${id}`;
+export const userFavsUrl = (id) => `${baseUrl}feed/${id}/favs`;
+export const userReseñasUrl = (id) => `${baseUrl}feed/${id}/resenas`;
+export const userReservasUrl = (id) => `${baseUrl}feed/${id}/reservas`;
 export const userPuntosUrl = (id) => `${baseUrl}users/${id}/puntos`;
 
 // 🔹 Para hacer peticiones al backend
