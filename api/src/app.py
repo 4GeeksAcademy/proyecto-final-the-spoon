@@ -11,6 +11,7 @@ app = Flask(__name__)
 app.url_map.strict_slashes = False
 start_time = time.time()
 
+
 db_url = os.getenv("DATABASE_URL")
 if db_url is not None:
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace("postgres://", "postgresql://")
@@ -33,6 +34,7 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
+# Ruta de salud
 @app.route("/health", methods=["GET"])
 def health_check():
     return jsonify({"status": "ok", "uptime": round(time.time() - start_time, 2)}), 200
@@ -156,4 +158,4 @@ def delete_reservation(reservation_id):
 
 if __name__ == "__main__":
     PORT = int(os.environ.get("PORT", 8080))
-    app.run(host="0.0.0.0", port=PORT, debug=False)
+    app.run(host="0.0.0.0", port=PORT, debug=True)
