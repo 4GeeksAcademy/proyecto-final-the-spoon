@@ -5,6 +5,15 @@ name = "pypi"
 
 [packages]
 flask = "*"
+flask-admin = "*"
+sqlalchemy = "*"
+bcrypt = "*"
+cors = "*"
+flask-jwt = "*"
+extended = "*"
+flask-migrate = "*"
+flask-cors = "*"
+flask-sqlalchemy = "*"
 
 [dev-packages]
 
@@ -13,3 +22,8 @@ python_version = "3.12"
 
 [scripts]
 start="flask --app src/app run"
+init="flask --app src/app db init"
+migrate="flask --app src/app db migrate"
+upgrade="flask --app src/app db upgrade"
+stamp="flask --app src/app db stamp head"
+revision="flask --app src/app db revision --rev-id 17f4243f6f5f"
