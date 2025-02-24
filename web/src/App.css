@@ -206,3 +206,14 @@ p {
 #footer .socials a:hover {
   background: #3D7EFF;
 }
+
+.feedcontainer {
+  display: flex;
+  flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
+  align-items: center; /* Centra los elementos horizontalmente */
+  justify-content: flex-start; /* Alinea los elementos en la parte superior */
+  min-height: 100vh;
+  text-align: center;
+  padding-top: 80px; /* Ajusta esto según la altura de tu navbar */
+  padding-left:350px;
+}
