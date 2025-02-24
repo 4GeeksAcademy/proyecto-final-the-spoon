@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 from flask_admin import Admin
-from models import db, User, Reservations, Reviews, Favorites, Restaurant, RestaurantPhotos, Dishes, DishesPhotos
+from models import db, Users, Reservations, Reviews, Favorites, Restaurant, RestaurantPhotos, Dishes, DishesPhotos
 from flask_admin.contrib.sqla import ModelView
 from sqlalchemy.orm.properties import RelationshipProperty
 
@@ -20,7 +20,7 @@ def setup_admin(app):
     app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
     admin = Admin(app, name='The Spoon Admin', template_mode='bootstrap3')
 
-    admin.add_view(AdminView(User, db.session))
+    admin.add_view(AdminView(Users, db.session))
     admin.add_view(AdminView(Restaurant, db.session))
     admin.add_view(AdminView(RestaurantPhotos, db.session))
     admin.add_view(AdminView(Reservations, db.session))

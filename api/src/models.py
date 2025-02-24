@@ -5,25 +5,22 @@ import enum
 
 db = SQLAlchemy()
 
-# User model representing both individual users and companies
+# User model
 @dataclass
-class User(db.Model):
-    __tablename__ = 'user'
+class Users(db.Model):
+    __tablename__ = 'users'
     id: int = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
     username: str = db.Column(db.String(50), nullable=False)
     email: str = db.Column(db.String(100), nullable=False, unique=True)
     password: str = db.Column(db.String(255), nullable=False)
-    points: int = db.Column(db.Integer, nullable=True)  # Only for individuals
-
-    def to_dict(self):
-         return {column.name: getattr(self, column.name) for column in self.__table__.columns}
+    points: int = db.Column(db.Integer, nullable=True)
 
 # Favorites model storing favorite restaurants
 @dataclass
 class Favorites(db.Model):
     __tablename__ = 'favorites'
     id: int = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
-    user_id: int = db.Column(db.Integer, ForeignKey('user.id'), nullable=False)
+    user_id: int = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
     restaurant: int = db.Column(db.Integer, ForeignKey('restaurant.id'), nullable=False)
 
 # Reviews model storing user reviews for restaurants
@@ -32,7 +29,7 @@ class Reviews(db.Model):
     __tablename__ = 'reviews'
     id: int = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
     restaurant_id: int = db.Column(db.Integer, ForeignKey('restaurant.id'), nullable=False)
-    user_id: int = db.Column(db.Integer, ForeignKey('user.id'), nullable=False)
+    user_id: int = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
     comment: str = db.Column(db.Text, nullable=False)
     rating: float = db.Column(db.Float, nullable=False)
 
@@ -46,7 +43,7 @@ class FoodType(str, enum.Enum):
 class Restaurant(db.Model):
     __tablename__ = 'restaurant'
     id: int = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
-    administrator: int = db.Column(db.Integer, ForeignKey('user.id'), nullable=False)
+    administrator: int = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
     location: str = db.Column(db.String(250), nullable=False)
     description: str = db.Column(db.Text, nullable=False)
     food_type: FoodType = db.Column(db.Enum(FoodType), nullable=False)
@@ -82,6 +79,6 @@ class DishesPhotos(db.Model):
 class Reservations(db.Model):
     __tablename__ = 'reservations'
     id: int = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
-    user_id: int = db.Column(db.Integer, ForeignKey('user.id'), nullable=False)
+    user_id: int = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
     restaurant_id: int = db.Column(db.Integer, ForeignKey('restaurant.id'), nullable=False)
     date: str = db.Column(db.DateTime, nullable=False)

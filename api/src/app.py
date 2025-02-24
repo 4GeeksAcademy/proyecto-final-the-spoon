@@ -2,7 +2,7 @@ import os
 import time
 from flask import Flask, request, jsonify
 from flask_migrate import Migrate
-from models import db, User, Favorites, Reviews, Reservations, Restaurant, RestaurantPhotos, Dishes, DishesPhotos
+from models import db, Users, Favorites, Reviews, Reservations, Restaurant, RestaurantPhotos, Dishes, DishesPhotos, FoodType
 from utils import generate_sitemap, APIException
 from flask_cors import CORS
 from admin import setup_admin
@@ -16,7 +16,7 @@ db_url = os.getenv("DATABASE_URL")
 if db_url is not None:
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace("postgres://", "postgresql://")
 else:
-    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////tmp/test1.db" # Si peta, cambiar la versión test1 a test2...
+    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////tmp/test2.db" # Si peta, cambiar la versión test1 a test2...
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 MIGRATE = Migrate(app, db)
@@ -44,37 +44,68 @@ def health_check():
 @app.route('/restaurants', methods=['GET'])
 def get_restaurants():
     restaurants = Restaurant.query.all()
-    return jsonify([restaurant.to_dict() for restaurant in restaurants]), 200
+    return jsonify(restaurants), 200
 
+# Get restaurant by id
+@app.route('/restaurants/<int:restaurant_id>', methods=['GET'])
+def get_restaurant(restaurant_id):
+    restaurant = Restaurant.query.get(restaurant_id)
+    return jsonify(restaurant) if restaurant else (jsonify({"error": "Restaurant not found"}), 400)
+
+# Crear un nuevo restaurante
 @app.route('/restaurants', methods=['POST'])
 def create_restaurant():
-    data = request.get_json(force=True)
-    print(data)
-    new_restaurant = Restaurant(**data)
-    db.session.add(new_restaurant)
-    db.session.commit()
-    return jsonify(new_restaurant.to_dict()), 201
+    data = request.get_json()
+    required_fields = {"administrator", "location", "description", "food_type", "name"}
+    
+    if not all(field in data for field in required_fields):
+        return jsonify({"error": "Missing required fields"}), 400
+
+    try:
+        new_restaurant = Restaurant(
+            id = data.get("id"),
+            administrator=data["administrator"],
+            location=data["location"],
+            description=data["description"],
+            food_type=FoodType(data["food_type"]),  # Convierte el string a Enum
+            name=data["name"]
+        )
+
+        db.session.add(new_restaurant)
+        db.session.commit()
+
+        return jsonify({
+            "id": new_restaurant.id,
+            "administrator": new_restaurant.administrator,
+            "location": new_restaurant.location,
+            "description": new_restaurant.description,
+            "food_type": new_restaurant.food_type.value,
+            "name": new_restaurant.name
+        }), 201
+
+    except ValueError:
+        return jsonify({"error": "Invalid food_type value"}), 400
 
 # Get all users
 @app.route('/users', methods=['GET'])
 def get_users():
-    users = User.query.all()
-    return jsonify([user.to_dict() for user in users]), 200
+    users = Users.query.all()
+    return jsonify(users), 200
 
 # Get user by id
 @app.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
-    user = User.query.get(user_id)
-    return jsonify(user.to_dict()) if user else (jsonify({"error": "User not found"}), 404)
+    user = Users.query.get(user_id)
+    return jsonify(user) if user else (jsonify({"error": "User not found"}), 400)
 
 # Create a new user
-@app.route('/user', methods=['POST'])
+@app.route('/users', methods=['POST'])
 def create_user():
     data = request.get_json()
     required_fields = {"username", "email", "password"}
     if not all(field in data for field in required_fields):
         return jsonify({"error": "Missing required fields"}), 400
-    new_user = User(
+    new_user = Users(
         id = data.get("id"),
         username=data["username"],
         email=data["email"],
