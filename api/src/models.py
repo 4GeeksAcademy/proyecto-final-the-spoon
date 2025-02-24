@@ -9,9 +9,9 @@ db = SQLAlchemy()
 @dataclass
 class Users(db.Model):
     __tablename__ = 'users'
-    id: int = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
+    id: int = db.Column(db.Integer, primary_key=True, nullable=False)
     username: str = db.Column(db.String(50), nullable=False)
-    email: str = db.Column(db.String(100), nullable=False, unique=True)
+    email: str = db.Column(db.String(100), nullable=False)
     password: str = db.Column(db.String(255), nullable=False)
     points: int = db.Column(db.Integer, nullable=True)
 
@@ -42,7 +42,7 @@ class FoodType(str, enum.Enum):
 @dataclass
 class Restaurant(db.Model):
     __tablename__ = 'restaurant'
-    id: int = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
+    id: int = db.Column(db.Integer, primary_key=True, nullable=False)
     administrator: int = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
     location: str = db.Column(db.String(250), nullable=False)
     description: str = db.Column(db.Text, nullable=False)
