@@ -204,7 +204,7 @@ def get_user_reviews(user_id):
     reviews = Reviews.query.filter_by(user_id=user_id).all()
     return jsonify(reviews), 200
 
-    @app.route('/users/<int:user_id>/reservations', methods=['GET', 'POST'])
+@app.route('/users/<int:user_id>/reservations', methods=['GET', 'POST'])
 def manage_user_reservations(user_id):
     if request.method == 'GET':
         # Retrieve all reservations of a user
