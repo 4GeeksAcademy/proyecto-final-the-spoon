@@ -1,14 +1,13 @@
+
 import { Routes, Route } from 'react-router-dom'
+import NavigateBar from './components/NavigateBar'
+import Footer from './components/Footer.jsx'
+import ReviewForm from './forms/ReviewForm.jsx';
+import ReservationForm from './forms/ReservationForm.jsx'
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
-import NavigateBar from './components/NavigateBar'
-import Footer from './components/Footer'
 import './App.css'
-import NavigateBar from './components/NavigateBar.jsx';
-import Footer from './components/Footer.jsx'
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-
 
 const App = () => {
   return (
@@ -16,6 +15,8 @@ const App = () => {
       <header id='header'>
         <NavigateBar />
       </header>
+      {/* <ReviewForm></ReviewForm> */}
+      <ReservationForm></ReservationForm>
       {/* <main>
           <AppHero />
           <AppAbout />
