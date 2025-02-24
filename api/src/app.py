@@ -204,6 +204,51 @@ def get_user_reviews(user_id):
     reviews = Reviews.query.filter_by(user_id=user_id).all()
     return jsonify(reviews), 200
 
+    @app.route('/users/<int:user_id>/reservations', methods=['GET', 'POST'])
+def manage_user_reservations(user_id):
+    if request.method == 'GET':
+        # Retrieve all reservations of a user
+        reservations = Reservations.query.filter_by(user_id=user_id).all()
+        return jsonify(reservations), 200
+
+    elif request.method == 'POST':
+        # Create a new reservation
+        data = request.get_json()
+        required_fields = {"restaurant_id", "date"}
+
+        if not all(field in data for field in required_fields):
+            return jsonify({"error": "Missing required fields"}), 400
+
+        new_reservation = Reservations(
+            user_id=user_id,
+            restaurant_id=data["restaurant_id"],
+            date=data["date"]
+        )
+
+        db.session.add(new_reservation)
+        db.session.commit()
+        return jsonify({"message": "Reservation created successfully"}), 201
+
+    return jsonify({"error": "Invalid request"}), 405  # Method not allowed
+
+@app.route('/users/<int:user_id>/reservations/<int:reservation_id>', methods=['DELETE'])
+def delete_user_reservation(user_id, reservation_id):
+    # Find the reservation by ID and user ID
+    reservation = Reservations.query.filter_by(id=reservation_id, user_id=user_id).first()
+
+    if not reservation:
+        return jsonify({"error": "Reservation not found"}), 404
+
+    db.session.delete(reservation)
+    db.session.commit()
+    return jsonify({"message": "Reservation cancelled successfully"}), 200
+
+@app.route('/restaurants/<int:restaurant_id>/reservations', methods=['GET'])
+def get_restaurant_reservations(restaurant_id):
+    # Retrieve all reservations for a specific restaurant
+    reservations = Reservations.query.filter_by(restaurant_id=restaurant_id).all()
+    return jsonify(reservations), 200
+
 @app.route('/restaurants/<int:restaurant_id>/photos', methods=['GET', 'POST'])
 def manage_restaurant_photos(restaurant_id):
     if request.method == 'GET':
