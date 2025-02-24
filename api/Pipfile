@@ -13,13 +13,9 @@ cors = "*"
 flask-jwt = "*"
 extended = "*"
 <<<<<<< HEAD
+<<<<<<< HEAD
 flask-cors = "*"
 flask-migrate = "*"
-=======
-flask-migrate = "*"
-flask-cors = "*"
->>>>>>> 3e863c446518cbeb3af83c4b72f6d6e774d417fc
-flask-sqlalchemy = "*"
 
 [dev-packages]
 
