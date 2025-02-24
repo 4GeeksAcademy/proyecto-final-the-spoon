@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 function Favoritos () {
     const {id} = useParams();
-    const [favorites, setFavorites = useState();
+    const [favorites, setFavorites] = useState();
     const [loading, setLoading] = useState(true);
 
     useEffect (()=>{
@@ -38,5 +38,5 @@ return (
             </ul>
         )}
     </div>
-)
+)}
 export default Favoritos;
