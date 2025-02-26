@@ -5,17 +5,15 @@ name = "pypi"
 
 [packages]
 flask-sqlalchemy = "*"
-flask = "*"
 flask-admin = "*"
 sqlalchemy = "*"
 bcrypt = "*"
 cors = "*"
 flask-jwt = "*"
 extended = "*"
-<<<<<<< HEAD
-<<<<<<< HEAD
 flask-cors = "*"
 flask-migrate = "*"
+flask = "*"
 
 [dev-packages]
 
