@@ -1,5 +1,6 @@
 import os
 import time
+from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_migrate import Migrate
 from models import db, Users, Favorites, Reviews, Reservations, Restaurant, RestaurantPhotos, Dishes, DishesPhotos, FoodType
@@ -219,10 +220,15 @@ def manage_user_reservations(user_id):
         if not all(field in data for field in required_fields):
             return jsonify({"error": "Missing required fields"}), 400
 
+        try:
+            reservation_date = datetime.strptime(data["date"], "%Y-%m-%d %H:%M:%S")
+        except ValueError:
+            return jsonify({"error": "Invalid date format. Use 'YYYY-MM-DD HH:MM:SS'"}), 400
+
         new_reservation = Reservations(
             user_id=user_id,
             restaurant_id=data["restaurant_id"],
-            date=data["date"]
+            date=reservation_date
         )
 
         db.session.add(new_reservation)
