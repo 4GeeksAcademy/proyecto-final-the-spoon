@@ -14,6 +14,9 @@ extended = "*"
 flask-cors = "*"
 flask-migrate = "*"
 flask = "*"
+gunicorn = "*"
+psycopg2-binary = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
@@ -22,6 +25,7 @@ python_version = "3.12"
 
 [scripts]
 start="flask --app src/app run"
+deploy="gunicorn -w 4 -b 0.0.0.0:$PORT src.app:app"
 init="flask --app src/app db init"
 migrate="flask --app src/app db migrate"
 upgrade="flask --app src/app db upgrade"
