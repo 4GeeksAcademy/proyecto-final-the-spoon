@@ -1,5 +1,6 @@
 import os
 import time
+from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_migrate import Migrate
 from models import db, Users, Favorites, Reviews, Reservations, Restaurant, RestaurantPhotos, Dishes, DishesPhotos, FoodType
@@ -122,70 +123,265 @@ def create_user():
         "points": new_user.points
     }), 201
 
-# Get user's favs
-@app.route('/users/<int:user_id>/favorites', methods=['GET'])
-def get_user_favorites(user_id):
-    favorites = Favorites.query.filter_by(user_id=user_id).all()
-    return jsonify([favorite.to_dict() for favorite in favorites]), 200
+# Get, add and delete user's restaurants favs
+@app.route('/users/<int:user_id>/favorites', methods=['GET', 'POST', 'DELETE'])
+def manage_user_favorites(user_id):
+    if request.method == 'GET':  
+        # Get all user favorites
+        favorites = Favorites.query.filter_by(user_id=user_id).all()
+        return jsonify(favorites), 200
 
-# Add a restaurant to the favorites
-@app.route('/users/<int:user_id>/favorites', methods=['POST'])
-def add_favorite(user_id):
-    data = request.get_json()
-    new_favorite = Favorites(user_id=user_id, **data)
-    db.session.add(new_favorite)
-    db.session.commit()
-    return jsonify(new_favorite.to_dict()), 201
+    elif request.method == 'POST':  
+        # Add a restaurant to the user's favorites
+        data = request.get_json()
+        if "restaurant_id" not in data:
+            return jsonify({"error": "Missing restaurant_id"}), 400
 
-# Delete a restaurant from favorites
-@app.route('/users/<int:user_id>/favorites/<int:favorite_id>', methods=['DELETE'])
-def delete_favorite(user_id, favorite_id):
-    favorite = Favorites.query.filter_by(user_id=user_id, id=favorite_id).first()
-    if not favorite:
-        return jsonify({"error": "Favorite not found"}), 404
-    db.session.delete(favorite)
-    db.session.commit()
-    return jsonify({"message": "Favorite deleted successfully"}), 200
+        new_favorite = Favorites(user_id=user_id, restaurant=data["restaurant_id"])
+        db.session.add(new_favorite)
+        db.session.commit()
+        return jsonify({"message": "Restaurant added to favorites"}), 201
 
-# Create a review for a restaurant
-@app.route('/reviews', methods=['POST'])
-def create_review():
-    data = request.get_json()
-    new_review = Reviews(**data)
-    db.session.add(new_review)
-    db.session.commit()
-    return jsonify(new_review.to_dict()), 201
+    elif request.method == 'DELETE':  
+        # Delete a user's favorite based on the id received in the body
+        data = request.get_json()
+        if "id" not in data:
+            return jsonify({"error": "Missing required fields"}), 400
 
-# Get reviews of a restaurant
-@app.route('/reviews/<int:restaurant_id>', methods=['GET'])
-def get_reviews(restaurant_id):
-    reviews = Reviews.query.filter_by(restaurant=restaurant_id).all()
-    return jsonify([review.to_dict() for review in reviews]), 200
+        favorite = Favorites.query.filter_by(id=data["id"], user_id=user_id).first()
+        if not favorite:
+            return jsonify({"error": "Favorite not found"}), 404
 
-# Create a reservation
-@app.route('/reservations', methods=['POST'])
-def create_reservation():
-    data = request.get_json()
-    new_reservation = Reservations(**data)
-    db.session.add(new_reservation)
-    db.session.commit()
-    return jsonify(new_reservation.to_dict()), 201
+        db.session.delete(favorite)
+        db.session.commit()
+        return jsonify({"message": "Favorite deleted successfully"}), 200
 
-# Get a user's reservations
-@app.route('/users/<int:user_id>/reservations', methods=['GET'])
-def get_user_reservations(user_id):
-    reservations = Reservations.query.filter_by(user_id=user_id).all()
-    return jsonify([reservation.to_dict() for reservation in reservations]), 200
+    return jsonify({"error": "Invalid request"}), 405
 
-# Delete a reservation
-@app.route('/reservations/<int:reservation_id>', methods=['DELETE'])
-def delete_reservation(reservation_id):
-    reservation = Reservations.query.get(reservation_id)
+@app.route('/restaurants/<int:restaurant_id>/reviews', methods=['GET', 'POST', 'DELETE'])
+def manage_reviews(restaurant_id):
+    if request.method == 'GET':  
+        # Retrieve all reviews for a specific restaurant
+        reviews = Reviews.query.filter_by(restaurant_id=restaurant_id).all()
+        return jsonify(reviews), 200
+
+    elif request.method == 'POST':  
+        # Add a new review for a restaurant
+        data = request.get_json()
+        required_fields = ["user_id", "comment", "rating"]
+        
+        if not all(field in data for field in required_fields):
+            return jsonify({"error": "Missing required fields"}), 400
+
+        new_review = Reviews(
+            restaurant_id=restaurant_id,
+            user_id=data["user_id"],
+            comment=data["comment"],
+            rating=data["rating"]
+        )
+        db.session.add(new_review)
+        db.session.commit()
+        return jsonify({"message": "Review added successfully"}), 201
+
+    elif request.method == 'DELETE':  
+        # Delete a review by its ID, provided in the request body
+        data = request.get_json()
+        if "id" not in data:
+            return jsonify({"error": "Missing required fields"}), 400
+
+        review = Reviews.query.filter_by(id=data["id"], restaurant_id=restaurant_id).first()
+        if not review:
+            return jsonify({"error": "Review not found"}), 404
+
+        db.session.delete(review)
+        db.session.commit()
+        return jsonify({"message": "Review deleted successfully"}), 200
+
+    return jsonify({"error": "Invalid request"}), 405  # Method not allowed
+
+@app.route('/users/<int:user_id>/reviews', methods=['GET'])
+def get_user_reviews(user_id):
+    # Retrieve all reviews made by a specific user
+    reviews = Reviews.query.filter_by(user_id=user_id).all()
+    return jsonify(reviews), 200
+
+@app.route('/users/<int:user_id>/reservations', methods=['GET', 'POST'])
+def manage_user_reservations(user_id):
+    if request.method == 'GET':
+        # Retrieve all reservations of a user
+        reservations = Reservations.query.filter_by(user_id=user_id).all()
+        return jsonify(reservations), 200
+
+    elif request.method == 'POST':
+        # Create a new reservation
+        data = request.get_json()
+        required_fields = {"restaurant_id", "date"}
+
+        if not all(field in data for field in required_fields):
+            return jsonify({"error": "Missing required fields"}), 400
+
+        try:
+            reservation_date = datetime.strptime(data["date"], "%Y-%m-%d %H:%M:%S")
+        except ValueError:
+            return jsonify({"error": "Invalid date format. Use 'YYYY-MM-DD HH:MM:SS'"}), 400
+
+        new_reservation = Reservations(
+            user_id=user_id,
+            restaurant_id=data["restaurant_id"],
+            date=reservation_date
+        )
+
+        db.session.add(new_reservation)
+        db.session.commit()
+        return jsonify({"message": "Reservation created successfully"}), 201
+
+    return jsonify({"error": "Invalid request"}), 405  # Method not allowed
+
+@app.route('/users/<int:user_id>/reservations/<int:reservation_id>', methods=['DELETE'])
+def delete_user_reservation(user_id, reservation_id):
+    # Find the reservation by ID and user ID
+    reservation = Reservations.query.filter_by(id=reservation_id, user_id=user_id).first()
+
     if not reservation:
         return jsonify({"error": "Reservation not found"}), 404
+
     db.session.delete(reservation)
     db.session.commit()
-    return jsonify({"message": "Reservation deleted successfully"}), 200
+    return jsonify({"message": "Reservation cancelled successfully"}), 200
+
+@app.route('/restaurants/<int:restaurant_id>/reservations', methods=['GET'])
+def get_restaurant_reservations(restaurant_id):
+    # Retrieve all reservations for a specific restaurant
+    reservations = Reservations.query.filter_by(restaurant_id=restaurant_id).all()
+    return jsonify(reservations), 200
+
+@app.route('/restaurants/<int:restaurant_id>/photos', methods=['GET', 'POST'])
+def manage_restaurant_photos(restaurant_id):
+    if request.method == 'GET':
+        # Retrieve all photos for a specific restaurant
+        photos = RestaurantPhotos.query.filter_by(restaurant_id=restaurant_id).all()
+        return jsonify(photos), 200
+
+    elif request.method == 'POST':
+        # Upload a new photo for a restaurant
+        data = request.get_json()
+        if "url" not in data:
+            return jsonify({"error": "Missing photo URL"}), 400
+
+        new_photo = RestaurantPhotos(
+            url=data["url"],
+            restaurant_id=restaurant_id
+        )
+        db.session.add(new_photo)
+        db.session.commit()
+        return jsonify({"message": "Photo added successfully"}), 201
+
+    return jsonify({"error": "Invalid request"}), 405  # Method not allowed
+
+@app.route('/restaurants/<int:restaurant_id>/photos/<int:photo_id>', methods=['DELETE'])
+def delete_restaurant_photo(restaurant_id, photo_id):
+    # Delete a specific photo of a restaurant
+    photo = RestaurantPhotos.query.filter_by(id=photo_id, restaurant_id=restaurant_id).first()
+    if not photo:
+        return jsonify({"error": "Photo not found"}), 404
+
+    db.session.delete(photo)
+    db.session.commit()
+    return jsonify({"message": "Photo deleted successfully"}), 200
+
+@app.route('/restaurants/<int:restaurant_id>/dishes', methods=['GET', 'POST'])
+def manage_dishes(restaurant_id):
+    if request.method == 'GET':
+        # Retrieve all dishes for a specific restaurant
+        dishes = Dishes.query.filter_by(restaurant_id=restaurant_id).all()
+        return jsonify(dishes), 200
+
+    elif request.method == 'POST':
+        # Create a new dish for a restaurant
+        data = request.get_json()
+        required_fields = {"dish_name", "price"}
+        
+        if not all(field in data for field in required_fields):
+            return jsonify({"error": "Missing required fields"}), 400
+
+        new_dish = Dishes(
+            dish_name=data["dish_name"],
+            price=data["price"],
+            restaurant_id=restaurant_id
+        )
+
+        db.session.add(new_dish)
+        db.session.commit()
+        return jsonify({"message": "Dish added successfully"}), 201
+
+    return jsonify({"error": "Invalid request"}), 405  # Method not allowed
+
+@app.route('/restaurants/<int:restaurant_id>/dishes/<int:dish_id>', methods=['GET', 'PUT', 'DELETE'])
+def manage_dish_by_id(restaurant_id, dish_id):
+    dish = Dishes.query.filter_by(id=dish_id, restaurant_id=restaurant_id).first()
+
+    if not dish:
+        return jsonify({"error": "Dish not found"}), 404
+
+    if request.method == 'GET':
+        return jsonify(dish), 200
+
+    elif request.method == 'PUT':
+        # Update dish details
+        data = request.get_json()
+        if "dish_name" in data:
+            dish.dish_name = data["dish_name"]
+        if "price" in data:
+            dish.price = data["price"]
+
+        db.session.commit()
+        return jsonify({"message": "Dish updated successfully"}), 200
+
+    elif request.method == 'DELETE':
+        # Delete a specific dish
+        db.session.delete(dish)
+        db.session.commit()
+        return jsonify({"message": "Dish deleted successfully"}), 200
+
+    return jsonify({"error": "Invalid request"}), 405  # Method not allowed
+
+@app.route('/restaurants/<int:restaurant_id>/dishes/<int:dish_id>/photos', methods=['GET', 'POST'])
+def manage_dish_photos(restaurant_id, dish_id):
+    if request.method == 'GET':
+        # Retrieve all photos of a specific dish
+        photos = DishesPhotos.query.filter_by(dish_id=dish_id).all()
+        return jsonify(photos), 200
+
+    elif request.method == 'POST':
+        # Upload a new photo for a dish
+        data = request.get_json()
+        required_fields = {"url"}
+
+        if not all(field in data for field in required_fields):
+            return jsonify({"error": "Missing required fields"}), 400
+
+        new_photo = DishesPhotos(
+            url=data["url"],
+            dish_id=dish_id
+        )
+
+        db.session.add(new_photo)
+        db.session.commit()
+        return jsonify({"message": "Photo added successfully"}), 201
+
+    return jsonify({"error": "Invalid request"}), 405  # Method not allowed
+
+@app.route('/restaurants/<int:restaurant_id>/dishes/<int:dish_id>/photos/<int:photo_id>', methods=['DELETE'])
+def delete_dish_photo(restaurant_id, dish_id, photo_id):
+    # Find the photo by ID and dish ID
+    photo = DishesPhotos.query.filter_by(id=photo_id, dish_id=dish_id).first()
+
+    if not photo:
+        return jsonify({"error": "Photo not found"}), 404
+
+    db.session.delete(photo)
+    db.session.commit()
+    return jsonify({"message": "Photo deleted successfully"}), 200
 
 if __name__ == "__main__":
     PORT = int(os.environ.get("PORT", 8080))
