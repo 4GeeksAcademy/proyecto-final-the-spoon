@@ -1,30 +1,34 @@
 import React, { useState } from "react";
-import "../styles/UserLoginForm.css"; 
+import { useNavigate } from "react-router-dom";
+import "../styles/UserLoginForm.css";
 
 const UserLoginForm = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
-    const handleUsernameChange = (e) => {
-        setUsername(e.target.value);
-    };
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
-    };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Formulario enviado');
-        console.log('Usuario:', username);
-        console.log('Contraseña:', password);
 
-        // reemplazar esto con un token del backend
-        localStorage.setItem("token", "fake-jwt-token");
+        try {
+            const response = await fetch("https://tu-api.com/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password })
+            });
 
-        setUsername('');
-        setPassword('');
+            const data = await response.json();
 
-        window.location.href = "/"; // Redirige a la página de inicio
+            if (response.ok) {
+                localStorage.setItem("token", data.token); // Guardamos el token
+                localStorage.setItem("userId", data.id); // Guardamos el ID del usuario
+                navigate(`/users/${data.id}`); // Redirigir al Dashboard
+            } else {
+                alert("Credenciales incorrectas");
+            }
+        } catch (error) {
+            console.error("Error en login:", error);
+        }
     };
 
     return (
@@ -37,7 +41,7 @@ const UserLoginForm = () => {
                         id="username"
                         className="input-field"
                         value={username}
-                        onChange={handleUsernameChange}
+                        onChange={(e) => setUsername(e.target.value)}
                         placeholder="Ingresa tu usuario"
                         required
                     />
@@ -49,7 +53,7 @@ const UserLoginForm = () => {
                         id="password"
                         className="input-field"
                         value={password}
-                        onChange={handlePasswordChange}
+                        onChange={(e) => setPassword(e.target.value)}
                         placeholder="Ingresa tu contraseña"
                         required
                     />

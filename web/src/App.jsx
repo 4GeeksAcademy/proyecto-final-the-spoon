@@ -5,6 +5,8 @@ import Footer from './components/Footer.jsx'
 import FeedRestaurantes from './components/Feedrestaurantes.jsx';
 import RestauranteDetalle from './pages/RestauranteDetalle.jsx';
 
+import UserDashboard from './pages/UserDashboard.jsx';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 import './App.css'
@@ -20,7 +22,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<FeedRestaurantes />} />
           <Route path="/restaurante/:id" element={<RestauranteDetalle />} />
-        </Routes>
+          <Route path="/users/:id/*" element={<UserDashboard />} />
+          </Routes>
       </main>
 
       <footer id="footer">
