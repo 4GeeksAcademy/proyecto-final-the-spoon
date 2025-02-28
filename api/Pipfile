@@ -13,10 +13,11 @@ flask-jwt = "*"
 extended = "*"
 flask-cors = "*"
 flask-migrate = "*"
-flask = "*"
 gunicorn = "*"
 psycopg2-binary = "*"
 python-dotenv = "*"
+flask-jwt-extended = "*"
+flask = "*"
 
 [dev-packages]
 
