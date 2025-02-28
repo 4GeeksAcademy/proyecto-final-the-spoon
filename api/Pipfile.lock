@@ -1,6 +1,7 @@
 {
     "_meta": {
         "hash": {
+            "sha256": "904d5b2cd5f49605e0656f0f467506942e0e6909f63d6ad5febf097faea7037e"
             "sha256": "d70824909e414288ee6473033b2d68ac876797a8de8eea1ac74695db165e707c"
         },
         "pipfile-spec": 6,
@@ -184,6 +185,14 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==8.1.8"
+        },
+        "cloudinary": {
+            "hashes": [
+                "sha256:ba223705409b2aaddd5196c2184d65f50a83dffcba3b94f3727658ff6a0172a3",
+                "sha256:e4191b470c5bae55542b64e0a78659af42971880294456dca480bc974fa9280a"
+            ],
+            "index": "pypi",
+            "version": "==1.42.2"
         },
         "colorama": {
             "hashes": [
@@ -637,6 +646,14 @@
             ],
             "markers": "python_version >= '3.9'",
             "version": "==75.8.0"
+        },
+        "six": {
+            "hashes": [
+                "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+            ],
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
+            "version": "==1.17.0"
         },
         "sqlalchemy": {
             "hashes": [
