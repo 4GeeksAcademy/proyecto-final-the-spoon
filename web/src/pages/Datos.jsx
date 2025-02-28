@@ -25,7 +25,7 @@ function Datos() {
     return (
         <div>
             <h3>Datos Personales</h3>
-            <p><strong>Nombre:</strong>{user.name}</p>
+            <p><strong>Nombre:</strong>{username}</p>
             <p><strong>Email:</strong>{user.email}</p>
             <p><strong>Password:</strong>{user.password}</p>
         </div>

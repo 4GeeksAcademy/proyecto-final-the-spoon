@@ -1,15 +1,24 @@
 import os
 import time
+import bcrypt
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_migrate import Migrate
 from models import db, Users, Favorites, Reviews, Reservations, Restaurant, RestaurantPhotos, Dishes, DishesPhotos, FoodType
+from sqlalchemy import or_
+from flask_jwt_extended import ( create_acces_token, get_csrf_token, jwt_required, JWTManager, set_access_cookies, unset_jwt-cookies,)
 from utils import generate_sitemap, APIException
 from flask_cors import CORS
 from admin import setup_admin
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+
+load_dotenv()
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -30,9 +39,22 @@ else:
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////tmp/test2.db" # Si peta, cambiar la versión test1 a test2...
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+jwt_key = os.getenv("JWT_SECRET_KEY") or "akjflsdj"
+
+print(db_url)
+# JWT
+app.config["JWT_SECRET_KEY"] = jwt_key
+app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+app.config["JWT_COOKIE_CSRF_PROTECT"] = True
+app.config["JWT_CSRF_IN_COOKIES"] = True
+app.config["JWT_COOKIE_SECURE"] = True
+
+jwt = JWTManager(app)
+
 MIGRATE = Migrate(app, db)
 db.init_app(app)
-CORS(app)
+app.config["CORS_HEADERS"] = "Content-Type"
+CORS(app, supports_credentials=True)
 setup_admin(app)
 
 # Error handler

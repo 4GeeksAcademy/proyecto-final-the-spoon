@@ -206,3 +206,59 @@ p {
 #footer .socials a:hover {
   background: #3D7EFF;
 }
+
+/* Ajustar el body para que el contenido no quede debajo del header y footer */
+body {
+  color: #333;
+  background: #fff;
+  font: 16px/1.6 "Muli", sans-serif;
+  min-width: 320px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  padding-top: 80px;  /* Deja espacio para el header fijo */
+  padding-bottom: 60px;  /* Deja espacio para el footer fijo */
+  height: 100%;
+  overflow-x: hidden; /* Evita el desplazamiento horizontal */
+  margin: 0; /* Elimina cualquier margen */
+}
+
+/* Contenedor de la página alineado a la izquierda */
+.feedcontainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alineación a la izquierda */
+  justify-content: flex-start;
+  text-align: left; /* Alineación del texto a la izquierda */
+  padding-top: 20px; /* Ajusta para que no sobreponga el header */
+  padding-bottom: 20px; /* Ajuste para el footer */
+  flex-grow: 1; /* Permite que el contenido crezca y ocupe el espacio disponible */
+  width: 100%; /* Asegura que el contenedor ocupe todo el ancho */
+  margin: 0; /* Elimina márgenes */
+}
+
+/* Asegurarse de que los elementos principales ocupen el ancho completo */
+.add-restaurant-container {
+  width: 100%;
+  max-width: 800px; /* Puedes ajustar esto según tus necesidades */
+  margin: 20px auto; /* Centrado con márgenes */
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos generales */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Muli", sans-serif;
+  font-weight: 400;
+  margin: 0 0 20px;
+  color: inherit;
+}
+
+/* Ajuste de los elementos */
+.add-restaurant-container h2 {
+  text-align: left;  /* Título alineado a la izquierda */
+}
+
+
