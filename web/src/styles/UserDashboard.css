@@ -1,0 +1,72 @@
+/* Estilos generales para el dashboard del usuario */
+.user-dashboard-container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Estilo para el título principal */
+.user-dashboard-container h3 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Estilo para la lista de enlaces de navegación */
+.nav-links {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+/* Estilo de los elementos de la lista */
+.nav-links li {
+  margin-bottom: 10px;
+}
+
+/* Estilo para los enlaces */
+.route-link {
+  text-decoration: none; /* Elimina el subrayado */
+  color: #007bff; /* Color de enlace */
+  font-size: 1.2em;
+  padding: 10px;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  transition: background-color 0.3s, color 0.3s; /* Transición suave */
+}
+
+/* Efecto hover para los enlaces */
+.route-link:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Estilo para los mensajes de carga y error */
+.loading-message, .error-message {
+  font-size: 1.2em;
+  color: #d9534f;
+  margin-top: 20px;
+  text-align: center; /* Centrado del texto */
+}
+
+/* Estilo del componente de Cargando usuario... */
+.loading-message {
+  font-weight: bold;
+}
+
+/* Estilo para los enlaces de las rutas */
+.route-link:hover {
+  text-decoration: none; /* Elimina el subrayado en el hover */
+}
+
+/* Añade un color más suave al fondo de los enlaces */
+.route-link {
+  background-color: #f8f9fa;
+}
+
+.route-link:hover {
+  background-color: #007bff;
+  color: white;
+}

@@ -10,16 +10,22 @@ function NavigateBar() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isLoginModal, setIsLoginModal] = useState(true);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    const storedUserId = localStorage.getItem('userId');
+    
     setIsAuthenticated(!!token);
+    setUserId(storedUserId);
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
     setIsAuthenticated(false);
-    navigate('/login');
+    setUserId(null);
+    navigate('/');
   };
 
   const handleShowLogin = () => {
@@ -47,30 +53,29 @@ function NavigateBar() {
             <Nav className="me-auto">
               {isAuthenticated ? (
                 <>
-                  <Nav.Link href="/private">Dashboard</Nav.Link>
+                  <Nav.Link href={`/users/${userId}`}>Dashboard</Nav.Link>
                   <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
                 </>
               ) : (
                 <>
                   <Nav.Link onClick={handleShowLogin}>Login</Nav.Link>
                   <Nav.Link onClick={handleShowRegister}>Register</Nav.Link>
-                  </>
+                </>
               )}
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
 
-      {/* Modal para el Login */}
       <Modal show={showModal} onHide={handleClose} centered>
-      <Modal.Header closeButton>
+        <Modal.Header closeButton>
           <Modal.Title>{isLoginModal ? 'Iniciar sesión' : 'Registro'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {isLoginModal ? (
-            <UserLoginForm /> // Formulario de login
+            <UserLoginForm /> 
           ) : (
-            <UserRegisterForm /> // Formulario de registro
+            <UserRegisterForm /> 
           )}
         </Modal.Body>
       </Modal>
