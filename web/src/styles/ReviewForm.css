@@ -1,103 +1,102 @@
 /* Estilos generales del contenedor */
 .review-form-container {
-    width: 100%;
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Título del formulario */
-  .review-form-container h2 {
-    text-align: center;
-    font-size: 24px;
-    color: #333;
-  }
-  
-  /* Estilos del formulario */
-  .review-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Estilos para cada campo del formulario */
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  label {
-    display: block;
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  textarea,
-  .select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    background-color: #fff; 
-    color: #333;
-  }
-  
-  textarea {
-    resize: vertical;
-    min-height: 100px;
-    color: #d3d3d3 !important;
-  }
-  
-  .select {
-    cursor: pointer;
-  }
-  
-  /* Estilo para el botón de enviar */
-  .submit-button {
-    background-color: #1A2E50;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-  }
-  
-  .submit-button:hover {
-    background-color: #1A2E50;
-  }
-  
-  .submit-button:active {
-    background-color: #284a84;
-  }
-  
-  /* Estilos para las estrellas */
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Título del formulario */
+.review-form-container h2 {
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+}
+
+/* Estilos del formulario */
+.review-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilos para cada campo del formulario */
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+textarea,
+.select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fff; 
+  color: #333;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+  color: #d3d3d3 !important;
+}
+
+.select {
+  cursor: pointer;
+}
+
+/* Estilo para el botón de enviar */
+.submit-button {
+  background-color: #1A2E50;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #1A2E50;
+}
+
+.submit-button:active {
+  background-color: #284a84;
+}
+
+/* Estilos para las estrellas */
 .stars {
-    font-size: 30px;
-    color: #FFD700; 
-    cursor: pointer;
-  }
-  
- /* Estilos para las estrellas */
+  font-size: 30px;
+  color: #FFD700; 
+  cursor: pointer;
+}
+
+/* Estilos para las estrellas */
 .stars {
-    font-size: 30px;
-    cursor: pointer;
-  }
-  
-  .star {
-    color: #ddd; 
-  }
-  
-  .star.filled {
-    color: #FFD700; 
-  }
-  
-  .star:hover {
-    color: #FFB300;
-  }
-  
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.star {
+  color: #ddd; 
+}
+
+.star.filled {
+  color: #FFD700; 
+}
+
+.star:hover {
+  color: #FFB300;
+}

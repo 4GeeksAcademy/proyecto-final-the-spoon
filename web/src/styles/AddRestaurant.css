@@ -1,0 +1,107 @@
+/* Estilos generales del contenedor */
+.add-restaurant-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: fixed; /* Se fija al principio de la página */
+    top: 20px; /* Ajusta la distancia desde el top */
+    left: 50%;
+    transform: translateX(-50%); /* Centrado horizontal */
+    z-index: 9999; /* Asegura que esté por encima de otros elementos */
+    max-height: 80vh; /* Ajusta la altura máxima */
+    overflow-y: auto; /* Si el contenido es muy largo, añade scroll */
+}
+
+/* Estilo para el botón de cierre (X) */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #ff0000;
+}
+
+/* Título del formulario */
+.add-restaurant-container h2 {
+    text-align: center;
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Estilos del formulario */
+.add-restaurant-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilos para cada campo del formulario */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+input[type="text"],
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    color: #333;
+}
+
+/* Estilo especial para textarea */
+textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Mapa de Google */
+.add-restaurant-container .google-map {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Estilo para el botón de enviar */
+.submit-button {
+    background-color: #1A2E50;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.submit-button:hover {
+    background-color: #1A2E50;
+}
+
+.submit-button:active {
+    background-color: #284a84;
+}
