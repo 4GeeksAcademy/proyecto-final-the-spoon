@@ -55,7 +55,7 @@ function UserDashboard() {
       <ul className="nav-links">
         {routes.map((route) => (
           <li key={route.path}>
-            <Link to={`/users/${user.id}${route.path}`} className="route-link">{route.name}</Link>
+            <Link to={`/users/${user.id}/${route.path}`} className="route-link">{route.name}</Link>
           </li>
         ))}
       </ul>

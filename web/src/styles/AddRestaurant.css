@@ -7,6 +7,30 @@
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: fixed; /* Se fija al principio de la página */
+    top: 20px; /* Ajusta la distancia desde el top */
+    left: 50%;
+    transform: translateX(-50%); /* Centrado horizontal */
+    z-index: 9999; /* Asegura que esté por encima de otros elementos */
+    max-height: 80vh; /* Ajusta la altura máxima */
+    overflow-y: auto; /* Si el contenido es muy largo, añade scroll */
+}
+
+/* Estilo para el botón de cierre (X) */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #ff0000;
 }
 
 /* Título del formulario */
