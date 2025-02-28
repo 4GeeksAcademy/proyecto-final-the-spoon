@@ -41,6 +41,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 jwt_key = os.getenv("JWT_SECRET_KEY") or "akjflsdj"
 
+# print db_url
 print(db_url)
 # JWT
 app.config["JWT_SECRET_KEY"] = jwt_key
