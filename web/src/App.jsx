@@ -20,7 +20,6 @@ const App = () => {
       </header>
       <main>
         <Routes>
-<<<<<<< HEAD
         {publicRoutesConfig.map((route) => {
             return (
               <Route
@@ -43,12 +42,6 @@ const App = () => {
           </Route>
           <Route path="/*" element={<FeedRestaurantes />} />
         </Routes>
-=======
-          <Route path="/" element={<FeedRestaurantes />} />
-          <Route path="/restaurante/:id" element={<RestauranteDetalle />} />
-          <Route path="/users/:id/*" element={<UserDashboard />} />
-          </Routes>
->>>>>>> c38aab85c58f30e17169ff6c8e8b4fe597e256a9
       </main>
       <footer id="footer">
         <Footer />
