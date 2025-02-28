@@ -145,6 +145,27 @@ def create_user():
         "points": new_user.points
     }), 201
 
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data.get("username")
+    password = data.get("password")
+
+    if not username or not password:
+        return jsonify({"error": "Faltan datos"}), 400
+
+    # Buscar usuario en la base de datos
+    user = Users.query.filter_by(username=username, password=password).first()
+
+    if not user:
+        return jsonify({"error": "Credenciales incorrectas"}), 401
+
+    # Enviar respuesta con el ID del usuario
+    return jsonify({
+        "message": "Inicio de sesión exitoso",
+        "id": user.id
+    }), 200
+
 # Get, add and delete user's restaurants favs
 @app.route('/users/<int:user_id>/favorites', methods=['GET', 'POST', 'DELETE'])
 def manage_user_favorites(user_id):

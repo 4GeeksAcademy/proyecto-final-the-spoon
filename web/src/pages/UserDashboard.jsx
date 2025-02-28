@@ -5,13 +5,15 @@ import Favoritos from "./Favoritos";
 import Reservas from "./Reservas";
 import Reseñas from "./Reseñas";
 import AddRestaurant from "../forms/AddRestaurant";
+import MyRestaurant from "./MyRestaurant";
 import'../styles/UserDashboard.css';
-
+import { FaCamera } from 'react-icons/fa'; // Para el icono de la cámara
 
 function UserDashboard() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [restaurant, setRestaurant] = useState(null); // Aquí se guardará el restaurante creado
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,31 +25,42 @@ function UserDashboard() {
     }
 
     fetch(`https://fluffy-space-telegram-v6qp6pqgq4pgc69wx-5000.app.github.dev/users/${userId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.id) { // Verifica si la respuesta contiene datos válidos
-          setUser(data);
-        } else {
-          console.error("Usuario no encontrado");
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error al obtener usuario:", error);
-        setLoading(false);
-      });
+  .then((res) => {
+    if (!res.ok) {
+      throw new Error('Error al obtener usuario');
+    }
+    return res.json();
+  })
+  .then((data) => {
+    if (data && data.id) {
+      setUser(data); // Actualiza el estado solo si los datos son válidos
+    } else {
+      console.error("Usuario no encontrado");
+    }
+    setLoading(false);
+  })
+  .catch((error) => {
+    console.error("Error al obtener usuario:", error);
+    setLoading(false);
+  });
   }, [id, navigate]);
+
+  // Función para actualizar el restaurante después de añadir uno
+  const handleRestaurantCreated = (newRestaurant) => {
+    setRestaurant(newRestaurant);
+  };
 
   if (loading) return <p className="loading-message">Cargando usuario...</p>;
   if (!user) return <p className="error-message">Error: usuario no encontrado</p>;
 
   const routes = [
-    { path: "datos", name: "Datos Personales", component: <Datos /> },
-    { path: "favoritos", name: "Favoritos", component: <Favoritos /> },
-    { path: "reservas", name: "Reservas", component: <Reservas /> },
-    { path: "resenas", name: "Reseñas", component: <Reseñas /> },
-    { path: "add-restaurant", name: "Añade tu Restaurante", component: <AddRestaurant /> }
-  ];
+      { path: "datos", name: "Datos Personales", component: <Datos /> },
+      { path: "favoritos", name: "Favoritos", component: <Favoritos /> },
+      { path: "reservas", name: "Reservas", component: <Reservas /> },
+      { path: "resenas", name: "Reseñas", component: <Reseñas /> },
+      { path: "add-restaurant", name: "Añade tu Restaurante", component: <AddRestaurant onRestaurantCreated={handleRestaurantCreated} /> },
+      { path: "my-restaurant", name: "Mi Restaurante", component: <MyRestaurant /> } // Ruta agregada
+    ];
 
   return (
     <div className="user-dashboard-container">
@@ -59,6 +72,19 @@ function UserDashboard() {
           </li>
         ))}
       </ul>
+
+      {/* Enlace a Mi Restaurante si ya ha creado uno */}
+      {restaurant && (
+        <div className="my-restaurant">
+          <h4>Mi Restaurante: {restaurant.name}</h4>
+          <Link to={`/users/${user.id}/my-restaurant`} className="route-link">Ver Restaurante</Link>
+        </div>
+      )}
+
+      <div className="add-photos">
+        {/* Icono para subir fotos */}
+        <FaCamera size={30} onClick={() => alert("Añadir fotos al restaurante")} />
+      </div>
 
       <Routes>
         {routes.map((route) => (

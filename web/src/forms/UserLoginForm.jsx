@@ -1,67 +1,73 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../styles/UserLoginForm.css";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const UserLoginForm = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const navigate = useNavigate();
+const UserLoginForm = ({ setIsAuthenticated, setShowModal }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        try {
-            const response = await fetch("https://tu-api.com/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password })
-            });
+    try {
+      const response = await fetch("https://fluffy-space-telegram-v6qp6pqgq4pgc69wx-5000.app.github.dev/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
 
-            const data = await response.json();
+      const data = await response.json();
 
-            if (response.ok) {
-                localStorage.setItem("token", data.token); // Guardamos el token
-                localStorage.setItem("userId", data.id); // Guardamos el ID del usuario
-                navigate(`/users/${data.id}`); // Redirigir al Dashboard
-            } else {
-                alert("Credenciales incorrectas");
-            }
-        } catch (error) {
-            console.error("Error en login:", error);
-        }
-    };
+      if (response.ok) {
+        // Guardamos el token y el ID del usuario en el localStorage
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.id);
 
-    return (
-        <div className="login-form-container">
-            <form className="login-form" onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="username">Usuario</label>
-                    <input
-                        type="text"
-                        id="username"
-                        className="input-field"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        placeholder="Ingresa tu usuario"
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Contraseña</label>
-                    <input
-                        type="password"
-                        id="password"
-                        className="input-field"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Ingresa tu contraseña"
-                        required
-                    />
-                </div>
-                <button type="submit" className="submit-button">Iniciar sesión</button>
-            </form>
-        </div>
-    );
+        // Actualizamos el estado de autenticación
+        setIsAuthenticated(true);
+
+        // Cerramos el modal
+        setShowModal(false);
+
+        // Redirigimos al dashboard del usuario
+        navigate(`/users/${data.id}`);
+      } else {
+        alert("Credenciales incorrectas");
+      }
+    } catch (error) {
+      console.error("Error en login:", error);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div className="form-group">
+        <label htmlFor="username">Usuario</label>
+        <input
+          type="text"
+          id="username"
+          className="input-field"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Ingresa tu usuario"
+          required
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="password">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          className="input-field"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Ingresa tu contraseña"
+          required
+        />
+      </div>
+      <button type="submit" className="submit-button">Iniciar sesión</button>
+    </form>
+  );
 };
 
 export default UserLoginForm;

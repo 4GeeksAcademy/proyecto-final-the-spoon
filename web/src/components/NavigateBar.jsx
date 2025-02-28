@@ -73,7 +73,10 @@ function NavigateBar() {
         </Modal.Header>
         <Modal.Body>
           {isLoginModal ? (
-            <UserLoginForm /> 
+            <UserLoginForm 
+              setIsAuthenticated={setIsAuthenticated} 
+              setShowModal={setShowModal} 
+            /> 
           ) : (
             <UserRegisterForm /> 
           )}
