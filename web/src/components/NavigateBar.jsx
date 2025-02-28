@@ -47,13 +47,13 @@ function NavigateBar() {
             <Nav className="me-auto">
               {isAuthenticated ? (
                 <>
-                  <Nav.Link href="/private">Dashboard</Nav.Link>
-                  <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                  <Nav.Link href="/users/${user.id}">Dashboard</Nav.Link>
+                  <Nav.Link href="/private" onClick={handleLogout}>Logout</Nav.Link>
                 </>
               ) : (
                 <>
-                  <Nav.Link onClick={handleShowLogin}>Login</Nav.Link>
-                  <Nav.Link onClick={handleShowRegister}>Register</Nav.Link>
+                  <Nav.Link href="/login" onClick={handleShowLogin}>Login</Nav.Link>
+                  <Nav.Link href="/register" onClick={handleShowRegister}>Register</Nav.Link>
                   </>
               )}
             </Nav>

@@ -29,9 +29,9 @@ function UserDashboard () {
         <ul>
             <li><Link to={`/users/${user.id}/datos`}>Datos Personales</Link></li>
             <li><Link to={`/users/${user.id}/puntos`}>Puntos</Link></li>
-            <li><Link to={`/users/${user.id}/favoritos`}>Favoritos</Link></li>
-            <li><Link to={`/users/${user.id}/reservas`}>Reservas</Link></li>
-            <li><Link to={`/users/${user.id}/resenas`}>Reseñas</Link></li>
+            <li><Link to={`/users/${user.id}/favorites`}>Favoritos</Link></li>
+            <li><Link to={`/users/${user.id}/reservations`}>Reservas</Link></li>
+            <li><Link to={`/users/${user.id}/reviews`}>Reseñas</Link></li>
         </ul>
     </div>
     );
