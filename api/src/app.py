@@ -7,10 +7,20 @@ from models import db, Users, Favorites, Reviews, Reservations, Restaurant, Rest
 from utils import generate_sitemap, APIException
 from flask_cors import CORS
 from admin import setup_admin
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 start_time = time.time()
+
+# Cloudinary config
+cloudinary.config(
+    cloud_name="dnew8rn7z",
+    api_key="768347444436787",
+    api_secret=os.getenv("CLOUDINARY_API_SECRET")
+)
 
 
 db_url = os.getenv("DATABASE_URL")
