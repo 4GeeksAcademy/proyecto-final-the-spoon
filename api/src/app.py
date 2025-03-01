@@ -11,9 +11,9 @@ from flask_migrate import Migrate
 from src.models import db, Users, Favorites, Reviews, Reservations, Restaurant, RestaurantPhotos, Dishes, DishesPhotos, FoodType
 from sqlalchemy import or_
 from flask_jwt_extended import ( create_access_token, get_csrf_token, jwt_required, JWTManager, set_access_cookies, unset_jwt_cookies)
-from utils import generate_sitemap, APIException
+from src.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from admin import setup_admin
+from src.admin import setup_admin
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
