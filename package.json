@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "flask": "^0.2.10",
-    "react-scripts": "^5.0.1"
-  }
-}
