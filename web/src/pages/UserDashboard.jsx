@@ -19,18 +19,6 @@ function UserDashboard() {
   useEffect(() => {
     let userId = id || localStorage.getItem("userId"); // Usa el ID de la URL o localStorage
 
-<<<<<<< HEAD
-    return (
-    <div>
-        <h3>Hola, {user.name}</h3>
-        <ul>
-            <li><Link to={`/users/${user.id}/datos`}>Datos Personales</Link></li>
-            <li><Link to={`/users/${user.id}/puntos`}>Puntos</Link></li>
-            <li><Link to={`/users/${user.id}/favorites`}>Favoritos</Link></li>
-            <li><Link to={`/users/${user.id}/reservations`}>Reservas</Link></li>
-            <li><Link to={`/users/${user.id}/reviews`}>Reseñas</Link></li>
-        </ul>
-=======
     if (!userId) {
       navigate("/"); // Si no hay ID, redirige al inicio
       return;
@@ -103,7 +91,6 @@ function UserDashboard() {
           <Route key={route.path} path={route.path} element={route.component} />
         ))}
       </Routes>
->>>>>>> c38aab85c58f30e17169ff6c8e8b4fe597e256a9
     </div>
   );
 }
