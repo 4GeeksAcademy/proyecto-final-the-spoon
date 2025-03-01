@@ -1,72 +1,89 @@
 /* Estilos generales del contenedor */
 .review-form-container {
-    width: 100%;
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Título del formulario */
-  .review-form-container h2 {
-    text-align: center;
-    font-size: 24px;
-    color: #333;
-  }
-  
-  /* Estilos del formulario */
-  .review-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Estilos para cada campo del formulario */
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  label {
-    display: block;
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .input-field {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    background-color: #fff;
-    color: #333;
-  }
-  
-  /* Estilo para el botón de enviar */
-  .submit-button {
-    background-color: #1a2e50;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-  }
-  
-  .submit-button:hover {
-    background-color: #1a2e50;
-  }
-  
-  .submit-button:active {
-    background-color: #284a84;
-  }
-  
-  .react-datepicker-wrapper {
-    margin-left: 10px; 
-    margin-bottom: 10px;
-  }
-  
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Título del formulario */
+.review-form-container h2 {
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+}
+
+/* Estilos del formulario */
+.review-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilos para cada campo del formulario */
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fff;  /* Fondo blanco para los campos */
+  color: #333;  /* Color del texto en los campos */
+}
+
+/* Estilo para el botón de enviar */
+.submit-button {
+  background-color: #1a2e50;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #1a2e50;
+}
+
+.submit-button:active {
+  background-color: #284a84;
+}
+
+.react-datepicker-wrapper {
+  margin-left: 10px; 
+  margin-bottom: 10px;
+}
+
+/* Específico para los campos de entrada */
+input[type="password"] {
+  background-color: #fff !important;  /* Fondo blanco para el campo de contraseña */
+  color: #333 !important;  /* Color del texto */
+  border: 1px solid #ddd; /* Borde gris claro */
+  font-size: 14px;
+  padding: 10px;
+}
+
+input[type="password"]:focus {
+  border-color: #1a2e50 !important; /* Borde azul en foco */
+  background-color: #fff !important; /* Fondo blanco cuando se hace foco */
+}
+
+input[type="password"]:hover {
+  background-color: #f1f1f1 !important;  /* Fondo gris claro al pasar el ratón */
+}

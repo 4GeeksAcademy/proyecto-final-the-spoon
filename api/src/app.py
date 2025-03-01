@@ -137,24 +137,51 @@ def get_user(user_id):
 def create_user():
     data = request.get_json()
     required_fields = {"username", "email", "password"}
+    
+    # Verificar que los campos obligatorios estén presentes en los datos recibidos
     if not all(field in data for field in required_fields):
         return jsonify({"error": "Missing required fields"}), 400
+
+    # Crear un nuevo usuario
     new_user = Users(
-        id = data.get("id"),
         username=data["username"],
         email=data["email"],
         password=data["password"],
-        # points=data.get("points", 0)  # Si no se envía, toma 0 por defecto
     )
 
+    # Añadir el nuevo usuario a la base de datos
     db.session.add(new_user)
     db.session.commit()
+
+    # Retornar una respuesta exitosa con el mensaje de usuario creado
     return jsonify({
+        "message": "Usuario creado exitosamente",
         "id": new_user.id,
         "username": new_user.username,
         "email": new_user.email,
-        "points": new_user.points
-    }), 201
+    }), 201  # Código de estado 201: Creado
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data.get("username")
+    password = data.get("password")
+
+    if not username or not password:
+        return jsonify({"error": "Faltan datos"}), 400
+
+    # Buscar usuario en la base de datos
+    user = Users.query.filter_by(username=username, password=password).first()
+
+    if not user:
+        return jsonify({"error": "Credenciales incorrectas"}), 401
+
+    # Enviar respuesta con el ID del usuario
+    return jsonify({
+        "message": "Inicio de sesión exitoso",
+        "id": user.id
+    }), 200
 
 # Get, add and delete user's restaurants favs
 @app.route('/users/<int:user_id>/favorites', methods=['GET', 'POST', 'DELETE'])

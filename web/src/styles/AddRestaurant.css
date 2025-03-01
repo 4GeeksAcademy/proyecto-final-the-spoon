@@ -105,3 +105,39 @@ textarea {
 .submit-button:active {
     background-color: #284a84;
 }
+
+/* Estilos generales para los campos de formulario */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea,
+select {
+    background-color: #fff !important;  /* Fondo blanco para todos los campos */
+    color: #333 !important;  /* Color del texto en todos los campos */
+    border: 1px solid #ddd !important; /* Borde gris claro */
+    font-size: 14px !important;
+    padding: 10px !important;
+    border-radius: 4px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Estilo para los campos de texto cuando están enfocados */
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+textarea:focus,
+select:focus {
+    border-color: #1a2e50 !important;  /* Borde azul en foco */
+    background-color: #fff !important; /* Fondo blanco al hacer foco */
+    outline: none !important;  /* Eliminar el borde predeterminado de enfoque */
+}
+
+/* Estilo para los campos cuando el mouse pasa sobre ellos */
+input[type="text"]:hover,
+input[type="password"]:hover,
+input[type="email"]:hover,
+textarea:hover,
+select:hover {
+    background-color: #f1f1f1 !important;  /* Fondo gris claro al pasar el ratón */
+}
