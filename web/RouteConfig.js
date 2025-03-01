@@ -15,22 +15,22 @@ export const publicRoutesConfig = [
   {
     name: "Root",
     path: "/",
-    component: <FeedRestaurantes />,
+    component: FeedRestaurantes,
   },
   {
     name: "Login",
     path: "/login",
-    component: <UserLoginForm />,
+    component: UserLoginForm,
   },
   {
     name: "Register",
     path: "/register",
-    component: <UserRegisterForm />,
+    component: UserRegisterForm,
   },
   {
     name: "Detalle",
     path: "/restaurante/:id",
-    component: <RestauranteDetalle />,
+    component: RestauranteDetalle,
   }
 ];
 
@@ -38,36 +38,36 @@ export const guardedRoutesConfig = [
   {
     name: "ReservasForm",
     path: "/reservations",
-    component: <ReservationForm />,
+    component: ReservationForm,
   },
   {
     name: "ReviewForm",
     path: "/reviews",
-    component: <ReviewForm />,
+    component: ReviewForm,
   },
   {
     name: "Datos",
     path: "/users/${user.id}/datos",
-    component: <Datos />,
+    component: Datos,
   },
   {
     name: "Favoritos",
     path: "/users/${user.id}/favorites",
-    component: <Favoritos />,
+    component: Favoritos,
   },
   {
     name: "Reviews",
     path: "/users/${user.id}/reviews",
-    component: <Reviews />,
+    component: Reviews,
   },
   {
     name: "Reservas",
     path: "/users/${user.id}/reservations",
-    component: <Reservas />,
+    component: Reservas,
   },
   {
     name: "Dashboard",
     path: "/users/${user.id}",
-    component: <UserDashboard />,
+    component: UserDashboard,
   }
 ];
