@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const UserLoginForm = ({ setIsAuthenticated, setShowModal }) => {
@@ -6,9 +6,23 @@ const UserLoginForm = ({ setIsAuthenticated, setShowModal }) => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
+    useEffect(() => {
+        // Cargar credenciales almacenadas temporalmente
+        const storedUsername = localStorage.getItem("tempUsername");
+        const storedPassword = localStorage.getItem("tempPassword");
+
+        if (storedUsername && storedPassword) {
+            setUsername(storedUsername);
+            setPassword(storedPassword);
+
+            // Limpiar después de usarlos
+            localStorage.removeItem("tempUsername");
+            localStorage.removeItem("tempPassword");
+        }
+    }, []);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
             const response = await fetch("https://fluffy-space-telegram-v6qp6pqgq4pgc69wx-5000.app.github.dev/login", {
                 method: "POST",
@@ -22,10 +36,9 @@ const UserLoginForm = ({ setIsAuthenticated, setShowModal }) => {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("userId", data.id);
 
-                setIsAuthenticated(true);  // Actualiza el estado en NavigateBar
-
-                setShowModal(false);  // Cierra el modal
-                navigate(`/users/${data.id}`);  // Redirige al dashboard
+                setIsAuthenticated(true);
+                setShowModal(false);
+                navigate(`/users/${data.id}`);
             } else {
                 alert("Credenciales incorrectas");
             }

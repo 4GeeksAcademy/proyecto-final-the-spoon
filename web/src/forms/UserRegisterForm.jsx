@@ -33,7 +33,9 @@ const UserRegisterForm = ({ setShowModal, setIsLoginModal, setIsAuthenticated })
             const data = await response.json();
 
             if (response.ok) {
-                // Si el registro es exitoso, actualizamos el estado
+                localStorage.setItem ("tempUsername", username);
+                localStorage.setItem ("tempPassword", password);
+                
                 setIsRegistered(true);  // Marca el registro como exitoso
                 setTimeout(() => {
                     setShowModal(false);  // Cierra el modal de registro
