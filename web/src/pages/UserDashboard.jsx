@@ -58,7 +58,7 @@ function UserDashboard() {
       { path: "favoritos", name: "Favoritos", component: <Favoritos /> },
       { path: "reservas", name: "Reservas", component: <Reservas /> },
       { path: "resenas", name: "Reseñas", component: <Reseñas /> },
-      { path: "add-restaurant", name: "Añade tu Restaurante", component: <AddRestaurant onRestaurantCreated={handleRestaurantCreated} /> },
+      { path: "restaurants", name: "Añade tu Restaurante", component: <AddRestaurant onRestaurantCreated={handleRestaurantCreated} /> },
       { path: "my-restaurant", name: "Mi Restaurante", component: <MyRestaurant /> } // Ruta agregada
     ];
 

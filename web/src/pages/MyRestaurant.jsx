@@ -7,7 +7,7 @@ const MyRestaurant = () => {
 
   useEffect(() => {
     // Aquí haces una llamada al backend para obtener los datos del restaurante
-    fetch(`http://localhost:5000/restaurants/${id}`)
+    fetch(`https://fluffy-space-telegram-v6qp6pqgq4pgc69wx-5000.app.github.dev/restaurants/${id}`)
       .then((response) => response.json())
       .then((data) => setRestaurant(data))
       .catch((error) => console.error("Error al obtener el restaurante:", error));

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import React, { useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 import { useNavigate } from "react-router-dom"; // Importamos el hook de navegación
 import "../styles/AddRestaurant.css";
 
@@ -18,11 +19,7 @@ const AddRestaurant = () => {
     width: "100%",
     height: "400px",
   };
-
-  const center = {
-    lat: location.lat,
-    lng: location.lng,
-  };
+  const center = [40.4168, -3.7038]; // Coordenadas de Madrid
 
   // Cambio de ubicación cuando el usuario hace clic en el mapa
   const handleMapClick = (e) => {
@@ -44,23 +41,32 @@ const AddRestaurant = () => {
       name: name,
     };
 
-    fetch("http://localhost:5000/restaurants", {
+    fetch("https://fluffy-space-telegram-v6qp6pqgq4pgc69wx-5000.app.github.dev/restaurants", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(restaurantData),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        setRestaurant(data); // Guardar el restaurante creado en el estado
-        // Redirigir a "Mi Restaurante" después de crear
-        navigate(`/mi-restaurante/${data.id}`);
-        setShowForm(false); // Cierra el formulario después de crear el restaurante
+      .then((response) => {
+        console.log('Response status:', response.status);
+        return response.text();  // Obtener la respuesta como texto
+      })
+      .then((text) => {
+        console.log('Response text:', text);
+        try {
+          const data = JSON.parse(text); // Intentamos parsear la respuesta como JSON
+          console.log('Data received:', data);
+          setRestaurant(data); // Guardar el restaurante creado en el estado
+          navigate(`/mi-restaurante/${data.id}`); // Redirigir a la página del restaurante
+          setShowForm(false); // Cerrar el formulario después de crear el restaurante
+        } catch (error) {
+          console.error('Error al analizar la respuesta como JSON:', error);
+        }
       })
       .catch((error) => console.error("Error al crear el restaurante:", error));
   };
-  
+
   const closeForm = () => {
     setShowForm(false);
   };
@@ -114,20 +120,16 @@ const AddRestaurant = () => {
           </select>
         </div>
 
-        {/* Mapa de Google */}
-        <div className="form-group google-map">
-          <label htmlFor="location">Ubicación</label>
-          <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
-            <GoogleMap
-              mapContainerStyle={containerStyle}
-              center={center}
-              zoom={15}
-              onClick={handleMapClick}
-            >
-              <Marker position={location} />
-            </GoogleMap>
-          </LoadScript>
+        {/* Mapa */}
+        <div className='google-map'>
+          <iframe
+            title="map"
+            src="https://www.google.com/maps/embed?pb=..."
+            style={{ width: "100%", height: "600px", border: "0" }}
+            allowFullScreen
+          ></iframe>
         </div>
+
 
         <button type="submit" className="submit-button">
           Crear Restaurante
