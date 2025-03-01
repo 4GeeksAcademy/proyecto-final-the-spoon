@@ -20,8 +20,6 @@ pyjwt = ">=2.8.0"
 flask = "*"
 sqlalchemy = "*"
 flask-jwt-extended = "*"
-flask = "*"
-
 [dev-packages]
 
 [requires]
