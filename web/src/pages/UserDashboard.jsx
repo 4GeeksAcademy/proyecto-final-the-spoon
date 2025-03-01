@@ -24,7 +24,7 @@ function UserDashboard() {
       return;
     }
 
-    fetch(`https://fluffy-space-telegram-v6qp6pqgq4pgc69wx-5000.app.github.dev/users/${userId}`)
+    fetch(`https://bookish-fortnight-wxxw59rx9vx399g5-5000.app.github.dev/users/${userId}`)
   .then((res) => {
     if (!res.ok) {
       throw new Error('Error al obtener usuario');
@@ -32,6 +32,7 @@ function UserDashboard() {
     return res.json();
   })
   .then((data) => {
+    console.log(data)
     if (data && data.id) {
       setUser(data); // Actualiza el estado solo si los datos son válidos
     } else {

@@ -4,7 +4,7 @@ import UserLoginForm from '../forms/UserLoginForm';
 import UserRegisterForm from '../forms/UserRegisterForm'; 
 import logo from '../assets/The Spoon.png';
 
-function NavigateBar() {
+const NavigateBar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isLoginModal, setIsLoginModal] = useState(true);

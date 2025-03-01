@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-function Datos() {
+const Datos = () => {
     const {id} = useParams();
     const [user, setUser] = useState();
     const [loading, setLoading]= useState(true);
