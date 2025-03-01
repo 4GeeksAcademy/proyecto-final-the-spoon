@@ -17,6 +17,8 @@ flask = "*"
 gunicorn = "*"
 psycopg2-binary = "*"
 python-dotenv = "*"
+pyjwt = ">=2.8.0"
+flask-jwt-extended = ">=4.5.2"
 
 [dev-packages]
 

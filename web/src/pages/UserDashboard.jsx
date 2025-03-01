@@ -64,7 +64,7 @@ function UserDashboard() {
 
   return (
     <div className="user-dashboard-container">
-      <h3>Hola, {user.name}</h3>
+      <h3>Hola, {user.username}</h3>
       <ul className="nav-links">
         {routes.map((route) => (
           <li key={route.path}>

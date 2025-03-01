@@ -1,26 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/UserRegisterForm.css"; 
 
-const UserRegisterForm = () => {
+const UserRegisterForm = ({ setShowModal, setIsLoginModal, setIsAuthenticated }) => {
     const [username, setUsername] = useState('');
-    const [email, setEmail] = useState(''); // Nuevo campo de correo electrónico
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState(''); // Nuevo campo para confirmar la contraseña
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
+    const [isRegistered, setIsRegistered] = useState(false);  // Estado para controlar el registro
 
-    const handleUsernameChange = (e) => {
-        setUsername(e.target.value);
-    };
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-    };
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
-    };
-    const handleConfirmPasswordChange = (e) => {
-        setConfirmPassword(e.target.value);
-    };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         // Validación de contraseñas
@@ -29,22 +18,40 @@ const UserRegisterForm = () => {
             return;
         }
 
-        console.log('Formulario de registro enviado');
-        console.log('Usuario:', username);
-        console.log('Correo:', email);
-        console.log('Contraseña:', password);
+        // Enviar los datos al backend para crear un nuevo usuario
+        try {
+            const response = await fetch("https://fluffy-space-telegram-v6qp6pqgq4pgc69wx-5000.app.github.dev/users", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username,
+                    email,
+                    password
+                })
+            });
 
-        // Aquí podrías enviar los datos al backend para el registro
-        // Para simular el registro, vamos a guardar los datos en localStorage
-        localStorage.setItem("user", JSON.stringify({ username, email, password }));
+            const data = await response.json();
 
-        setUsername('');
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
-
-        window.location.href = "/"; // Redirige a la página de inicio después de registrarse
+            if (response.ok) {
+                // Si el registro es exitoso, actualizamos el estado
+                setIsRegistered(true);  // Marca el registro como exitoso
+                setTimeout(() => {
+                    setShowModal(false);  // Cierra el modal de registro
+                    setIsLoginModal(true);  // Cambia al modal de login
+                    setShowModal(true);  // Abre el modal de login
+                }, 2000);  // Espera 2 segundos antes de hacer el cambio
+            } else {
+                setError(data.message || "Error al registrar el usuario.");
+            }
+        } catch (error) {
+            console.error("Error en el registro:", error);
+            setError("Error al conectar con el servidor.");
+        }
     };
+
+    if (isRegistered) {
+        return <div className="success-message">¡Registro exitoso! Redirigiendo al login...</div>;
+    }
 
     return (
         <div className="login-form-container">
@@ -56,7 +63,7 @@ const UserRegisterForm = () => {
                         id="username"
                         className="input-field"
                         value={username}
-                        onChange={handleUsernameChange}
+                        onChange={(e) => setUsername(e.target.value)}
                         placeholder="Ingresa tu usuario"
                         required
                     />
@@ -68,7 +75,7 @@ const UserRegisterForm = () => {
                         id="email"
                         className="input-field"
                         value={email}
-                        onChange={handleEmailChange}
+                        onChange={(e) => setEmail(e.target.value)}
                         placeholder="Ingresa tu correo electrónico"
                         required
                     />
@@ -80,7 +87,7 @@ const UserRegisterForm = () => {
                         id="password"
                         className="input-field"
                         value={password}
-                        onChange={handlePasswordChange}
+                        onChange={(e) => setPassword(e.target.value)}
                         placeholder="Ingresa tu contraseña"
                         required
                     />
@@ -92,11 +99,12 @@ const UserRegisterForm = () => {
                         id="confirmPassword"
                         className="input-field"
                         value={confirmPassword}
-                        onChange={handleConfirmPasswordChange}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
                         placeholder="Confirma tu contraseña"
                         required
                     />
                 </div>
+                {error && <p className="error-message">{error}</p>}
                 <button type="submit" className="submit-button">Registrarse</button>
             </form>
         </div>

@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Navbar, Nav, Container, Modal, Button } from 'react-bootstrap'; 
 import UserLoginForm from '../forms/UserLoginForm'; 
 import UserRegisterForm from '../forms/UserRegisterForm'; 
 import logo from '../assets/The Spoon.png';
 
 function NavigateBar() {
-  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isLoginModal, setIsLoginModal] = useState(true);
@@ -18,14 +16,14 @@ function NavigateBar() {
     
     setIsAuthenticated(!!token);
     setUserId(storedUserId);
-  }, []);
+  }, [isAuthenticated]); 
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
     setIsAuthenticated(false);
     setUserId(null);
-    navigate('/');
+    setShowModal(false); // Cierra el modal en logout
   };
 
   const handleShowLogin = () => {
@@ -73,12 +71,13 @@ function NavigateBar() {
         </Modal.Header>
         <Modal.Body>
           {isLoginModal ? (
-            <UserLoginForm 
-              setIsAuthenticated={setIsAuthenticated} 
-              setShowModal={setShowModal} 
-            /> 
+            <UserLoginForm setIsAuthenticated={setIsAuthenticated} setShowModal={setShowModal} /> 
           ) : (
-            <UserRegisterForm /> 
+            <UserRegisterForm 
+              setShowModal={setShowModal} 
+              setIsLoginModal={setIsLoginModal} 
+              setIsAuthenticated={setIsAuthenticated} 
+            />
           )}
         </Modal.Body>
       </Modal>
