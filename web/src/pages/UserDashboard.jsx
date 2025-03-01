@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Datos from "./Datos";
 import Favoritos from "./Favoritos";
 import Reservas from "./Reservas";
-import Reseñas from "./Reseñas";
+import Reviews from "./Reviews";
 import AddRestaurant from "../forms/AddRestaurant";
 import MyRestaurant from "./MyRestaurant";
 import'../styles/UserDashboard.css';
@@ -57,7 +57,7 @@ function UserDashboard() {
       { path: "datos", name: "Datos Personales", component: <Datos /> },
       { path: "favoritos", name: "Favoritos", component: <Favoritos /> },
       { path: "reservas", name: "Reservas", component: <Reservas /> },
-      { path: "resenas", name: "Reseñas", component: <Reseñas /> },
+      { path: "reviews", name: "Reviews", component: <Reviews /> },
       { path: "restaurants", name: "Añade tu Restaurante", component: <AddRestaurant onRestaurantCreated={handleRestaurantCreated} /> },
       { path: "my-restaurant", name: "Mi Restaurante", component: <MyRestaurant /> } // Ruta agregada
     ];
