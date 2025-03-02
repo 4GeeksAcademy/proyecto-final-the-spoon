@@ -39,7 +39,7 @@ else:
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////tmp/test2.db" # Si peta, cambiar la versión test1 a test2...
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-jwt_key = os.getenv("JWT_SECRET_KEY") or "akjflsdj"
+jwt_key = os.getenv("JWT_SECRET_KEY")
 
 # print db_url
 print(db_url)
@@ -74,6 +74,75 @@ def health_check():
     return jsonify({"status": "ok", "uptime": round(time.time() - start_time, 2)}), 200
 
 ############## API Endpoints ##############
+
+@app.route("/register", methods=["POST"])
+def register():
+    data = request.get_json()
+    username = data.get("username")
+    email = data.get("email")
+    password = data.get("password")
+
+    required_fields = ["username", "email", "password"]
+
+    if not all(field in data for field in required_fields):
+        return jsonify({"error": "Missing required fields"}), 400
+
+    existing_user = (
+        db.session.query(Users)
+        .filter(or_(Users.username == username, Users.email == email))
+        .first()
+    )
+    if existing_user:
+        return jsonify({"error": "Username or Email already registered"}), 400
+
+    hashedPassword = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode(
+        "utf-8"
+    )
+
+    new_user = Users(username=username, email=email, password=hashedPassword)
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({"message": "User registered successfully"}), 201
+
+@app.route("/login", methods=["POST"])
+def get_login():
+    data = request.get_json()
+
+    email = data["email"]
+    password = data["password"]
+
+    required_fields = ["email", "password"]
+    if not all(field in data for field in required_fields):
+        return jsonify({"error": "Missing required fields"}), 400
+
+    user = Users.query.filter_by(email=email).first()
+
+    if not user:
+        return jsonify({"error": "User not found"}), 400
+
+    is_password_valid = bcrypt.checkpw(
+        password.encode("utf-8"), user.password.encode("utf-8")
+    )
+
+    if not is_password_valid:
+        return jsonify({"error": "Password not correct"}), 400
+
+    access_token = create_access_token(identity=str(user.id))
+    csrf_token = get_csrf_token(access_token)
+    response = jsonify(
+        {"msg": "login successful", "user": user, "csrf_token": csrf_token}
+    )
+    set_access_cookies(response, access_token)
+
+    return response
+
+@app.route("/logout", methods=["POST"])
+@jwt_required()
+def logout_with_cookies():
+    response = jsonify({"msg": "logout successful"})
+    unset_jwt_cookies(response)
+    return response
 
 @app.route('/restaurants', methods=['GET'])
 def get_restaurants():
@@ -160,28 +229,6 @@ def create_user():
         "username": new_user.username,
         "email": new_user.email,
     }), 201  # Código de estado 201: Creado
-
-
-@app.route('/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    username = data.get("username")
-    password = data.get("password")
-
-    if not username or not password:
-        return jsonify({"error": "Faltan datos"}), 400
-
-    # Buscar usuario en la base de datos
-    user = Users.query.filter_by(username=username, password=password).first()
-
-    if not user:
-        return jsonify({"error": "Credenciales incorrectas"}), 401
-
-    # Enviar respuesta con el ID del usuario
-    return jsonify({
-        "message": "Inicio de sesión exitoso",
-        "id": user.id
-    }), 200
 
 # Get, add and delete user's restaurants favs
 @app.route('/users/<int:user_id>/favorites', methods=['GET', 'POST', 'DELETE'])

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-function Reservas() {
+const Reservas = () => {
     const [reservas, setReservas] = useState([]);
     const [loading, setLoading] = useState(true);
 
