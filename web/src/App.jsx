@@ -9,8 +9,10 @@ import UserDashboard from './pages/UserDashboard.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 import './App.css'
-import { publicRoutesConfig } from '../RouteConfig.js';
-import { guardedRoutesConfig } from '../RouteConfig.js';
+import { guardedRoutesConfig, publicRoutesConfig } from './services/routing/routeConfig.jsx';
+import { GuardedRoute } from './components/GuardedRoute.jsx';
+
+
 
 const App = () => {
   return (

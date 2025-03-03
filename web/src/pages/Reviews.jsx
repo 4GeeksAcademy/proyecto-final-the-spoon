@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-function Reviews() {
+const Reviews = () => {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
 

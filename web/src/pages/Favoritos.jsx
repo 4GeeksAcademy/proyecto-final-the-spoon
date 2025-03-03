@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
-function Favoritos() {
+const Favoritos = () => {
   const { id } = useParams();
   const [favorites, setFavorites] = useState([]); // Inicializado como un array vacío
   const [loading, setLoading] = useState(true);
