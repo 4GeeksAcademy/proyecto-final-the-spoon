@@ -227,14 +227,32 @@ body {
 .feedcontainer {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Alineación a la izquierda */
+  align-items: center;
   justify-content: flex-start;
-  text-align: left; /* Alineación del texto a la izquierda */
-  padding-top: 20px; /* Ajusta para que no sobreponga el header */
-  padding-bottom: 20px; /* Ajuste para el footer */
-  flex-grow: 1; /* Permite que el contenido crezca y ocupe el espacio disponible */
-  width: 100%; /* Asegura que el contenedor ocupe todo el ancho */
-  margin: 0; /* Elimina márgenes */
+  min-height: 100vh;
+  text-align: center;
+  padding-top: 10px;
+  padding-left: 350px;
+}
+
+.filters {
+  display: flex;
+  gap: 10px; /* Espacio entre los elementos */
+  justify-content: center;
+  align-items: center; /* Alinea verticalmente */
+  flex-wrap: wrap; /* Permite que los elementos se ajusten si no caben */
+  width: 100%;
+  max-width: 800px; /* Ajusta esto según tu diseño */
+}
+
+.filters input,
+.filters select {
+  padding: 8px;
+  font-size: 16px;
+}
+
+.results {
+  margin-top: 20px; /* Espacio entre los filtros y los resultados */
 }
 
 /* Asegurarse de que los elementos principales ocupen el ancho completo */
