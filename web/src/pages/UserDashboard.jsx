@@ -32,7 +32,7 @@ function UserDashboard() {
     return res.json();
   })
   .then((data) => {
-    console.log(data)
+    // console.log(data)
     if (data && data.id) {
       setUser(data); // Actualiza el estado solo si los datos son válidos
     } else {
