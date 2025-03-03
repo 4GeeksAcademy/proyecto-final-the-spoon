@@ -33,8 +33,9 @@ cloudinary.config(
 
 
 db_url = os.getenv("DATABASE_URL")
+
 if db_url is not None:
-    app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace("postgres://", "postgresql://")
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////tmp/test2.db" # Si peta, cambiar la versión test1 a test2...
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
