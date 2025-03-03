@@ -1,0 +1,13 @@
+html, body, #root {
+    height: 100%;
+    margin: 0; /* Elimina los márgenes predeterminados */
+  }
+  
+  .container-center {
+    min-height: 100vh; /* Asegura que el contenedor ocupe al menos toda la altura de la ventana */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centra el contenido verticalmente */
+    align-items: center; /* Centra el contenido horizontalmente */
+  }
+  
