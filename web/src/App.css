@@ -256,9 +256,17 @@ h1, h2, h3, h4, h5, h6 {
   color: inherit;
 }
 
-/* Ajuste de los elementos */
-.add-restaurant-container h2 {
-  text-align: left;  /* Título alineado a la izquierda */
+.container {
+  width: 100%;
+  max-width: 100%; /* Asegura que el ancho no se desborde */
+  padding: 0 15px; /* Si deseas márgenes dentro del contenedor */
 }
-
+.feedcontainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Asegura que ocupe todo el ancho disponible */
+  max-width: 1200px; /* Opcional, puedes poner un máximo si quieres que no se expanda demasiado */
+}
 

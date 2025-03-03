@@ -27,10 +27,8 @@ const FeedRestaurantes = () => {
     );
   });
 
-  //if (loading) return <p className="text-center">Cargando restaurantes...</p>;
-
   return (
-    <div className="feedcontainer">
+    <div className="container-center">
       {/* Filtros */}
       <div className="flex flex-wrap gap-4 mb-6">
         <input
