@@ -37,7 +37,7 @@ const UserLoginForm = ({ setIsAuthenticated, setShowModal }) => {
             }
 
             // Guardar token e ID del usuario
-            console.log("Datos recibidos en login:", data);
+            // console.log("Datos recibidos en login:", data);
             localStorage.setItem("token", data.csrf_token);
             localStorage.setItem("userId", data.user.id);
 
