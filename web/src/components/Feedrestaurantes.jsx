@@ -9,7 +9,7 @@ const FeedRestaurantes = () => {
   const [ubicacion, setUbicacion] = useState("");
 
   useEffect(() => {
-    fetch("https://api.ejemplo.com/restaurantes") // Reemplaza con la URL real
+    fetch("https://api/restaurantes") // Reemplaza con la URL real
       .then((res) => res.json())
       .then((data) => {
         setRestaurantes(data);
@@ -32,7 +32,7 @@ const FeedRestaurantes = () => {
   return (
     <div className="feedcontainer">
       {/* Filtros */}
-      <div className="flex flex-wrap gap-4 mb-6">
+      <div className="filters">
         <input
           type="text"
           placeholder="Buscar por nombre..."
@@ -63,7 +63,7 @@ const FeedRestaurantes = () => {
       </div>
 
       {/* Lista de restaurantes */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="results">
         {restaurantesFiltrados.length > 0 ? (
           restaurantesFiltrados.map((restaurante) => (
             <div key={restaurante.id} className="bg-white shadow-lg rounded-lg p-4">

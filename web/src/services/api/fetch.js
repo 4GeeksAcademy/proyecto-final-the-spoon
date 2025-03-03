@@ -1,4 +1,4 @@
-export const baseUrl = "https://bookish-fortnight-wxxw59rx9vx399g5-5000.app.github.dev/"; // Backend Render
+export const baseUrl = "/api/"; // Backend Render
 
 export const loginUrl = "login";
 export const registerUrl = "register";
