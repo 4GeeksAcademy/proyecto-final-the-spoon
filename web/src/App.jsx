@@ -4,7 +4,7 @@ import NavigateBar from './components/NavigateBar'
 import Footer from './components/Footer.jsx'
 import FeedRestaurantes from './components/Feedrestaurantes.jsx';
 
-import GuardedRoute from './components/GuardedRoute.jsx';
+import UserDashboard from './pages/UserDashboard.jsx';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
