@@ -281,10 +281,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 .feedcontainer {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%; /* Asegura que ocupe todo el ancho disponible */
-  max-width: 1200px; /* Opcional, puedes poner un máximo si quieres que no se expanda demasiado */
+  flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
+  align-items: center; /* Centra los elementos horizontalmente */
+  justify-content: flex-start; /* Alinea los elementos en la parte superior */
+  min-height: 100vh;
+  text-align: center;
+  padding-top: 80px; /* Ajusta esto según la altura de tu navbar */
+  padding-left:350px;
 }
-
