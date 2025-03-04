@@ -21,31 +21,7 @@ const UserRegisterForm = ({ setShowModal, setIsLoginModal, setIsAuthenticated })
 
         // Enviar los datos al backend para crear un nuevo usuario
         try {
-            // const response = await fetch("https://fluffy-space-telegram-v6qp6pqgq4pgc69wx-5000.app.github.dev/users", {
-            //     method: "POST",
-            //     headers: { "Content-Type": "application/json" },
-            //     body: JSON.stringify({
-            //         username,
-            //         email,
-            //         password
-            //     })
-            // });
 
-            // const data = await response.json();
-
-            // if (response.ok) {
-            //     localStorage.setItem ("tempUsername", username);
-            //     localStorage.setItem ("tempPassword", password);
-
-            //     setIsRegistered(true);  // Marca el registro como exitoso
-            //     setTimeout(() => {
-            //         setShowModal(false);  // Cierra el modal de registro
-            //         setIsLoginModal(true);  // Cambia al modal de login
-            //         setShowModal(true);  // Abre el modal de login
-            //     }, 2000);  // Espera 2 segundos antes de hacer el cambio
-            // } else {
-            //     setError(data.message || "Error al registrar el usuario.");
-            // }
             const data = await postRegister(username, email, password)
             if (data.error) {
                 setError(data.error);

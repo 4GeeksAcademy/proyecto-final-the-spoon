@@ -1,21 +1,21 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import VolverAtras from '../components/VolverAtras';
 
 const Favoritos = () => {
   const { id } = useParams();
-  const [favorites, setFavorites] = useState([]); // Inicializado como un array vacío
+  const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`/favoritos/${id}`)
       .then((response) => response.json())
       .then((data) => {
-        // Aseguramos que data sea un array antes de actualizar el estado
         if (Array.isArray(data)) {
           setFavorites(data);
         } else {
           console.error("Los datos obtenidos no son un array.");
-          setFavorites([]); // Si no es un array, inicializamos como un array vacío
+          setFavorites([]);
         }
         setLoading(false);
       })
@@ -30,6 +30,7 @@ const Favoritos = () => {
 
   return (
     <div>
+      <VolverAtras /> {/* Botón para volver atrás */}
       <h2>Favoritos</h2>
       <ul>
         {favorites.map((fav) => (

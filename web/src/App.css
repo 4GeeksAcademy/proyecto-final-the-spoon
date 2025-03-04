@@ -279,13 +279,33 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 100%; /* Asegura que el ancho no se desborde */
   padding: 0 15px; /* Si deseas márgenes dentro del contenedor */
 }
+/* Elimina la altura fija del body y usa min-height */
+/* Ajustar el body para que el contenido no quede debajo del header y footer */
+body {
+  color: #333;
+  background: #fff;
+  font: 16px/1.6 "Muli", sans-serif;
+  min-width: 320px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  padding-top: 80px;  /* Deja espacio para el header fijo */
+  padding-bottom: 60px;  /* Deja espacio para el footer fijo */
+  height: 100%;
+  overflow-x: hidden; /* Evita el desplazamiento horizontal */
+  margin: 0; /* Elimina cualquier margen */
+}
+
+/* Para asegurarte de que el contenido de la página ocupa todo el espacio disponible */
 .feedcontainer {
   display: flex;
-  flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
-  align-items: center; /* Centra los elementos horizontalmente */
-  justify-content: flex-start; /* Alinea los elementos en la parte superior */
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   min-height: 100vh;
   text-align: center;
-  padding-top: 80px; /* Ajusta esto según la altura de tu navbar */
-  padding-left:350px;
+  padding-top: 10px;
+  padding-left: 350px;
+  padding-bottom: 20px; /* Asegúrate de dejar espacio al final de la página */
 }
+

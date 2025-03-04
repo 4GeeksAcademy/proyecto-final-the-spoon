@@ -1,50 +1,28 @@
-import { useParams, useNavigate, Link, Route, Routes } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useNavigate, Link, Route, Routes } from "react-router-dom";
+import { useContext, useState, useEffect } from "react";
 import Datos from "./Datos";
 import Favoritos from "./Favoritos";
 import Reservas from "./Reservas";
 import Reviews from "./Reviews";
 import AddRestaurant from "../forms/AddRestaurant";
 import MyRestaurant from "./MyRestaurant";
-import'../styles/UserDashboard.css';
-import { FaCamera } from 'react-icons/fa'; // Para el icono de la cámara
+import '../styles/UserDashboard.css';
+import { UserContext } from "../context/User";  
 
 function UserDashboard() {
-  const { id } = useParams();
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const { user } = useContext(UserContext);  // Usamos el contexto para obtener el usuario
   const [restaurant, setRestaurant] = useState(null); // Aquí se guardará el restaurante creado
   const [loading, setLoading] = useState(true);
 
+  // Si no hay un usuario logueado, redirige a la página principal
   useEffect(() => {
-    let userId = id || localStorage.getItem("userId"); // Usa el ID de la URL o localStorage
-
-    if (!userId) {
-      navigate("/"); // Si no hay ID, redirige al inicio
-      return;
-    }
-
-    fetch(`https://bookish-fortnight-wxxw59rx9vx399g5-5000.app.github.dev/users/${userId}`)
-  .then((res) => {
-    if (!res.ok) {
-      throw new Error('Error al obtener usuario');
-    }
-    return res.json();
-  })
-  .then((data) => {
-    // console.log(data)
-    if (data && data.id) {
-      setUser(data); // Actualiza el estado solo si los datos son válidos
+    if (!user.id) {
+      navigate("/"); // Si no hay usuario, redirige al inicio
     } else {
-      console.error("Usuario no encontrado");
+      setLoading(false);  // Si el usuario existe, ya no está cargando
     }
-    setLoading(false);
-  })
-  .catch((error) => {
-    console.error("Error al obtener usuario:", error);
-    setLoading(false);
-  });
-  }, [id, navigate]);
+  }, [user, navigate]);
 
   // Función para actualizar el restaurante después de añadir uno
   const handleRestaurantCreated = (newRestaurant) => {
@@ -52,16 +30,16 @@ function UserDashboard() {
   };
 
   if (loading) return <p className="loading-message">Cargando usuario...</p>;
-  if (!user) return <p className="error-message">Error: usuario no encontrado</p>;
+  if (!user.id) return <p className="error-message">Error: usuario no encontrado</p>;
 
   const routes = [
-      { path: "datos", name: "Datos Personales", component: <Datos /> },
-      { path: "favoritos", name: "Favoritos", component: <Favoritos /> },
-      { path: "reservas", name: "Reservas", component: <Reservas /> },
-      { path: "reviews", name: "Reviews", component: <Reviews /> },
-      { path: "restaurants", name: "Añade tu Restaurante", component: <AddRestaurant onRestaurantCreated={handleRestaurantCreated} /> },
-      { path: "my-restaurant", name: "Mi Restaurante", component: <MyRestaurant /> } // Ruta agregada
-    ];
+    { path: "datos", name: "Datos Personales", component: <Datos /> },
+    { path: "favoritos", name: "Favoritos", component: <Favoritos /> },
+    { path: "reservas", name: "Reservas", component: <Reservas /> },
+    { path: "reviews", name: "Reviews", component: <Reviews /> },
+    { path: "restaurants", name: "Añade tu Restaurante", component: <AddRestaurant onRestaurantCreated={handleRestaurantCreated} /> },
+    { path: "my-restaurant", name: "Mi Restaurante", component: <MyRestaurant /> } // Ruta agregada
+  ];
 
   return (
     <div className="user-dashboard-container">
@@ -82,10 +60,6 @@ function UserDashboard() {
         </div>
       )}
 
-      <div className="add-photos">
-        {/* Icono para subir fotos */}
-        <FaCamera size={30} onClick={() => alert("Añadir fotos al restaurante")} />
-      </div>
 
       <Routes>
         {routes.map((route) => (
