@@ -1,4 +1,4 @@
-export const baseUrl = "/api/"; // Backend Render
+export const baseUrl = "https://fluffy-space-telegram-v6qp6pqgq4pgc69wx-5173.app.github.dev/api/"; // Backend Render
 
 export const loginUrl = "login";
 export const registerUrl = "register";

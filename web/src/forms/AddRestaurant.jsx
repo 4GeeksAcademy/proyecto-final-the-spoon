@@ -64,7 +64,7 @@ const AddRestaurant = () => {
 
     const restaurantData = {
       administrator: user.id, 
-      address: address, // Usamos la dirección en lugar de las coordenadas
+      location: address, // Usamos la dirección en lugar de las coordenadas
       description: description,
       food_type: foodType,
       name: name,

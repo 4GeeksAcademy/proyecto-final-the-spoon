@@ -22,7 +22,6 @@ const Datos = () => {
             <h3>Datos Personales</h3>
             <p><strong>Nombre:</strong> {user.username}</p>
             <p><strong>Email:</strong> {user.email}</p>
-            <p><strong>Password:</strong> {user.password}</p>
         </div>
     );
 };

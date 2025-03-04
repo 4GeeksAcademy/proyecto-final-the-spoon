@@ -53,7 +53,7 @@ export const UserProvider = ({ children }) => {
 
   // Función para agregar un restaurante
   const addRestaurant = (restaurantData) => {
-    fetch(`api/users/${user.id}/restaurants`, {
+    fetch(`/api/restaurants`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

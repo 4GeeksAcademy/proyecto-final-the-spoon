@@ -151,13 +151,13 @@ def get_restaurants():
     return jsonify(restaurants), 200
 
 # Get restaurant by id
-@app.route('/restaurants>', methods=['GET'])
-def get_restaurant(restaurant):
-    restaurant = Restaurant.query.get(restaurant)
+@app.route('/restaurants/<int:restaurant_id>', methods=['GET'])
+def get_restaurant(restaurant_id):
+    restaurant = Restaurant.query.get(restaurant_id)
     return jsonify(restaurant) if restaurant else (jsonify({"error": "Restaurant not found"}), 400)
 
 # Crear un nuevo restaurante
-@app.route('/users/<int:user_id>/restaurants', methods=['POST'])
+@app.route('/restaurants', methods=['POST'])
 def create_restaurant():
     data = request.get_json()
     required_fields = {"administrator", "location", "description", "food_type", "name"}

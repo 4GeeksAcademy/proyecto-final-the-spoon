@@ -9,7 +9,7 @@ const FeedRestaurantes = () => {
   const [ubicacion, setUbicacion] = useState("");
 
   useEffect(() => {
-    fetch("https://api/restaurantes") // Reemplaza con la URL real
+    fetch('/api/restaurants') // Reemplaza con la URL real
       .then((res) => res.json())
       .then((data) => {
         setRestaurantes(data);
