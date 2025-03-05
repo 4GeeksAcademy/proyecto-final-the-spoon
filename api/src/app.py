@@ -307,6 +307,15 @@ def manage_reviews(restaurant_id):
 
     return jsonify({"error": "Invalid request"}), 405  # Method not allowed
 
+@app.route('/users/<int:user_id>/restaurants', methods=['GET'])
+def get_restaurants_by_admin(user_id):
+    restaurants = Restaurant.query.filter_by(administrator=user_id).all()
+    
+    if not restaurants:
+        return jsonify({"error": "No restaurants found for this administrator"}), 404
+    
+    return jsonify(restaurants), 200
+    
 @app.route('/users/<int:user_id>/reviews', methods=['GET'])
 def get_user_reviews(user_id):
     # Retrieve all reviews made by a specific user
