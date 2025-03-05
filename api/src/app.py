@@ -314,7 +314,7 @@ def get_restaurants_by_admin(user_id):
     if not restaurants:
         return jsonify({"error": "No restaurants found for this administrator"}), 404
     
-    return jsonify([restaurant.to_dict() for restaurant in restaurants]), 200
+    return jsonify(restaurants), 200
 
 @app.route('/users/<int:user_id>/reviews', methods=['GET'])
 def get_user_reviews(user_id):
