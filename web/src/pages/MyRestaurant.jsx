@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/User"; 
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router-dom";  // Importa useNavigate
 
 const MyRestaurant = () => {
   const { id } = useParams(); // Obtienes el id de la URL (restaurante específico)
   const { user } = useContext(UserContext); // Accedes al usuario actual desde el contexto
   const [restaurants, setRestaurants] = useState([]); // Lista de restaurantes
   const [restaurantData, setRestaurantData] = useState(null); // Datos del restaurante que se está editando
+  const [isEditing, setIsEditing] = useState(false);  // Estado para controlar si estamos editando
+  const navigate = useNavigate();  // Hook de navegación
 
   useEffect(() => {
     // Función que obtiene los restaurantes creados por el usuario
@@ -59,10 +61,48 @@ const MyRestaurant = () => {
     }));
   };
 
-  const handleSaveChanges = () => {
-    if (restaurantData) {
-      console.log("Cambios guardados:", restaurantData);
+  const handleSaveChanges = async () => {
+    try {
+      // Enviar los cambios al servidor (PUT)
+      const response = await fetch(`/api/restaurants/${restaurantData.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(restaurantData), // Aquí estás enviando el objeto con los datos actualizados
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();  // Captura el detalle del error
+        console.error("Error al actualizar el restaurante:", errorData);
+        return; // Si hay un error, no continuar
+      } else {
+        const updatedRestaurant = await response.json(); // Recibimos los datos actualizados del servidor
+  
+        // Actualizar el estado de los restaurantes para reflejar los cambios
+        setRestaurants((prevRestaurants) =>
+          prevRestaurants.map((restaurant) =>
+            restaurant.id === updatedRestaurant.id
+              ? { ...restaurant, ...updatedRestaurant } // Actualizar el restaurante con los nuevos datos
+              : restaurant
+          )
+        );
+  
+        // Mostrar un mensaje de éxito o redirigir si es necesario
+        console.log("Restaurante actualizado correctamente:", updatedRestaurant);
+        
+        // Redirigir al usuario a la página del restaurante editado
+        navigate(`/restaurants/${updatedRestaurant.id}`);
+      }
+    } catch (error) {
+      console.error("Hubo un problema al enviar la solicitud:", error);
     }
+  };
+  
+  const handleEditClick = (restaurant) => {
+    // Establecer los datos del restaurante y mostrar el banner de edición
+    setRestaurantData(restaurant);
+    setIsEditing(true); // Activar la edición
   };
 
   return (
@@ -75,14 +115,21 @@ const MyRestaurant = () => {
           <div key={restaurant.id}>
             <h3>{restaurant.name}</h3>
             <p>{restaurant.description}</p>
-            <button onClick={() => setRestaurantData(restaurant)}>Editar</button>
+            <button onClick={() => handleEditClick(restaurant)}>Editar</button>
           </div>
         ))
       )}
 
-      {restaurantData && (
-        <div>
+      {isEditing && restaurantData && (
+        <div className="edit-banner">
           <h3>Editar {restaurantData.name}</h3>
+          <button onClick={() => setIsEditing(false)}>Cerrar Edición</button>
+          <button onClick={handleSaveChanges}>Guardar Cambios</button>
+        </div>
+      )}
+
+      {isEditing && (
+        <div>
           <div>
             <label>Nombre</label>
             <input
@@ -118,7 +165,6 @@ const MyRestaurant = () => {
               onChange={handleInputChange}
             />
           </div>
-          <button onClick={handleSaveChanges}>Guardar Cambios</button>
         </div>
       )}
     </div>
