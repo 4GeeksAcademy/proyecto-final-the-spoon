@@ -7,38 +7,44 @@ import Reviews from "./Reviews";
 import AddRestaurant from "../forms/AddRestaurant";
 import MyRestaurant from "./MyRestaurant";
 import '../styles/UserDashboard.css';
-import { UserContext } from "../context/User";  
+import { UserContext } from "../context/User";
 
 function UserDashboard() {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);  // Usamos el contexto para obtener el usuario
-  const [restaurant, setRestaurant] = useState(null); // Aquí se guardará el restaurante creado
-  const [loading, setLoading] = useState(true);
+  const { user, favorites, reservas, reviews, loadFavorites, getReservations, getReviews, loading, error, restaurants } = useContext(UserContext);  
+  const [restaurant, setRestaurant] = useState(null); 
+  const [loadingData, setLoadingData] = useState(true);
 
-  // Si no hay un usuario logueado, redirige a la página principal
   useEffect(() => {
-    if (!user.id) {
-      navigate("/"); // Si no hay usuario, redirige al inicio
+    if (user.id) {
+      setLoadingData(true);
+      Promise.all([
+        loadFavorites(user.id),
+        getReservations(user.id),
+        getReviews(user.id)
+      ])
+        .then(() => setLoadingData(false))
+        .catch(() => setLoadingData(false));
     } else {
-      setLoading(false);  // Si el usuario existe, ya no está cargando
+      setLoadingData(false);
     }
-  }, [user, navigate]);
+  }, [user, loadFavorites, getReservations, getReviews]);
 
-  // Función para actualizar el restaurante después de añadir uno
-  const handleRestaurantCreated = (newRestaurant) => {
-    setRestaurant(newRestaurant);
-  };
-
-  if (loading) return <p className="loading-message">Cargando usuario...</p>;
+  if (loadingData || loading) return <p className="loading-message">Cargando...</p>;
   if (!user.id) return <p className="error-message">Error: usuario no encontrado</p>;
+
+  const handleRestaurantCreated = (newRestaurant) => {
+    setRestaurant(newRestaurant); // Guardamos el restaurante recién creado
+    navigate(`/users/${user.id}/my-restaurant`); // Redirige a la página de "Mi Restaurante"
+  };
 
   const routes = [
     { path: "dashboard-data", name: "Datos Personales", component: <Datos /> },
-    { path: "favoritos", name: "Favoritos", component: <Favoritos /> },
-    { path: "reservas", name: "Reservas", component: <Reservas /> },
-    { path: "reviews", name: "Reviews", component: <Reviews /> },
+    { path: "favoritos", name: "Favoritos", component: <Favoritos favorites={favorites} /> },
+    { path: "reservas", name: "Reservas", component: <Reservas reservas={reservas} /> },
+    { path: "reviews", name: "Reviews", component: <Reviews reviews={reviews} /> },
     { path: "restaurants", name: "Añade tu Restaurante", component: <AddRestaurant onRestaurantCreated={handleRestaurantCreated} /> },
-    { path: "my-restaurant", name: "Mi Restaurante", component: <MyRestaurant /> } // Ruta agregada
+    { path: "my-restaurant", name: "Mi Restaurante", component: <MyRestaurant restaurant={restaurant || restaurants[0]} /> } // Aseguramos que restaurant tenga algo
   ];
 
   return (
@@ -52,14 +58,12 @@ function UserDashboard() {
         ))}
       </ul>
 
-      {/* Enlace a Mi Restaurante si ya ha creado uno */}
       {restaurant && (
         <div className="my-restaurant">
           <h4>Mi Restaurante: {restaurant.name}</h4>
           <Link to={`/users/${user.id}/my-restaurant`} className="route-link">Ver Restaurante</Link>
         </div>
       )}
-
 
       <Routes>
         {routes.map((route) => (

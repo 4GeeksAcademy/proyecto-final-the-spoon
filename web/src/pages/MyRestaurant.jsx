@@ -3,37 +3,40 @@ import { UserContext } from "../context/User";
 import { useParams } from "react-router";
 
 const MyRestaurant = () => {
-  const { id } = useParams(); // Obtener el ID desde la URL
-  const { restaurants, updateRestaurant } = useContext(UserContext); // Obtener restaurantes y método de actualización desde el contexto
+  const { id } = useParams(); // ID desde los parámetros de la URL
+  const { restaurants, user } = useContext(UserContext);
+  const [restaurantData, setRestaurantData] = useState(null);
   const [isRestaurantOwner, setIsRestaurantOwner] = useState(false);
-  const [restaurantData, setRestaurantData] = useState(null); // Estado para manejar los datos del restaurante en edición
 
-  // Buscar el restaurante por ID
-  const restaurant = restaurants.find((r) => r.id === parseInt(id)); // Filtramos el restaurante por ID
+  // Convertimos el ID de la URL a número
+  const restaurantId = parseInt(id, 10);
+  console.log("ID convertido a número:", restaurantId);
+
+  // Filtramos los restaurantes donde el 'user.id' coincide con 'administrator'
+  const myRestaurants = restaurants.filter((restaurant) => restaurant.administrator === user.id);
+  console.log("Restaurantes encontrados para el usuario:", myRestaurants);
+
+  // Buscamos el restaurante que coincida con el ID proporcionado en la URL
+  const restaurant = myRestaurants.find((r) => r.id === restaurantId);
 
   useEffect(() => {
     if (restaurant) {
-      console.log("Valor de restaurant desde el contexto:", restaurant); // Ver el valor del restaurante
-
-      if (restaurant.administrator === parseInt(id)) {
-        setIsRestaurantOwner(true);
-      } else {
-        setIsRestaurantOwner(false);
-      }
-
-      // Establecer los datos del restaurante para mostrarlos en el formulario
+      console.log("Restaurante encontrado:", restaurant);
       setRestaurantData({
+        id: restaurant.id,
         name: restaurant.name,
         description: restaurant.description,
         food_type: restaurant.food_type,
         location: restaurant.location,
       });
+      setIsRestaurantOwner(restaurant.administrator === user.id);
+    } else {
+      console.log("No se encontró el restaurante con ese id");
     }
-  }, [restaurant, id]);
+  }, [myRestaurants, restaurantId, restaurant]);
 
-  if (!restaurant) return <p>Cargando restaurante...</p>;
+  if (!restaurant) return <p>No se encontró el restaurante.</p>;
 
-  // Función para manejar cambios en los campos del formulario
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setRestaurantData((prevData) => ({
@@ -42,65 +45,66 @@ const MyRestaurant = () => {
     }));
   };
 
-  // Función para guardar los cambios del restaurante
   const handleSaveChanges = () => {
-    // Llamamos al método `updateRestaurant` del contexto para actualizar el restaurante
-    updateRestaurant({ ...restaurant, ...restaurantData });
+    if (restaurantData) {
+      console.log("Cambios guardados:", restaurantData);
+      // Aquí llamarías a la función para guardar cambios en el contexto
+    }
   };
 
-  if (!isRestaurantOwner) {
-    return <p>No tienes permiso para ver este restaurante.</p>;
-  }
-
   return (
-    <div>
-      <h2>Mi Restaurante: {restaurant.name}</h2>
-      {/* Si está editando, mostramos el formulario */}
-      {restaurantData ? (
+    <div className="my-restaurant-container">
+      <h2>Mis Restaurantes</h2>
+      <div key={restaurantData.id}>
+        <h3>{restaurantData.name}</h3>
+
         <div>
-          <h3>Editar Restaurante</h3>
-          <form>
-            <div>
-              <label>Nombre:</label>
-              <input 
-                type="text" 
-                name="name" 
-                value={restaurantData.name} 
-                onChange={handleInputChange} 
-              />
-            </div>
-            <div>
-              <label>Descripción:</label>
-              <textarea 
-                name="description" 
-                value={restaurantData.description} 
-                onChange={handleInputChange} 
-              />
-            </div>
-            <div>
-              <label>Tipo de comida:</label>
-              <input 
-                type="text" 
-                name="food_type" 
-                value={restaurantData.food_type} 
-                onChange={handleInputChange} 
-              />
-            </div>
-            <div>
-              <label>Ubicación:</label>
-              <input 
-                type="text" 
-                name="location" 
-                value={`Lat: ${restaurantData.location.lat}, Lng: ${restaurantData.location.lng}`} 
-                disabled 
-              />
-            </div>
-            <button type="button" onClick={handleSaveChanges}>Guardar Cambios</button>
-          </form>
+          <label>Nombre</label>
+          <input
+            type="text"
+            name="name"
+            value={restaurantData.name}
+            onChange={handleInputChange}
+            disabled={!isRestaurantOwner}
+          />
         </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+
+        <div>
+          <label>Descripción</label>
+          <textarea
+            name="description"
+            value={restaurantData.description}
+            onChange={handleInputChange}
+            disabled={!isRestaurantOwner}
+          />
+        </div>
+
+        <div>
+          <label>Tipo de comida</label>
+          <input
+            type="text"
+            name="food_type"
+            value={restaurantData.food_type}
+            onChange={handleInputChange}
+            disabled={!isRestaurantOwner}
+          />
+        </div>
+
+        <div>
+          <label>Ubicación</label>
+          <input
+            type="text"
+            name="location"
+            value={restaurantData.location}
+            onChange={handleInputChange}
+            disabled={!isRestaurantOwner}
+          />
+        </div>
+
+        {isRestaurantOwner && (
+          <button onClick={handleSaveChanges}>Guardar Cambios</button>
+        )}
+      </div>
     </div>
   );
 };

@@ -6,9 +6,9 @@ export const loginUrl = "login";
 export const registerUrl = "register";
 export const logoutUrl = "logout";
 export const privateUrl = `${baseUrl}private`; 
-export const addRestaurantUrl = "restaurant"; // Ruta protegida
+export const addRestaurantUrl = "restaurants"; // Ruta protegida
 export const favoritesUrl = "favoritos";
-export const reservationsUrl = `${baseUrl}reservations`;
+export const reservationsUrl = `reservations`;
 export const reviewUrl = "review"; 
 
 

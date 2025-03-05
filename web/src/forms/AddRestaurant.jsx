@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "../styles/AddRestaurant.css";
 
-const AddRestaurant = () => {
+const AddRestaurant = ({ onRestaurantCreated }) => {
   const [location, setLocation] = useState({ lat: 40.4168, lng: -3.7038 }); // Coordenadas de Madrid por defecto
   const [address, setAddress] = useState(""); // Dirección a buscar
   const [name, setName] = useState("");
@@ -13,8 +13,9 @@ const AddRestaurant = () => {
   const [showForm, setShowForm] = useState(true);
   const [loading, setLoading] = useState(false); // Estado de carga para el submit
   const [isSearching, setIsSearching] = useState(false); // Estado para manejar la búsqueda de dirección
+  const [searchError, setSearchError] = useState(""); // Para mostrar errores de búsqueda
 
-  const { user, addRestaurant, restaurants } = useContext(UserContext);
+  const { user, addRestaurant } = useContext(UserContext);
 
   // Opciones de comida
   const foodTypes = ["MEXICAN", "ITALIAN", "CHINESE"];
@@ -28,6 +29,7 @@ const AddRestaurant = () => {
   const handleSearchAddress = async () => {
     if (address.length > 3) { // Solo buscar si la longitud es mayor a 3 caracteres
       setIsSearching(true); // Indicamos que estamos buscando
+      setSearchError(""); // Limpiar cualquier error previo
       try {
         const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${address}&addressdetails=1`);
         const data = await response.json();
@@ -40,15 +42,16 @@ const AddRestaurant = () => {
           });
           setAddress(display_name); // Establecemos la dirección completa
         } else {
-          console.error("No se encontró la dirección.");
+          setSearchError("No se encontró la dirección. Intenta con otra.");
           setIsSearching(false); // Desactivamos la búsqueda
         }
       } catch (error) {
         console.error("Error al buscar la dirección:", error);
+        setSearchError("Error al realizar la búsqueda de la dirección.");
         setIsSearching(false); // Desactivamos la búsqueda en caso de error
       }
     } else {
-      console.log("La dirección debe tener al menos 4 caracteres.");
+      setSearchError("La dirección debe tener al menos 4 caracteres.");
     }
   };
 
@@ -64,7 +67,7 @@ const AddRestaurant = () => {
 
     const restaurantData = {
       administrator: user.id, 
-      location: address, // Usamos la dirección en lugar de las coordenadas
+      location: address, 
       description: description,
       food_type: foodType,
       name: name,
@@ -75,6 +78,7 @@ const AddRestaurant = () => {
 
     // Usamos la función del contexto para agregar el restaurante
     addRestaurant(restaurantData);
+    onRestaurantCreated(restaurantData); // Llamamos a la función del prop para actualizar el estado en UserDashboard
 
     setLoading(false); // Desactiva el estado de carga
     setShowForm(false); // Ocultamos el formulario
@@ -144,6 +148,9 @@ const AddRestaurant = () => {
             {isSearching ? "Buscando..." : "Buscar Dirección"}
           </button>
         </div>
+
+        {/* Mensaje de error de búsqueda */}
+        {searchError && <div className="error-message">{searchError}</div>}
 
         {/* Mapa */}
         <MapContainer

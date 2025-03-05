@@ -10,27 +10,28 @@ const UserLoginForm = ({ setShowModal }) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   
-  const { login } = useContext(UserContext);  // Accede a la función login desde el contexto
+  const { login } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Llamar a postLogin para hacer la petición de login
       const data = await postLogin(email, password);
 
       if (data.error) {
-        setError(data.error);  // Si hay error, lo mostramos
+        setError(data.error); 
         return;
       }
 
-      // Llamar a la función login del contexto para actualizar el estado
       login(email, password);
+      navigate(`/users/${data.user.id}`);
 
-      // Redirigir a la página del usuario después de iniciar sesión
-      navigate(`/users/${data.user.id}`);  // Redirige a la página del usuario
+      // Verifica que setShowModal es una función antes de usarla
+      if (typeof setShowModal === 'function') {
+        setShowModal(false);  // Cierra el modal después de hacer login
+      } else {
+        console.error('setShowModal no es una función');
+      }
 
-      // Cerrar el modal después de iniciar sesión
-      setShowModal(false);
     } catch (error) {
       console.error("Error en login:", error);
       setError("Error al conectar con el servidor.");
@@ -68,5 +69,4 @@ const UserLoginForm = ({ setShowModal }) => {
     </form>
   );
 };
-
 export default UserLoginForm;

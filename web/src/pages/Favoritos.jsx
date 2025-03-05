@@ -1,4 +1,3 @@
-// src/components/Favoritos.jsx
 import { useEffect } from "react";
 import { useUserContext } from "../context/User";
 
@@ -11,8 +10,9 @@ const Favoritos = () => {
     }
   }, [user, loadFavorites]);
 
+  // Si no hay favoritos, mostrar el mensaje "Añade favoritos"
   if (favorites.length === 0) {
-    return <p>No tienes favoritos.</p>;
+    return <p>Aún no tienes favoritos. ¡Añádelos!</p>;
   }
 
   return (

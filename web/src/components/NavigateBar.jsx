@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Navbar, Nav, Container, Modal } from 'react-bootstrap'; 
+import { Navbar, Nav, Container, Modal } from 'react-bootstrap';
 import UserLoginForm from '../forms/UserLoginForm'; 
-import UserRegisterForm from '../forms/UserRegisterForm'; 
+import UserRegisterForm from '../forms/UserRegisterForm';  // No lo quitamos
 import { useContext } from 'react';
 import { UserContext } from '../context/User';  // Importa el contexto de usuario
 import { Link } from 'react-router-dom';  // Importa Link de react-router-dom
@@ -20,12 +20,12 @@ const NavigateBar = () => {
 
   const handleShowLogin = () => {
     setIsLoginModal(true);
-    setShowModal(true);
+    setShowModal(true);  // Abre el modal cuando el usuario hace clic en "Login"
   };
 
   const handleShowRegister = () => {
     setIsLoginModal(false);
-    setShowModal(true);
+    setShowModal(true);  // Abre el modal cuando el usuario hace clic en "Register"
   };
 
   const handleClose = () => setShowModal(false); // Cierra el modal
@@ -34,7 +34,7 @@ const NavigateBar = () => {
     <>
       <Navbar bg="light" expand="lg">
         <Container>
-          <Navbar.Brand as={Link} to="/"> {/* Cambié href por Link */}
+          <Navbar.Brand as={Link} to="/">
             The Spoon
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -62,9 +62,9 @@ const NavigateBar = () => {
         </Modal.Header>
         <Modal.Body>
           {isLoginModal ? (
-            <UserLoginForm setShowModal={setShowModal} />
+            <UserLoginForm setShowModal={setShowModal} />  
           ) : (
-            <UserRegisterForm setShowModal={setShowModal} setIsLoginModal={setIsLoginModal} />
+            <UserRegisterForm setShowModal={setShowModal} setIsLoginModal={setIsLoginModal} />  
           )}
         </Modal.Body>
       </Modal>

@@ -1,9 +1,9 @@
-import { baseUrl, favoritesUrl } from "./fetch";
+import { userFavsUrl } from "./fetch";
 
 // Función para obtener los favoritos del usuario desde la API
 export const loadFavorites = async (userId) => {
   try {
-    const response = await fetch(`${baseUrl}${favoritesUrl}/${userId}`);
+    const response = await fetch(userFavsUrl);
     
     if (response.status === 404) {
       return [];  // Si no se encuentran favoritos, devolver un array vacío

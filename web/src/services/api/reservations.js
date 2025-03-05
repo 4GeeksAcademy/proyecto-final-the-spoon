@@ -1,15 +1,27 @@
-// Cargar reservas del usuario
+import { fetchWrapper, userReservationsUrl } from "./fetch";
 export const getReservations = async (userId) => {
-    try {
-      const response = await fetchWrapper(`users/${userId}/reservations`);  // Sin "/api"
-      if (!response.ok) {
-        throw new Error("No se pudieron cargar las reservas.");
-      }
-      return response;  // El fetchWrapper ya devuelve la respuesta procesada como JSON
-    } catch (error) {
-      throw new Error(error.message);
+  const url = userReservationsUrl(userId); 
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        "Accept": "application/json",
+      },
+    });
+
+    const text = await response.text();
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
-  };
+
+    return JSON.parse(text);
+  } catch (error) {
+    throw error;
+  }
+};
+
+
   
   // Agregar una nueva reserva
   export const addReservation = async (userId, reservationData) => {

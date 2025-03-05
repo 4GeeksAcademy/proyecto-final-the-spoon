@@ -1,8 +1,8 @@
-import {fetchWrapper} from './fetch'; // Asegúrate de importar fetchWrapper
+import {fetchWrapper, userReviewsUrl} from './fetch'; // Asegúrate de importar fetchWrapper
 
 export const getReviews = async (userId) => {
   try {
-    const response = await fetchWrapper(`/api/reviews/${userId}`);
+    const response = await fetchWrapper(userReviewsUrl);
     return response; // Retornamos la respuesta que viene de la API
   } catch (error) {
     console.error(error);

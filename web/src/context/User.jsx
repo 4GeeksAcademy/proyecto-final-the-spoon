@@ -111,7 +111,11 @@ export const UserProvider = ({ children }) => {
   const addRestaurant = async (restaurantData) => {
     setLoading(true);
     try {
-      const newRestaurant = await postRestaurant(restaurantData);
+      const newRestaurant = await postRestaurant({
+        ...restaurantData,
+        administrator: user.id // Establecemos el administrador con el ID del usuario
+      });
+      
       setRestaurants((prevRestaurants) => [...prevRestaurants, newRestaurant]);
       setLoading(false);
     } catch (error) {
