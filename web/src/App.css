@@ -20,6 +20,7 @@ html {
 }
 
 body {
+  flex:1;
   color: #333;
   background: #fff;
   font: 16px/1.6 "Muli", sans-serif;
@@ -27,6 +28,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
+  padding-top: 80px; /* Espacio para el header */
+  padding-bottom: 20px; /* Espacio antes del footer */
 }
 
 img {
