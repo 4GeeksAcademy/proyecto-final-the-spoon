@@ -1,7 +1,7 @@
-import { baseUrl, addRestaurantUrl } from "./fetch";
+import { baseUrl, restaurantsUrl } from "./fetch";
 import { fetchWrapper } from "./fetch";  // Importamos el fetchWrapper
 
-const postRestaurantEndpoint = `${baseUrl}${addRestaurantUrl}`; // /api/restaurant
+const postRestaurantEndpoint = `${baseUrl}${restaurantsUrl}`; // /api/restaurant
 
 // Función para agregar un restaurante
 export const postRestaurant = async (restaurantData) => {
@@ -15,9 +15,18 @@ export const postRestaurant = async (restaurantData) => {
       body: JSON.stringify(restaurantData),
     });
 
-    return data; // Regresamos la respuesta del backend
+    return data; 
   } catch (error) {
     console.error("Error en postRestaurant:", error);
-    throw error; 
+    throw error;
+  }
+};
+
+export const getUserRestaurants = async (userId) => {
+  try {
+    const data = await fetchWrapper(`${baseUrl}users/${userId}/restaurants`)
+    return data;
+  } catch (error) {
+    return [];
   }
 };
