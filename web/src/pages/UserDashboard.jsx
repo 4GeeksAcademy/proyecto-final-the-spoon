@@ -33,7 +33,7 @@ function UserDashboard() {
   if (!user.id) return <p className="error-message">Error: usuario no encontrado</p>;
 
   const routes = [
-    { path: "datos", name: "Datos Personales", component: <Datos /> },
+    { path: "dashboard-data", name: "Datos Personales", component: <Datos /> },
     { path: "favoritos", name: "Favoritos", component: <Favoritos /> },
     { path: "reservas", name: "Reservas", component: <Reservas /> },
     { path: "reviews", name: "Reviews", component: <Reviews /> },

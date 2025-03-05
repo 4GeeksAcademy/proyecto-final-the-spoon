@@ -1,9 +1,16 @@
+import { postLogout } from "./auth";
+
 export const baseUrl = "https://fluffy-space-telegram-v6qp6pqgq4pgc69wx-5173.app.github.dev/api/"; // Backend Render
 
 export const loginUrl = "login";
 export const registerUrl = "register";
 export const logoutUrl = "logout";
-export const privateUrl = `${baseUrl}private`; // Ruta protegida
+export const privateUrl = `${baseUrl}private`; 
+export const addRestaurantUrl = "restaurant"; // Ruta protegida
+export const favoritesUrl = "favoritos";
+export const reservationsUrl = `${baseUrl}reservations`;
+export const reviewUrl = "review"; 
+
 
 // Pantalla principal de restaurantes 
 export const restaurantsUrl = `${baseUrl}restaurants`;

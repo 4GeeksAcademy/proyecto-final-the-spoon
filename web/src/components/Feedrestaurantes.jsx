@@ -77,7 +77,7 @@ const FeedRestaurantes = () => {
                 to={`/restaurante/${restaurante.id}`}
                 className="block mt-3 text-blue-500 hover:underline"
               >
-                Ver detalles
+                Ver detalles 
               </Link>
             </div>
           ))

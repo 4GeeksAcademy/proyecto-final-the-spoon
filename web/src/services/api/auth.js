@@ -1,4 +1,4 @@
-import { baseUrl, fetchWrapper, loginUrl, logoutUrl, registerUrl } from "./fetch";
+import { fetchWrapper, baseUrl, loginUrl, logoutUrl, registerUrl } from "./fetch";
 
 const registerEndpoint = `${baseUrl}${registerUrl}` // /api/register
 const loginEndpoint = `${baseUrl}${loginUrl}` // /api/login

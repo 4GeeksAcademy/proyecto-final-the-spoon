@@ -47,7 +47,7 @@ export const guardedRoutesConfig = [
   },
   {
     name: "Datos",
-    path: "/users/:id/datos",  // Usa :id en lugar de `${user.id}`
+    path: "/dasboard-data",  // Usa :id en lugar de `${user.id}`
     component: <Datos />,
   },
   {
