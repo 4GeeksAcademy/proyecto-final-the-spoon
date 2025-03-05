@@ -1,83 +1,97 @@
-import React, { useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import { useNavigate } from "react-router-dom"; // Importamos el hook de navegación
+import React, { useState, useContext } from "react";
+import { UserContext } from "../context/User";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 import "../styles/AddRestaurant.css";
 
-const AddRestaurant = () => {
-  const [location, setLocation] = useState({ lat: 40.4168, lng: -3.7038 }); // Coordenadas de Madrid
+const AddRestaurant = ({ onRestaurantCreated }) => {
+  const [location, setLocation] = useState({ lat: 40.4168, lng: -3.7038 }); // Coordenadas de Madrid por defecto
+  const [address, setAddress] = useState(""); // Dirección a buscar
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [foodType, setFoodType] = useState("MEXICAN");
-  const [userId, setUserId] = useState(localStorage.getItem("userId") || ""); // Se obtiene del localStorage
-  const [restaurant, setRestaurant] = useState(null); // Estado para almacenar el restaurante creado
-  const [showForm, setShowForm] = useState(true); // Estado para controlar la visibilidad del formulario
-  const navigate = useNavigate(); // Usamos useNavigate para redirigir
+  const [showForm, setShowForm] = useState(true);
+  const [loading, setLoading] = useState(false); // Estado de carga para el submit
+  const [isSearching, setIsSearching] = useState(false); // Estado para manejar la búsqueda de dirección
+  const [searchError, setSearchError] = useState(""); // Para mostrar errores de búsqueda
 
-  // Definimos las opciones del mapa
-  const containerStyle = {
-    width: "100%",
-    height: "400px",
-  };
-  const center = [40.4168, -3.7038]; // Coordenadas de Madrid
+  const { user, addRestaurant } = useContext(UserContext);
 
-  // Cambio de ubicación cuando el usuario hace clic en el mapa
-  const handleMapClick = (e) => {
-    setLocation({
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng(),
-    });
+  // Opciones de comida
+  const foodTypes = ["MEXICAN", "ITALIAN", "CHINESE"];
+
+  // Maneja el cambio de la dirección
+  const handleAddressChange = (e) => {
+    setAddress(e.target.value);
   };
 
-  // Enviar formulario
+  // Maneja la búsqueda de la dirección
+  const handleSearchAddress = async () => {
+    if (address.length > 3) { // Solo buscar si la longitud es mayor a 3 caracteres
+      setIsSearching(true); // Indicamos que estamos buscando
+      setSearchError(""); // Limpiar cualquier error previo
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${address}&addressdetails=1`);
+        const data = await response.json();
+
+        if (data.length > 0) {
+          const { lat, lon, display_name } = data[0]; // Usamos display_name como dirección completa
+          setLocation({
+            lat: parseFloat(lat),
+            lng: parseFloat(lon),
+          });
+          setAddress(display_name); // Establecemos la dirección completa
+        } else {
+          setSearchError("No se encontró la dirección. Intenta con otra.");
+          setIsSearching(false); // Desactivamos la búsqueda
+        }
+      } catch (error) {
+        console.error("Error al buscar la dirección:", error);
+        setSearchError("Error al realizar la búsqueda de la dirección.");
+        setIsSearching(false); // Desactivamos la búsqueda en caso de error
+      }
+    } else {
+      setSearchError("La dirección debe tener al menos 4 caracteres.");
+    }
+  };
+
+  // Enviar formulario usando el contexto para agregar el restaurante
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Previene que la página se recargue al enviar el formulario
+
+    // Asegúrate de que user.id esté presente
+    if (!user || !user.id) {
+      console.error("User ID no encontrado");
+      return;
+    }
 
     const restaurantData = {
-      administrator: userId,
-      location: location, // ubicación (lat, lng)
+      administrator: user.id, 
+      location: address, 
       description: description,
       food_type: foodType,
       name: name,
     };
+    console.log("Datos del restaurante a guardar:", restaurantData);
+    
+    setLoading(true); // Activa el estado de carga
 
-    fetch("https://fluffy-space-telegram-v6qp6pqgq4pgc69wx-5000.app.github.dev/restaurants", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(restaurantData),
-    })
-      .then((response) => {
-        console.log('Response status:', response.status);
-        return response.text();  // Obtener la respuesta como texto
-      })
-      .then((text) => {
-        console.log('Response text:', text);
-        try {
-          const data = JSON.parse(text); // Intentamos parsear la respuesta como JSON
-          console.log('Data received:', data);
-          setRestaurant(data); // Guardar el restaurante creado en el estado
-          navigate(`/mi-restaurante/${data.id}`); // Redirigir a la página del restaurante
-          setShowForm(false); // Cerrar el formulario después de crear el restaurante
-        } catch (error) {
-          console.error('Error al analizar la respuesta como JSON:', error);
-        }
-      })
-      .catch((error) => console.error("Error al crear el restaurante:", error));
+    // Usamos la función del contexto para agregar el restaurante
+    addRestaurant(restaurantData);
+    onRestaurantCreated(restaurantData); // Llamamos a la función del prop para actualizar el estado en UserDashboard
+
+    setLoading(false); // Desactiva el estado de carga
+    setShowForm(false); // Ocultamos el formulario
+
+    console.log("Restaurante agregado:", restaurantData);
   };
 
-  const closeForm = () => {
-    setShowForm(false);
-  };
-
-  if (!showForm) return null; // No renderiza el formulario si el estado showForm es false
+  if (!showForm) return null;
 
   return (
     <form onSubmit={handleSubmit} className="add-restaurant-form">
       <div className="add-restaurant-container">
-        {/* Botón de cierre */}
-        <button type="button" className="close-button" onClick={closeForm}>
+        <button type="button" className="close-button" onClick={() => setShowForm(false)}>
           &times;
         </button>
 
@@ -112,7 +126,7 @@ const AddRestaurant = () => {
             onChange={(e) => setFoodType(e.target.value)}
             required
           >
-            {["MEXICAN", "ITALIAN", "CHINESE"].map((type) => (
+            {foodTypes.map((type) => (
               <option key={type} value={type}>
                 {type}
               </option>
@@ -120,19 +134,42 @@ const AddRestaurant = () => {
           </select>
         </div>
 
-        {/* Mapa */}
-        <div className='google-map'>
-          <iframe
-            title="map"
-            src="https://www.google.com/maps/embed?pb=..."
-            style={{ width: "100%", height: "600px", border: "0" }}
-            allowFullScreen
-          ></iframe>
+        <div className="form-group">
+          <label htmlFor="address">Dirección</label>
+          <input
+            type="text"
+            id="address"
+            value={address}
+            onChange={handleAddressChange}
+            placeholder="Buscar una dirección"
+            required
+          />
+          <button type="button" onClick={handleSearchAddress} disabled={isSearching}>
+            {isSearching ? "Buscando..." : "Buscar Dirección"}
+          </button>
         </div>
 
+        {/* Mensaje de error de búsqueda */}
+        {searchError && <div className="error-message">{searchError}</div>}
 
-        <button type="submit" className="submit-button">
-          Crear Restaurante
+        {/* Mapa */}
+        <MapContainer
+          center={[location.lat, location.lng]}
+          zoom={13}
+          style={{ width: "100%", height: "400px" }}
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+          <Marker position={[location.lat, location.lng]}>
+            <Popup>Ubicación seleccionada</Popup>
+          </Marker>
+        </MapContainer>
+
+        {/* Botón para enviar el formulario */}
+        <button type="submit" className="submit-button" disabled={loading}>
+          {loading ? "Creando..." : "Crear Restaurante"}
         </button>
       </div>
     </form>

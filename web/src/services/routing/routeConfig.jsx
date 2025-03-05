@@ -10,6 +10,7 @@ import Favoritos from "../../pages/Favoritos";
 import Reservas from "../../pages/Reservas";
 import Reviews from "../../pages/Reviews";
 import UserDashboard from "../../pages/UserDashboard";
+import AddRestaurant from "../../forms/AddRestaurant";
 
 export const publicRoutesConfig = [
   {
@@ -33,7 +34,6 @@ export const publicRoutesConfig = [
     component: <RestauranteDetalle />,
   }
 ];
-
 export const guardedRoutesConfig = [
   {
     name: "ReservasForm",
@@ -47,27 +47,32 @@ export const guardedRoutesConfig = [
   },
   {
     name: "Datos",
-    path: "/users/${user.id}/datos",
+    path: "/dasboard-data",  // Usa :id en lugar de `${user.id}`
     component: <Datos />,
   },
   {
     name: "Favoritos",
-    path: "/users/${user.id}/favorites",
+    path: "/users/:id/favorites",  // Usa :id en lugar de `${user.id}`
     component: <Favoritos />,
   },
   {
     name: "Reviews",
-    path: "/users/${user.id}/reviews",
+    path: "/users/:id/reviews",  // Usa :id en lugar de `${user.id}`
     component: <Reviews />,
   },
   {
     name: "Reservas",
-    path: "/users/${user.id}/reservations",
+    path: "/users/:id/reservations",  // Usa :id en lugar de `${user.id}`
     component: <Reservas />,
   },
   {
     name: "Dashboard",
-    path: "/users/${user.id}",
+    path: "/users/:id/*",  // Usa :id en lugar de `${user.id}`
     component: <UserDashboard />,
+  },
+  {
+    name: "AddRestaurant",
+    path: "/users/:id/restaurant",  // Usa :id en lugar de `${user.id}`
+    component: <AddRestaurant />,
   }
 ];

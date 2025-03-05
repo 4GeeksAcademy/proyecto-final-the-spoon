@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { useUserContext } from '../context/User'; // Asegúrate de importar UserContext
 import '../styles/ReviewForm.css';
 
 function ReviewForm({ user }) {
     const [comment, setComment] = useState('');
     const [rating, setRating] = useState(1);
     const [createdAt] = useState(new Date().toLocaleDateString('es-ES'));
-
+    const { addReview } = useUserContext(); // Acceder a la función addReview del UserContext
 
     const handleCommentChange = (event) => {
         setComment(event.target.value);
@@ -20,7 +21,7 @@ function ReviewForm({ user }) {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        // Datos al backend
+        // Datos de la reseña
         const reviewData = {
             comment,
             rating,
@@ -28,20 +29,12 @@ function ReviewForm({ user }) {
             created_at: createdAt
         };
 
-        fetch('/api/reviews', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(reviewData),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Reseña enviada:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+        // Llamar a la función addReview desde el contexto para agregar la reseña
+        addReview(user.id, reviewData); // Llamar a addReview para agregar la nueva reseña
+
+        // Limpiar el formulario
+        setComment('');
+        setRating(1);
     };
 
     const renderStars = (rating) => {
@@ -66,7 +59,7 @@ function ReviewForm({ user }) {
         <div className="review-form-container">
             <h2>Deja tu Reseña</h2>
             <div className="user-info">
-                <p><strong>Usuario:</strong> {user ? user.name : 'Anónimo'}</p> {/* Mostrar el nombre del usuario */}
+                <p><strong>Usuario:</strong> {user ? user.name : 'Anónimo'}</p> 
                 <p><strong>Fecha:</strong> {createdAt}</p>
             </div>
             <form onSubmit={handleSubmit} className="review-form">

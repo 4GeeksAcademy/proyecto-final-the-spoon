@@ -1,67 +1,51 @@
-import { useParams, useNavigate, Link, Route, Routes } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useNavigate, Link, Route, Routes } from "react-router-dom";
+import { useContext, useState, useEffect } from "react";
 import Datos from "./Datos";
 import Favoritos from "./Favoritos";
 import Reservas from "./Reservas";
 import Reviews from "./Reviews";
 import AddRestaurant from "../forms/AddRestaurant";
 import MyRestaurant from "./MyRestaurant";
-import'../styles/UserDashboard.css';
-import { FaCamera } from 'react-icons/fa'; // Para el icono de la cámara
+import '../styles/UserDashboard.css';
+import { UserContext } from "../context/User";
 
 function UserDashboard() {
-  const { id } = useParams();
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [restaurant, setRestaurant] = useState(null); // Aquí se guardará el restaurante creado
-  const [loading, setLoading] = useState(true);
+  const { user, favorites, reservas, reviews, loadFavorites, getReservations, getReviews, loading, error, restaurants } = useContext(UserContext);  
+  const [restaurant, setRestaurant] = useState(null); 
+  const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
-    let userId = id || localStorage.getItem("userId"); // Usa el ID de la URL o localStorage
-
-    if (!userId) {
-      navigate("/"); // Si no hay ID, redirige al inicio
-      return;
-    }
-
-    fetch(`https://bookish-fortnight-wxxw59rx9vx399g5-5000.app.github.dev/users/${userId}`)
-  .then((res) => {
-    if (!res.ok) {
-      throw new Error('Error al obtener usuario');
-    }
-    return res.json();
-  })
-  .then((data) => {
-    // console.log(data)
-    if (data && data.id) {
-      setUser(data); // Actualiza el estado solo si los datos son válidos
+    if (user.id) {
+      setLoadingData(true);
+      Promise.all([
+        loadFavorites(user.id),
+        getReservations(user.id),
+        getReviews(user.id)
+      ])
+        .then(() => setLoadingData(false))
+        .catch(() => setLoadingData(false));
     } else {
-      console.error("Usuario no encontrado");
+      setLoadingData(false);
     }
-    setLoading(false);
-  })
-  .catch((error) => {
-    console.error("Error al obtener usuario:", error);
-    setLoading(false);
-  });
-  }, [id, navigate]);
+  }, [user, loadFavorites, getReservations, getReviews]);
 
-  // Función para actualizar el restaurante después de añadir uno
+  if (loadingData || loading) return <p className="loading-message">Cargando...</p>;
+  if (!user.id) return <p className="error-message">Error: usuario no encontrado</p>;
+
   const handleRestaurantCreated = (newRestaurant) => {
-    setRestaurant(newRestaurant);
+    setRestaurant(newRestaurant); // Guardamos el restaurante recién creado
+    navigate(`/users/${user.id}/my-restaurant`); // Redirige a la página de "Mi Restaurante"
   };
 
-  if (loading) return <p className="loading-message">Cargando usuario...</p>;
-  if (!user) return <p className="error-message">Error: usuario no encontrado</p>;
-
   const routes = [
-      { path: "datos", name: "Datos Personales", component: <Datos /> },
-      { path: "favoritos", name: "Favoritos", component: <Favoritos /> },
-      { path: "reservas", name: "Reservas", component: <Reservas /> },
-      { path: "reviews", name: "Reviews", component: <Reviews /> },
-      { path: "restaurants", name: "Añade tu Restaurante", component: <AddRestaurant onRestaurantCreated={handleRestaurantCreated} /> },
-      { path: "my-restaurant", name: "Mi Restaurante", component: <MyRestaurant /> } // Ruta agregada
-    ];
+    { path: "dashboard-data", name: "Datos Personales", component: <Datos /> },
+    { path: "favoritos", name: "Favoritos", component: <Favoritos favorites={favorites} /> },
+    { path: "reservas", name: "Reservas", component: <Reservas reservas={reservas} /> },
+    { path: "reviews", name: "Reviews", component: <Reviews reviews={reviews} /> },
+    { path: "restaurants", name: "Añade tu Restaurante", component: <AddRestaurant onRestaurantCreated={handleRestaurantCreated} /> },
+    { path: "my-restaurant", name: "Mi Restaurante", component: <MyRestaurant restaurant={restaurant || restaurants[0]} /> } // Aseguramos que restaurant tenga algo
+  ];
 
   return (
     <div className="user-dashboard-container">
@@ -74,18 +58,12 @@ function UserDashboard() {
         ))}
       </ul>
 
-      {/* Enlace a Mi Restaurante si ya ha creado uno */}
       {restaurant && (
         <div className="my-restaurant">
           <h4>Mi Restaurante: {restaurant.name}</h4>
           <Link to={`/users/${user.id}/my-restaurant`} className="route-link">Ver Restaurante</Link>
         </div>
       )}
-
-      <div className="add-photos">
-        {/* Icono para subir fotos */}
-        <FaCamera size={30} onClick={() => alert("Añadir fotos al restaurante")} />
-      </div>
 
       <Routes>
         {routes.map((route) => (

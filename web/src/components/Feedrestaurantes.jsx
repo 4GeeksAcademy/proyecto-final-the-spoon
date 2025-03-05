@@ -9,7 +9,7 @@ const FeedRestaurantes = () => {
   const [ubicacion, setUbicacion] = useState("");
 
   useEffect(() => {
-    fetch("https://api/restaurantes") // Reemplaza con la URL real
+    fetch('/api/restaurants') // Reemplaza con la URL real
       .then((res) => res.json())
       .then((data) => {
         setRestaurantes(data);
@@ -27,10 +27,8 @@ const FeedRestaurantes = () => {
     );
   });
 
-  //if (loading) return <p className="text-center">Cargando restaurantes...</p>;
-
   return (
-    <div className="feedcontainer">
+    <div className="container-center">
       {/* Filtros */}
       <div className="filters">
         <input
@@ -79,7 +77,7 @@ const FeedRestaurantes = () => {
                 to={`/restaurante/${restaurante.id}`}
                 className="block mt-3 text-blue-500 hover:underline"
               >
-                Ver detalles
+                Ver detalles 
               </Link>
             </div>
           ))
