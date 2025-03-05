@@ -3,39 +3,37 @@ import { UserContext } from "../context/User";
 import { useParams } from "react-router";
 
 const MyRestaurant = () => {
-  const { id } = useParams(); // ID desde los parámetros de la URL
-  const { restaurants, user } = useContext(UserContext);
+  const { id } = useParams(); 
+  const { restaurants = [], user, getUserRestaurants } = useContext(UserContext); 
   const [restaurantData, setRestaurantData] = useState(null);
   const [isRestaurantOwner, setIsRestaurantOwner] = useState(false);
 
-  // Convertimos el ID de la URL a número
-  const restaurantId = parseInt(id, 10);
-  console.log("ID convertido a número:", restaurantId);
-
-  // Filtramos los restaurantes donde el 'user.id' coincide con 'administrator'
-  const myRestaurants = restaurants.filter((restaurant) => restaurant.administrator === user.id);
-  console.log("Restaurantes encontrados para el usuario:", myRestaurants);
-
-  // Buscamos el restaurante que coincida con el ID proporcionado en la URL
-  const restaurant = myRestaurants.find((r) => r.id === restaurantId);
+  useEffect(() => {
+    getUserRestaurants();
+  }, [user.id]);
 
   useEffect(() => {
+    const restaurantId = parseInt(id, 10);
+    const myRestaurants = restaurants?.filter((restaurant) => restaurant?.administrator === user?.id) || [];
+    const restaurant = myRestaurants.find((r) => r.id === restaurantId);
+
     if (restaurant) {
-      console.log("Restaurante encontrado:", restaurant);
       setRestaurantData({
         id: restaurant.id,
-        name: restaurant.name,
-        description: restaurant.description,
-        food_type: restaurant.food_type,
-        location: restaurant.location,
+        name: restaurant.name || "",
+        description: restaurant.description || "",
+        food_type: restaurant.food_type || "",
+        location: restaurant.location || "",
       });
       setIsRestaurantOwner(restaurant.administrator === user.id);
     } else {
       console.log("No se encontró el restaurante con ese id");
     }
-  }, [myRestaurants, restaurantId, restaurant]);
+  }, [restaurants, id, user.id]);
 
-  if (!restaurant) return <p>No se encontró el restaurante.</p>;
+  if (!restaurantData) {
+    return <p>Cargando restaurante...</p>;
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -48,7 +46,6 @@ const MyRestaurant = () => {
   const handleSaveChanges = () => {
     if (restaurantData) {
       console.log("Cambios guardados:", restaurantData);
-      // Aquí llamarías a la función para guardar cambios en el contexto
     }
   };
 

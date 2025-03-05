@@ -3,7 +3,7 @@ import { useUserContext } from "../context/User";
 import VolverAtras from "../components/VolverAtras";
 import ReservationForm from "../forms/ReservationForm";
 
-const Reservas = ({ reservasProp }) => {
+const Reservas = ({reservasProp}) => {
   const {
     user,
     loading,
@@ -15,13 +15,13 @@ const Reservas = ({ reservasProp }) => {
     restaurants,
   } = useUserContext();
   
-  const reservas = reservasProp || []; // Aquí definimos reservas correctamente
+  const reservas = reservasProp || [];
 
   const [showForm, setShowForm] = useState(false); // Estado para mostrar/ocultar formulario
 
   useEffect(() => {
     if (user?.id) {
-      getReservations(user.id); // Obtenemos las reservas del usuario
+      getReservations(user.id);
     }
   }, [user, getReservations]);
 
@@ -47,12 +47,11 @@ const Reservas = ({ reservasProp }) => {
 
       {showForm && <ReservationForm restaurants={restaurants} onSubmit={handleAddReservation} />}
 
-      {/* Verificamos si hay reservas usando la variable 'reservas' */}
-      {reservas.length === 0 ? (
+      {reservasProp.length === 0 ? (
         <p>No tienes reservas.</p>
       ) : (
         <ul>
-          {reservas.map((reserva) => (
+          {reservasProp.map((reserva) => (
             <li key={reserva.id}>
               <p>
                 <strong>{reserva.restaurante}</strong>

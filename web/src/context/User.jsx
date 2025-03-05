@@ -2,7 +2,7 @@ import { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { postLogin, postLogout, postRegister } from "../services/api/auth";
 import { loadFavorites } from "../services/api/favorites";
-import { postRestaurant } from "../services/api/restaurant";
+import { postRestaurant, getUserRestaurants } from "../services/api/restaurant";
 import { addReservation as addReservationData, getReservations as getReservationsData, deleteReservation as deleteReservationData, updateReservation as updateReservationData } from "../services/api/reservations";
 import { getReviews as getReviewsData, addReview as addReviewData, updateReview as updateReviewData, deleteReview as deleteReviewData } from "../services/api/reviews";
 
@@ -14,21 +14,22 @@ export const UserContext = createContext({
   reviews: [],
   loading: false,
   error: null,
-  login: () => {},
-  logout: () => {},
-  loadFavorites: () => {},
-  register: () => {},
-  addRestaurant: () => {},
-  removeRestaurant: () => {},
-  updateRestaurant: () => {},
-  addReservation: () => {},
-  getReservations: () => {},
-  deleteReservation: () => {},
-  updateReservation: () => {},
-  getReviews: () => {},
-  addReview: () => {},
-  updateReview: () => {},
-  deleteReview: () => {},
+  login: () => { },
+  logout: () => { },
+  loadFavorites: () => { },
+  register: () => { },
+  addRestaurant: () => { },
+  removeRestaurant: () => { },
+  updateRestaurant: () => { },
+  getUserRestaurants: () => { },
+  addReservation: () => { },
+  getReservations: () => { },
+  deleteReservation: () => { },
+  updateReservation: () => { },
+  getReviews: () => { },
+  addReview: () => { },
+  updateReview: () => { },
+  deleteReview: () => { },
 });
 
 export const UserProvider = ({ children }) => {
@@ -48,12 +49,14 @@ export const UserProvider = ({ children }) => {
       Promise.all([
         loadFavorites(user.id),
         getReservationsData(user.id),
-        getReviewsData(user.id)
+        getReviewsData(user.id),
+        getUserRestaurants(user.id) 
       ])
-        .then(([favoritesData, reservationsData, reviewsData]) => {
+        .then(([favoritesData, reservationsData, reviewsData, restaurantsData]) => {
           setFavorites(favoritesData || []);
           setReservas(reservationsData || []);
           setReviews(reviewsData || []);
+          setRestaurants(restaurantsData || []);
           setLoading(false);
         })
         .catch(() => {
@@ -61,9 +64,10 @@ export const UserProvider = ({ children }) => {
           setLoading(false);
         });
     } else {
-      setLoading(false);
+      setLoading(false); 
     }
   }, [user]);
+  
 
   const login = (email, password) => {
     setLoading(true);
@@ -113,9 +117,8 @@ export const UserProvider = ({ children }) => {
     try {
       const newRestaurant = await postRestaurant({
         ...restaurantData,
-        administrator: user.id // Establecemos el administrador con el ID del usuario
+        administrator: user.id
       });
-      
       setRestaurants((prevRestaurants) => [...prevRestaurants, newRestaurant]);
       setLoading(false);
     } catch (error) {
@@ -124,89 +127,9 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  const removeRestaurant = (restaurantId) => {
-    setRestaurants((prevRestaurants) => prevRestaurants.filter(r => r.id !== restaurantId));
-  };
-
-  const updateRestaurant = (updatedRestaurant) => {
-    setRestaurants((prevRestaurants) => prevRestaurants.map(r => r.id === updatedRestaurant.id ? updatedRestaurant : r));
-  };
-
-  const addReservation = async (userId, reservationData) => {
-    setLoading(true);
-    try {
-      const newReservation = await addReservationData(userId, reservationData);
-      setReservas((prevReservas) => [...prevReservas, newReservation]);
-      setLoading(false);
-    } catch (error) {
-      setError("Error al agregar la reserva");
-      setLoading(false);
-    }
-  };
-
-  const deleteReservation = async (reservationId) => {
-    setLoading(true);
-    try {
-      await deleteReservationData(reservationId);
-      setReservas((prevReservas) => prevReservas.filter(r => r.id !== reservationId));
-      setLoading(false);
-    } catch (error) {
-      setError("Error al eliminar la reserva");
-      setLoading(false);
-    }
-  };
-
-  const updateReservation = async (reservationId, updatedData) => {
-    setLoading(true);
-    try {
-      const updatedReservation = await updateReservationData(reservationId, updatedData);
-      setReservas((prevReservas) => prevReservas.map(r => r.id === reservationId ? updatedReservation : r));
-      setLoading(false);
-    } catch (error) {
-      setError("Error al actualizar la reserva");
-      setLoading(false);
-    }
-  };
-
-  const addReview = async (userId, reviewData) => {
-    setLoading(true);
-    try {
-      const newReview = await addReviewData(userId, reviewData);
-      setReviews((prevReviews) => [...prevReviews, newReview]);
-      setLoading(false);
-    } catch (error) {
-      setError("Error al agregar la reseña");
-      setLoading(false);
-    }
-  };
-
-  const updateReview = async (reviewId, updatedData) => {
-    setLoading(true);
-    try {
-      const updatedReview = await updateReviewData(reviewId, updatedData);
-      setReviews((prevReviews) => prevReviews.map(r => r.id === reviewId ? updatedReview : r));
-      setLoading(false);
-    } catch (error) {
-      setError("Error al actualizar la reseña");
-      setLoading(false);
-    }
-  };
-
-  const deleteReview = async (reviewId) => {
-    setLoading(true);
-    try {
-      await deleteReviewData(reviewId);
-      setReviews((prevReviews) => prevReviews.filter(r => r.id !== reviewId));
-      setLoading(false);
-    } catch (error) {
-      setError("Error al eliminar la reseña");
-      setLoading(false);
-    }
-  };
-
   return (
     <UserContext.Provider value={{
-      user, 
+      user,
       favorites,
       restaurants,
       reservas,
@@ -218,16 +141,17 @@ export const UserProvider = ({ children }) => {
       loadFavorites,
       register,
       addRestaurant,
-      removeRestaurant,
-      updateRestaurant,
-      addReservation,
+      removeRestaurant: (restaurantId) => setRestaurants((prevRestaurants) => prevRestaurants.filter(r => r.id !== restaurantId)),
+      updateRestaurant: (updatedRestaurant) => setRestaurants((prevRestaurants) => prevRestaurants.map(r => r.id === updatedRestaurant.id ? updatedRestaurant : r)),
+      getUserRestaurants,
+      addReservationData,
       getReservations: getReservationsData,
-      deleteReservation,
-      updateReservation,
+      deleteReservationData,
+      updateReservationData,
       getReviews: getReviewsData,
-      addReview,
-      updateReview,
-      deleteReview
+      addReviewData,
+      updateReviewData,
+      deleteReviewData
     }}>
       {children}
     </UserContext.Provider>
