@@ -15,7 +15,7 @@ const UserRegisterForm = ({ setShowModal, setIsLoginModal, setIsAuthenticated })
 
         // Validación de contraseñas
         if (password !== confirmPassword) {
-            alert("Las contraseñas no coinciden.");
+            alert("Passwords are not matching.");
             return;
         }
 
@@ -42,62 +42,62 @@ const UserRegisterForm = ({ setShowModal, setIsLoginModal, setIsAuthenticated })
     };
 
     if (isRegistered) {
-        return <div className="success-message">¡Registro exitoso! Redirigiendo al login...</div>;
+        return <div className="success-message">¡Registered successsfully! Redirecting to Log in...</div>;
     }
 
     return (
         <div className="login-form-container">
             <form className="login-form" onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label htmlFor="username">Usuario</label>
+                    <label htmlFor="username">User</label>
                     <input
                         type="text"
                         id="username"
                         className="input-field"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        placeholder="Ingresa tu usuario"
+                        placeholder="Insert your user"
                         required
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="email">Correo electrónico</label>
+                    <label htmlFor="email">Email</label>
                     <input
                         type="email"
                         id="email"
                         className="input-field"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Ingresa tu correo electrónico"
+                        placeholder="Insert your email"
                         required
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="password">Contraseña</label>
+                    <label htmlFor="password">Password</label>
                     <input
                         type="password"
                         id="password"
                         className="input-field"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Ingresa tu contraseña"
+                        placeholder="Insert your top-secret password"
                         required
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="confirmPassword">Confirmar contraseña</label>
+                    <label htmlFor="confirmPassword">Confirm password</label>
                     <input
                         type="password"
                         id="confirmPassword"
                         className="input-field"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        placeholder="Confirma tu contraseña"
+                        placeholder="Confirm your top-secret password"
                         required
                     />
                 </div>
                 {error && <p className="error-message">{error}</p>}
-                <button type="submit" className="submit-button">Registrarse</button>
+                <button type="submit" className="submit-button">Register</button>
             </form>
         </div>
     );

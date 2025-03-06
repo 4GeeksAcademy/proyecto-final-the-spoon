@@ -57,14 +57,14 @@ function ReviewForm({ user }) {
 
     return (
         <div className="review-form-container">
-            <h2>Deja tu Reseña</h2>
+            <h2>Leave a review</h2>
             <div className="user-info">
-                <p><strong>Usuario:</strong> {user ? user.name : 'Anónimo'}</p> 
-                <p><strong>Fecha:</strong> {createdAt}</p>
+                <p><strong>User:</strong> {user ? user.name : 'Anónimo'}</p> 
+                <p><strong>Date:</strong> {createdAt}</p>
             </div>
             <form onSubmit={handleSubmit} className="review-form">
                 <div className="form-group">
-                    <label htmlFor="comment">Comentario:</label>
+                    <label htmlFor="comment">Comment:</label>
                     <textarea
                         id="comment"
                         name="comment"
@@ -76,13 +76,13 @@ function ReviewForm({ user }) {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="rating">Puntuación:</label>
+                    <label htmlFor="rating">Mark:</label>
                     <div className="stars">
                         {renderStars(rating)}
                     </div>
                 </div>
                 <div className="form-group">
-                    <button type="submit" className="submit-button">Enviar Reseña</button>
+                    <button type="submit" className="submit-button">Submit Review</button>
                 </div>
             </form>
         </div>

@@ -12,12 +12,12 @@ const Favoritos = () => {
 
   // Si no hay favoritos, mostrar el mensaje "Añade favoritos"
   if (favorites.length === 0) {
-    return <p>Aún no tienes favoritos. ¡Añádelos!</p>;
+    return <p>Not favourites yet. What are you waiting for?</p>;
   }
 
   return (
     <div>
-      <h2>Mis Favoritos</h2>
+      <h2>My Favourites</h2>
       <ul>
         {favorites.map((favorite) => (
           <li key={favorite.id}>

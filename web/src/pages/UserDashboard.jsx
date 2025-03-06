@@ -30,8 +30,8 @@ function UserDashboard() {
     }
   }, [user, loadFavorites, getReservations, getReviews]);
 
-  if (loadingData || loading) return <p className="loading-message">Cargando...</p>;
-  if (!user.id) return <p className="error-message">Error: usuario no encontrado</p>;
+  if (loadingData || loading) return <p className="loading-message">Loading...</p>;
+  if (!user.id) return <p className="error-message">Error: user not found</p>;
 
   const handleRestaurantCreated = (newRestaurant) => {
     setRestaurant(newRestaurant); // Guardamos el restaurante recién creado
@@ -39,17 +39,17 @@ function UserDashboard() {
   };
 
   const routes = [
-    { path: "dashboard-data", name: "Datos Personales", component: <Datos /> },
-    { path: "favoritos", name: "Favoritos", component: <Favoritos favorites={favorites} /> },
-    { path: "reservas", name: "Reservas", component: <Reservas reservas={reservas} /> },
+    { path: "dashboard-data", name: "Personal Data", component: <Datos /> },
+    { path: "favoritos", name: "Favourites", component: <Favoritos favorites={favorites} /> },
+    { path: "reservas", name: "Reservations", component: <Reservas reservas={reservas} /> },
     { path: "reviews", name: "Reviews", component: <Reviews reviews={reviews} /> },
-    { path: "restaurants", name: "Añade tu Restaurante", component: <AddRestaurant onRestaurantCreated={handleRestaurantCreated} /> },
-    { path: "my-restaurant", name: "Mi Restaurante", component: <MyRestaurant restaurant={restaurant || restaurants[0]} /> } // Aseguramos que restaurant tenga algo
+    { path: "restaurants", name: "Add a New Restaurant", component: <AddRestaurant onRestaurantCreated={handleRestaurantCreated} /> },
+    { path: "my-restaurant", name: "My Restaurant", component: <MyRestaurant restaurant={restaurant || restaurants[0]} /> } // Aseguramos que restaurant tenga algo
   ];
 
   return (
     <div className="user-dashboard-container">
-      <h3>Hola, {user.username}</h3>
+      <h3>Hello, {user.username}</h3>
       <ul className="nav-links">
         {routes.map((route) => (
           <li key={route.path}>
@@ -60,8 +60,8 @@ function UserDashboard() {
 
       {restaurant && (
         <div className="my-restaurant">
-          <h4>Mi Restaurante: {restaurant.name}</h4>
-          <Link to={`/users/${user.id}/my-restaurant`} className="route-link">Ver Restaurante</Link>
+          <h4>My Restaurant: {restaurant.name}</h4>
+          <Link to={`/users/${user.id}/my-restaurant`} className="route-link">See Restaurant</Link>
         </div>
       )}
 

@@ -20,9 +20,9 @@ const RestauranteDetalle = () => {
       });
   }, [id]);
   if (loading)
-    return <p className="text-center mt-5 fs-4 text-primary">Cargando detalles...</p>;
+    return <p className="text-center mt-5 fs-4 text-primary">Loading details...</p>;
   if (!restaurante)
-    return <p className="text-center mt-5 fs-4 text-danger">Restaurante no encontrado</p>;
+    return <p className="text-center mt-5 fs-4 text-danger">Restaurant not found</p>;
   // Si no hay imagen del restaurante, usar la imagen de 'The Spoon'
   const imageSrc = restaurante.imagen ? restaurante.imagen : theSpoonImage;
   return (
@@ -42,7 +42,7 @@ const RestauranteDetalle = () => {
           <p className="card-text text-center mt-3">{restaurante.description}</p>
           <div className="text-center mt-4">
             <Link to="/" className="btn btn-outline-primary">
-              ← Volver al inicio
+              ← Return
             </Link>
           </div>
         </div>

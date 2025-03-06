@@ -31,17 +31,17 @@ const ReservationForm = ({ restaurants, onSubmit }) => {
 
   return (
     <div className="reservation-form-container">
-      <h2>Reservar mesa</h2>
+      <h2>Book a table</h2>
       <form className="reservation-form" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Restaurante:</label>
+          <label>Restaurant:</label>
           <select
             className="input-field"
             value={selectedRestaurant}
             onChange={(e) => setSelectedRestaurant(e.target.value)}
             required
           >
-            <option value="">Selecciona un restaurante</option>
+            <option value="">Choose a restaurant</option>
             {restaurants.map((restaurant) => (
               <option key={restaurant.id} value={restaurant.name}>
                 {restaurant.name}
@@ -50,7 +50,7 @@ const ReservationForm = ({ restaurants, onSubmit }) => {
           </select>
         </div>
         <div className="form-group">
-          <label>Número de personas:</label>
+          <label>Number of persons:</label>
           <input
             className="input-field"
             type="number"
@@ -61,7 +61,7 @@ const ReservationForm = ({ restaurants, onSubmit }) => {
           />
         </div>
         <div className="form-group">
-          <label>Fecha y hora:</label>
+          <label>Date and time:</label>
           <DatePicker
             selected={startDate}
             onChange={(date) => setStartDate(date)}
@@ -75,7 +75,7 @@ const ReservationForm = ({ restaurants, onSubmit }) => {
           />
         </div>
         <button type="submit" className="submit-button">
-          Reservar
+          Reserve
         </button>
       </form>
     </div>

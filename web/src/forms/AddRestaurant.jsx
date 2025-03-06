@@ -95,10 +95,10 @@ const AddRestaurant = ({ onRestaurantCreated }) => {
           &times;
         </button>
 
-        <h2>Añadir Restaurante</h2>
+        <h2>Add restaurant</h2>
 
         <div className="form-group">
-          <label htmlFor="name">Nombre del Restaurante</label>
+          <label htmlFor="name">Restaurant name</label>
           <input
             type="text"
             id="name"
@@ -109,7 +109,7 @@ const AddRestaurant = ({ onRestaurantCreated }) => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="description">Descripción</label>
+          <label htmlFor="description">Description</label>
           <textarea
             id="description"
             value={description}
@@ -119,7 +119,7 @@ const AddRestaurant = ({ onRestaurantCreated }) => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="foodType">Tipo de comida</label>
+          <label htmlFor="foodType">Food type</label>
           <select
             id="foodType"
             value={foodType}
@@ -135,7 +135,7 @@ const AddRestaurant = ({ onRestaurantCreated }) => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="address">Dirección</label>
+          <label htmlFor="address">Location</label>
           <input
             type="text"
             id="address"
@@ -145,7 +145,7 @@ const AddRestaurant = ({ onRestaurantCreated }) => {
             required
           />
           <button type="button" onClick={handleSearchAddress} disabled={isSearching}>
-            {isSearching ? "Buscando..." : "Buscar Dirección"}
+            {isSearching ? "Searching..." : "Search location"}
           </button>
         </div>
 
@@ -163,13 +163,13 @@ const AddRestaurant = ({ onRestaurantCreated }) => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
           <Marker position={[location.lat, location.lng]}>
-            <Popup>Ubicación seleccionada</Popup>
+            <Popup>Location selected</Popup>
           </Marker>
         </MapContainer>
 
         {/* Botón para enviar el formulario */}
         <button type="submit" className="submit-button" disabled={loading}>
-          {loading ? "Creando..." : "Crear Restaurante"}
+          {loading ? "Creating..." : "Create restaurant"}
         </button>
       </div>
     </form>
