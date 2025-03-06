@@ -41,31 +41,31 @@ const UserLoginForm = ({ setShowModal }) => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="form-group">
-        <label htmlFor="email">Correo Electrónico</label>
+        <label htmlFor="email">Email</label>
         <input
           type="email"
           id="email"
           className="input-field"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Ingresa tu correo electrónico"
+          placeholder="Insert your ingenous email"
           required
         />
       </div>
       <div className="form-group">
-        <label htmlFor="password">Contraseña</label>
+        <label htmlFor="password">Password</label>
         <input
           type="password"
           id="password"
           className="input-field"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Ingresa tu contraseña"
+          placeholder="Insert your top-secret password"
           required
         />
       </div>
       {error && <p className="error-message">{error}</p>}
-      <button type="submit" className="submit-button">Iniciar sesión</button>
+      <button type="submit" className="submit-button">Log in</button>
     </form>
   );
 };

@@ -35,7 +35,7 @@ const FeedRestaurantes = () => {
       <div className="filters">
         <input
           type="text"
-          placeholder="Buscar por nombre..."
+          placeholder="Search by name..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="border p-2 rounded-lg w-full md:w-1/3"
@@ -45,17 +45,17 @@ const FeedRestaurantes = () => {
           onChange={(e) => setCategoria(e.target.value)}  
           className="border p-2 rounded-lg w-full md:w-1/4"
         >
-          <option value="">Todas las categorías</option>
-          <option value="ITALIAN">Italiana</option>
-          <option value="CHINESE">China</option>
-          <option value="MEXICAN">Mexicana</option>
+          <option value="">Every food type</option>
+          <option value="ITALIAN">Italian</option>
+          <option value="CHINESE">Chinese</option>
+          <option value="MEXICAN">Mexican</option>
         </select>
         <select
           value={ubicacion}
           onChange={(e) => setUbicacion(e.target.value)}
           className="border p-2 rounded-lg w-full md:w-1/4"
         >
-          <option value="">Todas las ubicaciones</option>
+          <option value="">Every location</option>
           <option value="Madrid">Madrid</option>
           <option value="Barcelona">Barcelona</option>
           <option value="Valencia">Valencia</option>
@@ -79,12 +79,12 @@ const FeedRestaurantes = () => {
                 to={`/restaurante/${restaurante.id}`}
                 className="block mt-3 text-center text-blue-500 hover:underline"
               >
-                Ver detalles 
+                See details
               </Link>
             </div>
           ))
         ) : (
-          <p className="text-center w-full">No hay restaurantes que coincidan con los filtros.</p>
+          <p className="text-center w-full">No restaurant is matching the filters chosen.</p>
         )}
       </div>
     </div>
