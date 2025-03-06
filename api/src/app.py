@@ -231,7 +231,7 @@ def create_user():
         "email": new_user.email,
     }), 201  # Código de estado 201: Creado
 
-@app.route('/api/restaurants/<int:restaurant_id>', methods=['PUT'])
+@app.route('/restaurants/<int:restaurant_id>', methods=['PUT'])
 def update_restaurant(restaurant_id):
     restaurant = Restaurant.query.get(restaurant_id)
     
