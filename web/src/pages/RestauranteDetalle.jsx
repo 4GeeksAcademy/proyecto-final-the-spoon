@@ -1,44 +1,53 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import theSpoonImage from '../assets/The Spoon.png';  // Importación de la imagen
 
 const RestauranteDetalle = () => {
-  const { id } = useParams(); // Obtiene el ID del restaurante desde la URL
+  const { id } = useParams();
   const [restaurante, setRestaurante] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  console.log(id)
-
   useEffect(() => {
-    fetch(`/api/restaurants/${id}`) // Reemplaza con la URL real
+    fetch(`/api/restaurants/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         setRestaurante(data);
         setLoading(false);
       })
-      .catch((error) => console.error("Error al cargar detalles:", error));
+      .catch((error) => {
+        console.error("Error al cargar detalles:", error);
+        setLoading(false);
+      });
   }, [id]);
-
-  if (loading) return <p className="text-center mt-10">Cargando detalles...</p>;
-  if (!restaurante) return <p className="text-center mt-10">Restaurante no encontrado</p>;
-
+  if (loading)
+    return <p className="text-center mt-5 fs-4 text-primary">Cargando detalles...</p>;
+  if (!restaurante)
+    return <p className="text-center mt-5 fs-4 text-danger">Restaurante no encontrado</p>;
+  // Si no hay imagen del restaurante, usar la imagen de 'The Spoon'
+  const imageSrc = restaurante.imagen ? restaurante.imagen : theSpoonImage;
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      {/* <img
-        src={restaurante.imagen}
-        alt={restaurante.nombre}
-        className="w-full h-64 object-cover rounded-lg"
-      /> */}
-      {/* <h1 className="text-3xl font-bold mt-4">{restaurante.name}</h1> */}
-      <p className="text-gray-600 mt-2">{restaurante.food_type}</p>
-      <p className="text-gray-700 mt-2">{restaurante.location}</p>
-      <p className="mt-4">{restaurante.description}</p>
-      <Link to="/" className="block mt-4 text-blue-500 hover:underline">
-        ← Volver al inicio
-      </Link>
+    <div className="container">
+      <div className="card shadow-lg">
+        <img
+          src={imageSrc}
+          alt={restaurante.name}
+          className="card-img-top"
+          style={{ height: "100px", width: "100px" }}
+        />
+        <div className="card-body">
+          <h1 className="card-title text-center text-primary">{restaurante.name}</h1>
+          <h5 className="text-muted text-center">{restaurante.food_type}</h5>
+          <p className="text-center text-secondary"> {restaurante.location}
+          </p>
+          <p className="card-text text-center mt-3">{restaurante.description}</p>
+          <div className="text-center mt-4">
+            <Link to="/" className="btn btn-outline-primary">
+              ← Volver al inicio
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
-
 export default RestauranteDetalle;

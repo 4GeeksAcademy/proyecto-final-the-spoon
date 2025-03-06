@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import './Feedrestaurantes.css'
+import logo from '../assets/The Spoon.png'
 
 const FeedRestaurantes = () => {
   const [restaurantes, setRestaurantes] = useState([]);
@@ -66,16 +68,16 @@ const FeedRestaurantes = () => {
           restaurantesFiltrados.map((restaurante) => (
             <div key={restaurante.id} className="bg-white shadow-lg rounded-lg p-4">
               <img
-                src={restaurante.imagen}
+                src={logo}
                 alt={restaurante.name}
                 className="w-full h-40 object-cover rounded-md"
               />
               <h2 className="text-xl font-bold mt-2">{restaurante.name}</h2>
-              <p className="text-gray-600">{restaurante.food_type}</p> {/* Mostrando el tipo de comida */}
+              <p className="text-gray-600">{restaurante.food_type}</p>
               <p className="text-gray-700">{restaurante.location}</p>
               <Link
                 to={`/restaurante/${restaurante.id}`}
-                className="block mt-3 text-blue-500 hover:underline"
+                className="block mt-3 text-center text-blue-500 hover:underline"
               >
                 Ver detalles 
               </Link>
