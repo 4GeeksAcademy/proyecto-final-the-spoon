@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useUserContext } from '../context/User'; // Importar UserContext
+import { FaArrowLeft } from 'react-icons/fa';
 
 const Reviews = ({ restaurantId }) => {
   const { reviews = [], loading, error } = useUserContext(); // Asegurarse de que reviews sea un arreglo
@@ -19,7 +20,6 @@ const Reviews = ({ restaurantId }) => {
       {error && <p>{error}</p>}
 
       <ul>
-        {/* Verificar si 'filteredReviews' es un arreglo antes de hacer map */}
         {Array.isArray(filteredReviews) && filteredReviews.length > 0 ? (
           filteredReviews.map((review) => (
             <li key={review.id}>
@@ -32,6 +32,23 @@ const Reviews = ({ restaurantId }) => {
           <p>No hay reseñas disponibles para este restaurante.</p> // Mensaje si no hay reseñas
         )}
       </ul>
+      <button
+        onClick={handleBackClick}
+        style={{
+          cursor: 'pointer',
+          fontSize: '20px',
+          marginBottom: '20px',
+          padding: '10px 15px',
+          border: 'none',
+          backgroundColor: '#f1f1f1',
+          borderRadius: '5px',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <FaArrowLeft style={{ marginRight: '8px' }} />
+        Volver
+      </button>
     </div>
   );
 };
