@@ -30,3 +30,4 @@ export const getUserRestaurants = async (userId) => {
     return [];
   }
 };
+

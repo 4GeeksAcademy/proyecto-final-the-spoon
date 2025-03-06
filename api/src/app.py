@@ -231,6 +231,27 @@ def create_user():
         "email": new_user.email,
     }), 201  # Código de estado 201: Creado
 
+@app.route('/api/restaurants/<int:restaurant_id>', methods=['PUT'])
+def update_restaurant(restaurant_id):
+    restaurant = Restaurant.query.get(restaurant_id)
+    
+    if not restaurant:
+        return jsonify({"error": "Restaurant not found"}), 404
+    
+    data = request.get_json()
+
+    restaurant.name = data.get('name', restaurant.name)
+    restaurant.description = data.get('description', restaurant.description)
+    restaurant.food_type = data.get('food_type', restaurant.food_type)
+    restaurant.location = data.get('location', restaurant.location)
+    
+    try:
+        db.session.commit()
+        return jsonify({"message": "Restaurant updated successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": "Error updating restaurant", "details": str(e)}), 500
+
 # Get, add and delete user's restaurants favs
 @app.route('/users/<int:user_id>/favorites', methods=['GET', 'POST', 'DELETE'])
 def manage_user_favorites(user_id):

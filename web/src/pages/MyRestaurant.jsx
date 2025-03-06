@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/User"; 
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";  // Importa useParams
 
 const MyRestaurant = () => {
   const { id } = useParams(); // Obtienes el id de la URL (restaurante específico)
@@ -59,9 +59,34 @@ const MyRestaurant = () => {
     }));
   };
 
-  const handleSaveChanges = () => {
-    if (restaurantData) {
+  const handleSaveChanges = async () => {
+    try {
+      // Enviar los cambios al servidor (PUT)
+      const response = await fetch(`/api/restaurants/${restaurantData.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(restaurantData), // Aquí estás enviando el objeto con los datos actualizados
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();  // Captura el detalle del error
+        console.error("Error al actualizar el restaurante:", errorData);
+      } else {
+        const updatedRestaurant = await response.json();
+        // Aquí actualizas el estado de los restaurantes sin redirigir a otra página
+        setRestaurants((prevRestaurants) =>
+          prevRestaurants.map((restaurant) =>
+            restaurant.id === restaurantData.id
+              ? { ...restaurant, ...restaurantData } // Actualizar los datos del restaurante
+              : restaurant
+          )
+        );
+      }  
       console.log("Cambios guardados:", restaurantData);
+    } catch (error) {
+      console.error("Hubo un problema al enviar la solicitud:", error);
     }
   };
 
