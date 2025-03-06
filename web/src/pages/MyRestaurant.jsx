@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/User"; 
 import { useParams } from "react-router-dom";  // Importa useParams
+import { baseUrl } from "../services/api/fetch";
 
 const MyRestaurant = () => {
   const { id } = useParams(); // Obtienes el id de la URL (restaurante específico)
@@ -62,7 +63,7 @@ const MyRestaurant = () => {
   const handleSaveChanges = async () => {
     try {
       // Enviar los cambios al servidor (PUT)
-      const response = await fetch(`/api/restaurants/${restaurantData.id}`, {
+      const response = await fetch(`${baseUrl}restaurants/${restaurantData.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -94,7 +95,7 @@ const MyRestaurant = () => {
     <div className="my-restaurant-container">
       <h2>My Restaurants</h2>
       {restaurants.length === 0 ? (
-        <p>Not restaurant added yet</p>
+        <p>No restaurants added yet.</p>
       ) : (
         restaurants.map((restaurant) => (
           <div key={restaurant.id}>

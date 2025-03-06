@@ -26,7 +26,7 @@ export const getReservations = async (userId) => {
   // Agregar una nueva reserva
   export const addReservation = async (userId, reservationData) => {
     try {
-      const response = await fetchWrapper(`users/${userId}/reservations`, {
+      const response = await fetchWrapper(`${baseUrl}users/${userId}/reservations`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +45,7 @@ export const getReservations = async (userId) => {
   // Eliminar una reserva
   export const deleteReservation = async (userId, reservationId) => {
     try {
-      const response = await fetchWrapper(`users/${userId}/reservations/${reservationId}`, {
+      const response = await fetchWrapper(`${baseUrl}users/${userId}/reservations/${reservationId}`, {
         method: "DELETE",
       });
       return response;  // Confirma que la eliminación fue exitosa
@@ -57,7 +57,7 @@ export const getReservations = async (userId) => {
   // Editar (actualizar) una reserva
   export const updateReservation = async (userId, reservationId, updatedData) => {
     try {
-      const response = await fetchWrapper(`users/${userId}/reservations/${reservationId}`, {
+      const response = await fetchWrapper(`${baseUrl}users/${userId}/reservations/${reservationId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

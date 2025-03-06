@@ -4,7 +4,7 @@ import { postLogin, postLogout, postRegister } from "../services/api/auth";
 import { loadFavorites } from "../services/api/favorites";
 import { postRestaurant, getUserRestaurants } from "../services/api/restaurant";
 import { addReservation as addReservationData, getReservations as getReservationsData, deleteReservation as deleteReservationData, updateReservation as updateReservationData } from "../services/api/reservations";
-import { getReviews as getReviewsData, addReview as addReviewData, updateReview as updateReviewData, deleteReview as deleteReviewData } from "../services/api/reviews";
+import { getReviews as getReviewsData, addReview as addReviewData, deleteReview as deleteReviewData } from "../services/api/reviews";
 
 export const UserContext = createContext({
   user: {},
@@ -28,7 +28,6 @@ export const UserContext = createContext({
   updateReservation: () => { },
   getReviews: () => { },
   addReview: () => { },
-  updateReview: () => { },
   deleteReview: () => { },
 });
 
@@ -127,6 +126,10 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const addReviewData = (userId, reviewData) => {
+    setReviews ((prevReviews)=>[...prevReviews, reviewData])
+  }
+
   return (
     <UserContext.Provider value={{
       user,
@@ -150,7 +153,6 @@ export const UserProvider = ({ children }) => {
       updateReservationData,
       getReviews: getReviewsData,
       addReviewData,
-      updateReviewData,
       deleteReviewData
     }}>
       {children}
