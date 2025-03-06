@@ -48,7 +48,7 @@ const MyRestaurant = () => {
   }, [restaurants, id]);
 
   if (!restaurantData) {
-    return <p>Cargando restaurante...</p>;
+    return <p>Loading restaurant...</p>;
   }
 
   const handleInputChange = (e) => {
@@ -92,24 +92,24 @@ const MyRestaurant = () => {
 
   return (
     <div className="my-restaurant-container">
-      <h2>Mis Restaurantes</h2>
+      <h2>My Restaurants</h2>
       {restaurants.length === 0 ? (
-        <p>No has creado ningún restaurante aún.</p>
+        <p>Not restaurant added yet</p>
       ) : (
         restaurants.map((restaurant) => (
           <div key={restaurant.id}>
             <h3>{restaurant.name}</h3>
             <p>{restaurant.description}</p>
-            <button onClick={() => setRestaurantData(restaurant)}>Editar</button>
+            <button onClick={() => setRestaurantData(restaurant)}>Edit</button>
           </div>
         ))
       )}
 
       {restaurantData && (
         <div>
-          <h3>Editar {restaurantData.name}</h3>
+          <h3>Edit {restaurantData.name}</h3>
           <div>
-            <label>Nombre</label>
+            <label>Name</label>
             <input
               type="text"
               name="name"
@@ -118,7 +118,7 @@ const MyRestaurant = () => {
             />
           </div>
           <div>
-            <label>Descripción</label>
+            <label>Description</label>
             <textarea
               name="description"
               value={restaurantData.description}
@@ -126,7 +126,7 @@ const MyRestaurant = () => {
             />
           </div>
           <div>
-            <label>Tipo de comida</label>
+            <label>Food type</label>
             <input
               type="text"
               name="food_type"
@@ -135,7 +135,7 @@ const MyRestaurant = () => {
             />
           </div>
           <div>
-            <label>Ubicación</label>
+            <label>Location</label>
             <input
               type="text"
               name="location"
@@ -143,7 +143,7 @@ const MyRestaurant = () => {
               onChange={handleInputChange}
             />
           </div>
-          <button onClick={handleSaveChanges}>Guardar Cambios</button>
+          <button onClick={handleSaveChanges}>Save changes</button>
         </div>
       )}
     </div>

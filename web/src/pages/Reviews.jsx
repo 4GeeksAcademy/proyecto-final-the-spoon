@@ -14,22 +14,22 @@ const Reviews = ({ restaurantId }) => {
 
   return (
     <div>
-      <h2>Reseñas de tu Restaurante</h2>
+      <h2>Reviews to your restaurant</h2>
 
-      {loading && <p>Cargando reseñas...</p>}
+      {loading && <p>Loading reviews...</p>}
       {error && <p>{error}</p>}
 
       <ul>
         {Array.isArray(filteredReviews) && filteredReviews.length > 0 ? (
           filteredReviews.map((review) => (
             <li key={review.id}>
-              <p><strong>Restaurante: {review.restaurantId}</strong></p>
-              <p>Calificación: {review.rating}</p>
+              <p><strong>Restaurant: {review.restaurantId}</strong></p>
+              <p>Mark: {review.rating}</p>
               <p>{review.content}</p>
             </li>
           ))
         ) : (
-          <p>No hay reseñas disponibles para este restaurante.</p> // Mensaje si no hay reseñas
+          <p>No available reviews for this restaurant.</p> // Mensaje si no hay reseñas
         )}
       </ul>
       <button
@@ -47,7 +47,7 @@ const Reviews = ({ restaurantId }) => {
         }}
       >
         <FaArrowLeft style={{ marginRight: '8px' }} />
-        Volver
+        Return
       </button>
     </div>
   );

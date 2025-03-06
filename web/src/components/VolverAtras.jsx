@@ -6,7 +6,7 @@ const VolverAtras = () => {
 
   return (
     <button onClick={() => navigate(-1)} style={{ cursor: 'pointer', fontSize: '20px', marginBottom: '20px' }}>
-      <FaArrowLeft /> Volver
+      <FaArrowLeft /> Return
     </button>
   );
 };

@@ -25,7 +25,7 @@ const Reservas = ({reservasProp}) => {
     }
   }, [user, getReservations]);
 
-  if (loading) return <p>Cargando reservas...</p>;
+  if (loading) return <p>Loading reservations...</p>;
   if (error) return <p>{error}</p>;
 
   const handleAddReservation = (newReservation) => {
@@ -36,19 +36,19 @@ const Reservas = ({reservasProp}) => {
   return (
     <div>
       <VolverAtras />
-      <h2>Reservas</h2>
+      <h2>Reservations</h2>
 
       {/* Botón para mostrar el formulario */}
       {!showForm && (
         <button onClick={() => setShowForm(true)} className="show-form-button">
-          Haz tu reserva ahora
+          Book your reservation now
         </button>
       )}
 
       {showForm && <ReservationForm restaurants={restaurants} onSubmit={handleAddReservation} />}
 
       {reservasProp.length === 0 ? (
-        <p>No tienes reservas.</p>
+        <p>There are no reservations.</p>
       ) : (
         <ul>
           {reservasProp.map((reserva) => (
@@ -56,15 +56,15 @@ const Reservas = ({reservasProp}) => {
               <p>
                 <strong>{reserva.restaurante}</strong>
               </p>
-              <p>Fecha: {reserva.fecha}</p>
-              <p>Personas: {reserva.numeroPersonas}</p>
-              <button onClick={() => removeReservation(user.id, reserva.id)}>Eliminar</button>
+              <p>Date: {reserva.fecha}</p>
+              <p>People: {reserva.numeroPersonas}</p>
+              <button onClick={() => removeReservation(user.id, reserva.id)}>Delete</button>
               <button
                 onClick={() =>
                   updateReservation(user.id, reserva.id, { ...reserva, numeroPersonas: reserva.numeroPersonas + 1 })
                 }
               >
-                Actualizar
+                Update
               </button>
             </li>
           ))}
