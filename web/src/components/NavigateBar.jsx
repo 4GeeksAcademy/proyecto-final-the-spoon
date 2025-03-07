@@ -55,7 +55,7 @@ const NavigateBar = () => {
               ) : (
                 <>
                   <Nav.Link onClick={handleShowLogin}>Login</Nav.Link>
-                  <Nav.Link onClick={handleShowRegister}>Register</Nav.Link>
+                  <Nav.Link onClick={handleShowRegister}>Sign up</Nav.Link>
                 </>
               )}
             </Nav>
@@ -65,7 +65,7 @@ const NavigateBar = () => {
 
       <Modal show={showModal} onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>{isLoginModal ? 'Iniciar sesión' : 'Registro'}</Modal.Title>
+          <Modal.Title>{isLoginModal ? 'Log in' : 'Sign up'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {isLoginModal ? (

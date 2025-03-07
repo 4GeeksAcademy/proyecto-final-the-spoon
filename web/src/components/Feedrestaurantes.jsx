@@ -84,7 +84,7 @@ const FeedRestaurantes = () => {
             </div>
           ))
         ) : (
-          <p className="text-center w-full">No restaurant is matching the filters chosen.</p>
+          <p className="text-center w-full">No restaurant is matching the chosen filters.</p>
         )}
       </div>
     </div>

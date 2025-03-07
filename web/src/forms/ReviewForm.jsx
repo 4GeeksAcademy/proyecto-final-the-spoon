@@ -115,7 +115,7 @@ const ReviewForm = ({ restaurantId, onReviewSubmit }) => {
             value={comment}
             onChange={handleCommentChange}
             required
-            placeholder="Escribe tu comentario aquí"
+            placeholder="Tell us what you think about us"
             className="textarea"
           />
         </div>
