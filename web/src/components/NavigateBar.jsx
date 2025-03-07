@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Navbar, Nav, Container, Modal } from 'react-bootstrap';
-import UserLoginForm from '../forms/UserLoginForm'; 
+import UserLoginForm from '../forms/UserLoginForm';
 import UserRegisterForm from '../forms/UserRegisterForm';  // No lo quitamos
 import { useContext } from 'react';
 import { UserContext } from '../context/User';  // Importa el contexto de usuario
@@ -36,11 +36,11 @@ const NavigateBar = () => {
       <Navbar bg="light" expand="lg">
         <Container>
           <Navbar.Brand as={Link} to="/">
-          <img 
-          className="logo"
-          src={logo}
-          alt={"logo"}
-          />
+            <img
+              className="logo"
+              src={logo}
+              alt={"logo"}
+            />
             The Spoon
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -68,9 +68,15 @@ const NavigateBar = () => {
         </Modal.Header>
         <Modal.Body>
           {isLoginModal ? (
-            <UserLoginForm setShowModal={setShowModal} />  
+            <UserLoginForm onClose={() => {
+              handleClose();  // Esto debe poner showModal en false
+              navigate("/feedrestaurantes");
+            }} />
           ) : (
-            <UserRegisterForm setShowModal={setShowModal} setIsLoginModal={setIsLoginModal} />  
+            <UserRegisterForm
+              setShowModal={setShowModal}
+              setIsLoginModal={setIsLoginModal}
+            />
           )}
         </Modal.Body>
       </Modal>

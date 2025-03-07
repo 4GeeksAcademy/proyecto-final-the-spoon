@@ -77,7 +77,7 @@ export const UserProvider = ({ children }) => {
       localStorage.setItem("token", data.csrf_token);
       localStorage.setItem("userId", data.user.id);
       setLoading(false);
-      navigate(`/users/${data.user.id}`);
+      navigate("/");
     }).catch(() => {
       setLoading(false);
       setError("Error al iniciar sesión");
