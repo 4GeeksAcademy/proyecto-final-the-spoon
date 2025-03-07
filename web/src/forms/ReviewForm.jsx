@@ -1,25 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useUserContext } from "../context/User";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
-import { useUserContext } from '../context/User'; // Extraemos el usuario desde el contexto
-import '../styles/ReviewForm.css';
-import { addReview } from '../services/api/reviews';
+import "../styles/ReviewForm.css";
 
-function ReviewForm({ restaurantId }) {
-  // Extraemos el usuario desde el contexto
+const ReviewForm = ({ restaurantId, onReviewSubmit }) => {
+  const location = useLocation();
+  const restaurant = location.state?.restaurant;
   const { user } = useUserContext();
-  
-  // Si el usuario no está logueado, no mostramos el formulario
-  if (!user) {
+  const navigate = useNavigate();
+
+  if (!user || !user.id) {
     return (
       <div className="review-form-container">
         <h2>Leave a review</h2>
         <p>Debes iniciar sesión para comentar.</p>
+        <button onClick={() => navigate("/login")} className="submit-button">
+          Iniciar sesión
+        </button>
       </div>
     );
   }
 
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState("");
   const [rating, setRating] = useState(1);
 
   const handleCommentChange = (event) => {
@@ -35,13 +39,11 @@ function ReviewForm({ restaurantId }) {
       user_id: user.id,
     };
 
-    addReview(restaurantId, reviewData);
-
-    setComment('');
+    onReviewSubmit(reviewData);
+    setComment("");
     setRating(1);
   };
 
-  // Función para detectar clic en media o estrella completa
   const handleStarClick = (event, starNumber) => {
     const { left, width } = event.currentTarget.getBoundingClientRect();
     const clickX = event.clientX - left;
@@ -52,12 +54,10 @@ function ReviewForm({ restaurantId }) {
     }
   };
 
-  // Función para renderizar las estrellas con soporte para valores flotantes
   const renderStars = (rating) => {
     let stars = [];
     for (let i = 1; i <= 5; i++) {
       if (rating >= i) {
-        // Estrella completa
         stars.push(
           <span
             key={i}
@@ -70,7 +70,6 @@ function ReviewForm({ restaurantId }) {
           </span>
         );
       } else if (rating >= i - 0.5) {
-        // Media estrella
         stars.push(
           <span
             key={i}
@@ -83,7 +82,6 @@ function ReviewForm({ restaurantId }) {
           </span>
         );
       } else {
-        // Estrella vacía
         stars.push(
           <span
             key={i}
@@ -133,6 +131,6 @@ function ReviewForm({ restaurantId }) {
       </form>
     </div>
   );
-}
+};
 
 export default ReviewForm;

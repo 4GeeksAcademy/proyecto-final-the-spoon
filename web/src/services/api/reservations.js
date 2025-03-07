@@ -1,27 +1,19 @@
 import { fetchWrapper, userReservationsUrl } from "./fetch";
 export const getReservations = async (userId) => {
-  const url = userReservationsUrl(userId); 
-
+  const url = userReservationsUrl(userId); // Asegúrate de usar userReservationsUrl y no userReviewsUrl
   try {
     const response = await fetch(url, {
-      headers: {
-        "Accept": "application/json",
-      },
+      headers: { "Accept": "application/json" },
     });
-
     const text = await response.text();
-
     if (!response.ok) {
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
-
     return JSON.parse(text);
   } catch (error) {
     throw error;
   }
 };
-
-
   
   // Agregar una nueva reserva
   export const addReservation = async (userId, reservationData) => {

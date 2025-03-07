@@ -7,15 +7,12 @@ export const registerUrl = "register";
 export const logoutUrl = "logout";
 export const privateUrl = `${baseUrl}private`; 
 export const restaurantsUrl = "restaurants"; // Ruta protegida
-export const favoritesUrl = "favoritos";
 export const reservationsUrl = `reservations`;
 export const reviewUrl = "review"; 
 
 
 // Ajustar según backend
 export const restaurantIdUrl = (id) => `${baseUrl}restaurants/${id}`;
-export const userFavsUrl = (id) => `${baseUrl}users/${id}/favorites`;
-export const userReviewsUrl = (id) => `${baseUrl}users/${id}/reviews`;
 export const userReservationsUrl = (id) => `${baseUrl}users/${id}/reservations`;
 export const userPointsUrl = (id) => `${baseUrl}users/${id}/puntos`; // AQUÍ HABRÍA QUE FILTRAR POR LOS DATOS QUE CONTIENE EL USUARIO EN BBDD
 

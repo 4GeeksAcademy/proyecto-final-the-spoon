@@ -1,7 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { postLogin, postLogout, postRegister } from "../services/api/auth";
-import { loadFavorites } from "../services/api/favorites";
 import { postRestaurant, getUserRestaurants } from "../services/api/restaurant";
 import { addReservation as addReservationData, getReservations as getReservationsData, deleteReservation as deleteReservationData, updateReservation as updateReservationData } from "../services/api/reservations";
 import { getReviews as getReviewsData, addReview as addReviewData, deleteReview as deleteReviewData } from "../services/api/reviews";
@@ -16,7 +15,6 @@ export const UserContext = createContext({
   error: null,
   login: () => { },
   logout: () => { },
-  loadFavorites: () => { },
   register: () => { },
   addRestaurant: () => { },
   removeRestaurant: () => { },
@@ -46,7 +44,6 @@ export const UserProvider = ({ children }) => {
     if (user.id) {
       setLoading(true);
       Promise.all([
-        loadFavorites(user.id),
         getReservationsData(user.id),
         getReviewsData(user.id),
         getUserRestaurants(user.id) 
@@ -141,7 +138,6 @@ export const UserProvider = ({ children }) => {
       error,
       login,
       logout,
-      loadFavorites,
       register,
       addRestaurant,
       removeRestaurant: (restaurantId) => setRestaurants((prevRestaurants) => prevRestaurants.filter(r => r.id !== restaurantId)),

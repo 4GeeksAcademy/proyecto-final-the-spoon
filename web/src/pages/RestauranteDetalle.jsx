@@ -4,9 +4,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import theSpoonImage from '../assets/The Spoon.png';
 import ReviewForm from "../forms/ReviewForm";
 import { baseUrl } from "../services/api/fetch";
+import { useUserContext } from "../context/User";
 
 const RestauranteDetalle = () => {
   const { id } = useParams();
+  const { user } = useUserContext();
   const [restaurante, setRestaurante] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,8 +34,7 @@ const RestauranteDetalle = () => {
   }, [id]);
 
   const handleReviewSubmit = (newReview) => {
-    // Actualizar la lista de reseñas con la nueva reseña
-    setReviews([newReview, ...reviews]);
+    setReviews((prevReviews) => [newReview, ...prevReviews]);
   };
 
   if (loading)
@@ -42,7 +43,6 @@ const RestauranteDetalle = () => {
   if (!restaurante)
     return <p className="text-center mt-5 fs-4 text-danger">Restaurant not found</p>;
 
-  // Si no hay imagen del restaurante, usar la imagen de 'The Spoon'
   const imageSrc = restaurante.imagen ? restaurante.imagen : theSpoonImage;
 
   return (
@@ -60,7 +60,11 @@ const RestauranteDetalle = () => {
           <p className="text-center text-secondary">{restaurante.location}</p>
           <p className="card-text text-center mt-3">{restaurante.description}</p>
           <div className="text-center mt-4">
-            <Link to="/reservations" className="btn btn-success">
+            <Link
+              to="/reservations"
+              className="btn btn-success"
+              state={{ restaurant: restaurante }}
+            >
               🏷️ Reservar
             </Link>
           </div>
@@ -69,11 +73,14 @@ const RestauranteDetalle = () => {
               ← Return
             </Link>
           </div>
-
-          {/* Sección de Reseñas */}
           <div className="mt-5">
             <h3 className="text-center">Reviews</h3>
-            <ReviewForm restaurantId={id} onReviewSubmit={handleReviewSubmit} />
+            {/* Solo mostramos el formulario de reseñas si el usuario está logueado */}
+            {user ? (
+              <ReviewForm restaurantId={id} onReviewSubmit={handleReviewSubmit} />
+            ) : (
+              <p className="text-center">Inicia sesión para dejar un review.</p>
+            )}
             {reviews.length > 0 ? (
               <ul className="list-group">
                 {reviews.map((review) => (
@@ -84,7 +91,9 @@ const RestauranteDetalle = () => {
                 ))}
               </ul>
             ) : (
-              <p className="text-center text-muted">No reviews available for this restaurant.</p>
+              <p className="text-center text-muted">
+                No reviews available for this restaurant.
+              </p>
             )}
           </div>
         </div>
