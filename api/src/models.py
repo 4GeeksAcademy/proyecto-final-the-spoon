@@ -81,4 +81,5 @@ class Reservations(db.Model):
     id: int = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
     user_id: int = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
     restaurant_id: int = db.Column(db.Integer, ForeignKey('restaurant.id'), nullable=False)
+    people: int = db.Column(db.Integer, nullable=False)
     date: str = db.Column(db.DateTime, nullable=False)

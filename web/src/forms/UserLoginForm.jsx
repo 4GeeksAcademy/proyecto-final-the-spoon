@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/User";
 import { postLogin } from "../services/api/auth";
 
@@ -7,7 +6,6 @@ const UserLoginForm = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
   const { login } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
@@ -18,13 +16,11 @@ const UserLoginForm = ({ onClose }) => {
         setError(data.error);
         return;
       }
-      await login(email, password);
-      // Cierra el modal si onClose está definido
+      // Llamamos a login sin redirigir (redirect = false)
+      await login(email, password, false);
       if (onClose) {
         onClose();
       }
-      // Opcional: redirige al feed de restaurantes
-      navigate("/feedrestaurantes");
     } catch (err) {
       console.error("Error en login:", err);
       setError("Error al conectar con el servidor.");

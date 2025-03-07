@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import theSpoonImage from '../assets/The Spoon.png';
+import theSpoonImage from "../assets/The Spoon.png";
 import ReviewForm from "../forms/ReviewForm";
+import UserLoginForm from "../forms/UserLoginForm";
+import ReservationForm from "../forms/ReservationForm";
 import { baseUrl } from "../services/api/fetch";
 import { useUserContext } from "../context/User";
 
 const RestauranteDetalle = () => {
   const { id } = useParams();
-  const { user } = useUserContext();
+  const { user, addReservation, getReservations } = useUserContext();
   const [restaurante, setRestaurante] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  // Estado para controlar la visibilidad de los modales
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showReservationModal, setShowReservationModal] = useState(false);
+  // Estado local para reservas, si lo usas en este componente (para actualizar el listado)
+  const [localReservas, setLocalReservas] = useState([]);
 
   useEffect(() => {
     // Cargar detalles del restaurante
@@ -33,13 +41,33 @@ const RestauranteDetalle = () => {
       .catch((error) => console.error("Error al cargar reseñas:", error));
   }, [id]);
 
+  // Función para agregar una reserva y actualizar el listado
+  const handleAddReservation = async (newReservation) => {
+    try {
+      await addReservation(user.id, newReservation);
+      alert("Reserva completada con éxito");
+      const updatedReservations = await getReservations(user.id);
+      setLocalReservas(updatedReservations);
+    } catch (error) {
+      console.error("Error al agregar reserva:", error);
+    }
+  };
+
   const handleReviewSubmit = (newReview) => {
     setReviews((prevReviews) => [newReview, ...prevReviews]);
   };
 
+  // Al hacer clic en "Reservar"
+  const handleReservarClick = () => {
+    if (user && user.id) {
+      setShowReservationModal(true);
+    } else {
+      setShowLoginModal(true);
+    }
+  };
+
   if (loading)
     return <p className="text-center mt-5 fs-4 text-primary">Loading details...</p>;
-
   if (!restaurante)
     return <p className="text-center mt-5 fs-4 text-danger">Restaurant not found</p>;
 
@@ -47,6 +75,36 @@ const RestauranteDetalle = () => {
 
   return (
     <div className="container">
+      {/* Modal de Login */}
+      <Modal show={showLoginModal} onHide={() => setShowLoginModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Inicia sesión</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <UserLoginForm
+            onClose={() => {
+              setShowLoginModal(false);
+              // Tras login exitoso, abre el modal de reserva
+              setShowReservationModal(true);
+            }}
+          />
+        </Modal.Body>
+      </Modal>
+
+      {/* Modal de Reserva */}
+      <Modal show={showReservationModal} onHide={() => setShowReservationModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Hacer Reserva</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ReservationForm
+            onClose={() => setShowReservationModal(false)}
+            restaurant={restaurante}
+            onSubmit={handleAddReservation}
+          />
+        </Modal.Body>
+      </Modal>
+
       <div className="card shadow-lg">
         <img
           src={imageSrc}
@@ -60,13 +118,9 @@ const RestauranteDetalle = () => {
           <p className="text-center text-secondary">{restaurante.location}</p>
           <p className="card-text text-center mt-3">{restaurante.description}</p>
           <div className="text-center mt-4">
-            <Link
-              to="/reservations"
-              className="btn btn-success"
-              state={{ restaurant: restaurante }}
-            >
+            <button className="btn btn-success" onClick={handleReservarClick}>
               🏷️ Reservar
-            </Link>
+            </button>
           </div>
           <div className="text-center mt-4">
             <Link to="/" className="btn btn-outline-primary">
@@ -75,14 +129,15 @@ const RestauranteDetalle = () => {
           </div>
           <div className="mt-5">
             <h3 className="text-center">Reviews</h3>
-            {/* Solo mostramos el formulario de reseñas si el usuario está logueado */}
-            {user ? (
+            {user && user.id ? (
               <ReviewForm restaurantId={id} onReviewSubmit={handleReviewSubmit} />
             ) : (
-              <p className="text-center">Inicia sesión para dejar un review.</p>
+              <div className="text-center">
+                <p>Inicia sesión para dejar un review.</p>
+              </div>
             )}
             {reviews.length > 0 ? (
-              <ul className="list-group">
+              <ul className="list-group1">
                 {reviews.map((review) => (
                   <li key={review.id} className="list-group-item">
                     <p><strong>Rating:</strong> {review.rating}</p>

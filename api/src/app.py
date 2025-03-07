@@ -348,12 +348,30 @@ def manage_user_reservations(user_id):
     if request.method == 'GET':
         # Retrieve all reservations of a user
         reservations = Reservations.query.filter_by(user_id=user_id).all()
-        return jsonify(reservations), 200
+        if not reservations:
+            return jsonify({"error": "No reservations found"}), 404
 
+        reservations_data = []
+        for reservation in reservations:
+            restaurant = Restaurant.query.get(reservation.restaurant_id)
+        
+            reservations_data.append({
+                "id": reservation.id,
+                "date": reservation.date.strftime("%Y-%m-%d %H:%M:%S"),
+                "people": reservation.people,
+                "restaurant": {
+                    "id": restaurant.id,
+                    "name": restaurant.name,
+                    "location": restaurant.location
+                }
+            })
+
+        return jsonify(reservations_data), 200
+    
     elif request.method == 'POST':
         # Create a new reservation
         data = request.get_json()
-        required_fields = {"restaurant_id", "date","numeroPersonas"}
+        required_fields = {"restaurant_id", "date", "people"}
 
         if not all(field in data for field in required_fields):
             return jsonify({"error": "Missing required fields"}), 400
@@ -367,7 +385,7 @@ def manage_user_reservations(user_id):
             user_id=user_id,
             restaurant_id=data["restaurant_id"],
             date=reservation_date,
-            numeroPersonas=data["numeroPersonas"]
+            people=data["people"]
         )
 
         db.session.add(new_reservation)

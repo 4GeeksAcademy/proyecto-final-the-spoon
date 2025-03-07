@@ -103,7 +103,7 @@ const ReviewForm = ({ restaurantId, onReviewSubmit }) => {
       <h2>Leave a review</h2>
       <div className="user-info">
         <p>
-          <strong>User:</strong> {user.name}
+          <strong>User:</strong> {user.username}
         </p>
       </div>
       <form onSubmit={handleSubmit} className="review-form">

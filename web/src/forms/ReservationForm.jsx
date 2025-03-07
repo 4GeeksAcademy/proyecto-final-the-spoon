@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import { es } from "date-fns/locale/es";
-import { useLocation } from "react-router-dom";
-import { useUserContext } from "../context/User";  // Importamos el contexto para obtener el user
+import { useLocation, useParams } from "react-router-dom";
+import { useUserContext } from "../context/User";
 import { format } from "date-fns";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -12,13 +12,14 @@ import "../styles/ReservationForm.css";
 registerLocale("es", es);
 
 const ReservationForm = ({
+  restaurant: restaurantProp, // Se recibe la prop con los datos del restaurante
   onSubmit = (reservationData) =>
     console.log("Reserva recibida (default):", reservationData),
+  onClose,
 }) => {
-  // Extraemos el restaurante desde el state de la navegación
+  // Se intenta obtener el restaurante de la prop o de location.state
   const location = useLocation();
-  const restaurant = location.state?.restaurant;
-  // Obtenemos el user del contexto
+  const restaurant = restaurantProp || location.state?.restaurant;
   const { user } = useUserContext();
 
   const [people, setPeople] = useState(1);
@@ -40,15 +41,18 @@ const ReservationForm = ({
       return;
     }
     const formattedDate = format(startDate, "yyyy-MM-dd HH:mm:ss");
-    // Construir el payload con los nombres de campos que espera el backend:
     const payload = {
-      restaurant_id: restaurant.id, 
+      user_id: user.id,
+      restaurant_id: restaurant.id,
       date: formattedDate,
-      numeroPersonas: people,
-      user_id: user.id,  // Esto asocia la reserva al usuario (por ejemplo, 5)
+      people: Number(people)
     };
     console.log("Payload enviado:", payload);
     onSubmit(payload);
+    alert("Reserva completada con éxito");
+    if (onClose) {
+      onClose();
+    }
     setPeople(1);
     setStartDate(new Date());
   };
@@ -59,7 +63,6 @@ const ReservationForm = ({
       <form className="reservation-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Restaurant:</label>
-          {/* Mostramos el nombre del restaurante de forma fija */}
           <p className="input-field">
             {restaurant ? restaurant.name : "Restaurante desconocido"}
           </p>
