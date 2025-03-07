@@ -1,8 +1,9 @@
-import {fetchWrapper, userReviewsUrl} from './fetch'; // Asegúrate de importar fetchWrapper
+import {fetchWrapper} from './fetch'; // Asegúrate de importar fetchWrapper
+import { baseUrl } from './fetch';
 
 export const getReviews = async (userId) => {
   try {
-    const response = await fetchWrapper(userReviewsUrl);
+    const response = await fetchWrapper(`${baseUrl}users/${userId}/reviews`);
     return response; // Retornamos la respuesta que viene de la API
   } catch (error) {
     console.error(error);
@@ -10,35 +11,27 @@ export const getReviews = async (userId) => {
   }
 };
 
-export const addReview = async (userId, reviewData) => {
+export const addReview = async (restaurantId, reviewData) => {
   try {
-    const response = await fetchWrapper(`/api/reviews/${userId}`, {
+    const response = await fetchWrapper(`${baseUrl}restaurants/${restaurantId}/reviews`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(reviewData),
     });
-    return response; // Retornamos la respuesta que viene de la API
+    return response;
   } catch (error) {
     console.error(error);
-    throw error; // Propagamos el error para que pueda manejarse más arriba
+    throw error; 
   }
 };
 
-export const updateReview = async (reviewId, updatedData) => {
-  try {
-    const response = await fetchWrapper(`/api/reviews/${reviewId}`, {
-      method: 'PUT',
-      body: JSON.stringify(updatedData),
-    });
-    return response; // Retornamos la respuesta que viene de la API
-  } catch (error) {
-    console.error(error);
-    throw error; // Propagamos el error para que pueda manejarse más arriba
-  }
-};
+
 
 export const deleteReview = async (reviewId) => {
   try {
-    const response = await fetchWrapper(`/api/reviews/${reviewId}`, {
+    const response = await fetchWrapper(`${baseUrl}reviews/${reviewId}`, {
       method: 'DELETE',
     });
     return response; // Retornamos la respuesta que viene de la API

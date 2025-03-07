@@ -353,7 +353,7 @@ def manage_user_reservations(user_id):
     elif request.method == 'POST':
         # Create a new reservation
         data = request.get_json()
-        required_fields = {"restaurant_id", "date"}
+        required_fields = {"restaurant_id", "date","numeroPersonas"}
 
         if not all(field in data for field in required_fields):
             return jsonify({"error": "Missing required fields"}), 400
@@ -366,7 +366,8 @@ def manage_user_reservations(user_id):
         new_reservation = Reservations(
             user_id=user_id,
             restaurant_id=data["restaurant_id"],
-            date=reservation_date
+            date=reservation_date,
+            numeroPersonas=data["numeroPersonas"]
         )
 
         db.session.add(new_reservation)

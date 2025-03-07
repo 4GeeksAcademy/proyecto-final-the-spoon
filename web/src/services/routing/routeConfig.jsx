@@ -6,9 +6,7 @@ import RestauranteDetalle from "../../pages/RestauranteDetalle";
 import ReservationForm from "../../forms/ReservationForm";
 import ReviewForm from "../../forms/ReviewForm";
 import Datos from "../../pages/Datos";
-import Favoritos from "../../pages/Favoritos";
 import Reservas from "../../pages/Reservas";
-import Reviews from "../../pages/Reviews";
 import UserDashboard from "../../pages/UserDashboard";
 import AddRestaurant from "../../forms/AddRestaurant";
 
@@ -50,16 +48,7 @@ export const guardedRoutesConfig = [
     path: "/dasboard-data",  // Usa :id en lugar de `${user.id}`
     component: <Datos />,
   },
-  {
-    name: "Favoritos",
-    path: "/users/:id/favorites",  // Usa :id en lugar de `${user.id}`
-    component: <Favoritos />,
-  },
-  {
-    name: "Reviews",
-    path: "/users/:id/reviews",  // Usa :id en lugar de `${user.id}`
-    component: <Reviews />,
-  },
+
   {
     name: "Reservas",
     path: "/users/:id/reservations",  // Usa :id en lugar de `${user.id}`

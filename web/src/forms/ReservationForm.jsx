@@ -2,13 +2,25 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import { es } from "date-fns/locale/es";
+import { useLocation } from "react-router-dom";
+import { useUserContext } from "../context/User";  // Importamos el contexto para obtener el user
+import { format } from "date-fns";
+
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/ReservationForm.css";
 
 registerLocale("es", es);
 
-const ReservationForm = ({ restaurants, onSubmit }) => {
-  const [selectedRestaurant, setSelectedRestaurant] = useState("");
+const ReservationForm = ({
+  onSubmit = (reservationData) =>
+    console.log("Reserva recibida (default):", reservationData),
+}) => {
+  // Extraemos el restaurante desde el state de la navegación
+  const location = useLocation();
+  const restaurant = location.state?.restaurant;
+  // Obtenemos el user del contexto
+  const { user } = useUserContext();
+
   const [people, setPeople] = useState(1);
   const [startDate, setStartDate] = useState(new Date());
 
@@ -19,12 +31,24 @@ const ReservationForm = ({ restaurants, onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!selectedRestaurant) {
-      alert("Por favor, selecciona un restaurante.");
+    if (!restaurant) {
+      alert("No se encontró el restaurante.");
       return;
     }
-    onSubmit({ restaurante: selectedRestaurant, fecha: startDate, numeroPersonas: people });
-    setSelectedRestaurant("");
+    if (!user) {
+      alert("Usuario no identificado.");
+      return;
+    }
+    const formattedDate = format(startDate, "yyyy-MM-dd HH:mm:ss");
+    // Construir el payload con los nombres de campos que espera el backend:
+    const payload = {
+      restaurant_id: restaurant.id, 
+      date: formattedDate,
+      numeroPersonas: people,
+      user_id: user.id,  // Esto asocia la reserva al usuario (por ejemplo, 5)
+    };
+    console.log("Payload enviado:", payload);
+    onSubmit(payload);
     setPeople(1);
     setStartDate(new Date());
   };
@@ -35,19 +59,10 @@ const ReservationForm = ({ restaurants, onSubmit }) => {
       <form className="reservation-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Restaurant:</label>
-          <select
-            className="input-field"
-            value={selectedRestaurant}
-            onChange={(e) => setSelectedRestaurant(e.target.value)}
-            required
-          >
-            <option value="">Choose a restaurant</option>
-            {restaurants.map((restaurant) => (
-              <option key={restaurant.id} value={restaurant.name}>
-                {restaurant.name}
-              </option>
-            ))}
-          </select>
+          {/* Mostramos el nombre del restaurante de forma fija */}
+          <p className="input-field">
+            {restaurant ? restaurant.name : "Restaurante desconocido"}
+          </p>
         </div>
         <div className="form-group">
           <label>Number of persons:</label>

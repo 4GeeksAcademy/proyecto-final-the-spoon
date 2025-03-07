@@ -1,39 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { UserContext } from "../context/User"; 
-import { postLogin } from "../services/api/auth"; // Importa el contexto de usuario
+import { UserContext } from "../context/User";
+import { postLogin } from "../services/api/auth";
 
-const UserLoginForm = ({ setShowModal }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+const UserLoginForm = ({ onClose }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
-  
   const { login } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const data = await postLogin(email, password);
-
       if (data.error) {
-        setError(data.error); 
+        setError(data.error);
         return;
       }
-
-      login(email, password);
-      navigate(`/users/${data.user.id}`);
-
-      // Verifica que setShowModal es una función antes de usarla
-      if (typeof setShowModal === 'function') {
-        setShowModal(false);  // Cierra el modal después de hacer login
-      } else {
-        console.error('setShowModal no es una función');
+      await login(email, password);
+      // Cierra el modal si onClose está definido
+      if (onClose) {
+        onClose();
       }
-
-    } catch (error) {
-      console.error("Error en login:", error);
+      // Opcional: redirige al feed de restaurantes
+      navigate("/feedrestaurantes");
+    } catch (err) {
+      console.error("Error en login:", err);
       setError("Error al conectar con el servidor.");
     }
   };
@@ -69,4 +62,5 @@ const UserLoginForm = ({ setShowModal }) => {
     </form>
   );
 };
+
 export default UserLoginForm;
