@@ -91,7 +91,7 @@ export const UserProvider = ({ children }) => {
       localStorage.removeItem("token");
       localStorage.removeItem("userId");
       setLoading(false);
-      navigate('/login');
+      navigate("/");
     }).catch(() => {
       setLoading(false);
       setError("Error al cerrar sesión");
