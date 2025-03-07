@@ -8,11 +8,15 @@ export const getReservations = async (userId) => {
       headers: { "Accept": "application/json" },
     });
     if (!response.ok) {
+      if (response.status === 404) {
+        return []
+      } 
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
     return await response.json()
   } catch (error) {
-    throw error;
+    console.error ("Error al obtener reservas:", error)
+    return [];
   }
 };
   
