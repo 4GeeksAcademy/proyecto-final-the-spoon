@@ -26,6 +26,18 @@
       }
     }, [user, getReservations]);
 
+    const handleDeleteReservation = (reservationId) => {
+      // Llamamos a la función para eliminar la reserva
+      deleteReservation(user.id, reservationId)
+        .then(() => {
+          // Actualizamos el estado de reservas eliminando la reserva eliminada
+          setReservas((prevReservas) =>
+            prevReservas.filter((reserva) => reserva.id !== reservationId)
+          );
+        })
+        .catch((err) => console.error("Error al eliminar la reserva:", err));
+    };
+
     if (loading) return <p>Loading reservations...</p>;
     if (error) return <p>{error}</p>;
 
@@ -45,7 +57,7 @@
                 <p>Location: {reserva.restaurant.location}</p>
                 <p>Date: {reserva.date}</p>
                 <p>People: {reserva.people}</p>
-                <button onClick={() => deleteReservation(user.id, reserva.id)}>
+                <button onClick={() => handleDeleteReservation(reserva.id)}>
                   Delete
                 </button>
               </li>
