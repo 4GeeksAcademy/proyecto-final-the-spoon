@@ -78,7 +78,7 @@ const RestauranteDetalle = () => {
       {/* Modal de Login */}
       <Modal show={showLoginModal} onHide={() => setShowLoginModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Inicia sesión</Modal.Title>
+          <Modal.Title>Log in</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <UserLoginForm
@@ -94,7 +94,7 @@ const RestauranteDetalle = () => {
       {/* Modal de Reserva */}
       <Modal show={showReservationModal} onHide={() => setShowReservationModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Hacer Reserva</Modal.Title>
+          <Modal.Title>Book a reservation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ReservationForm
@@ -119,7 +119,7 @@ const RestauranteDetalle = () => {
           <p className="card-text text-center mt-3">{restaurante.description}</p>
           <div className="text-center mt-4">
             <button className="btn btn-success" onClick={handleReservarClick}>
-              🏷️ Reservar
+              🏷️ Reserve
             </button>
           </div>
           <div className="text-center mt-4">
@@ -133,7 +133,7 @@ const RestauranteDetalle = () => {
               <ReviewForm restaurantId={id} onReviewSubmit={handleReviewSubmit} />
             ) : (
               <div className="text-center">
-                <p>Inicia sesión para dejar un review.</p>
+                <p>Login to leave a review.</p>
               </div>
             )}
             {reviews.length > 0 ? (
