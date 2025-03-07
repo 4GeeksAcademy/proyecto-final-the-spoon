@@ -15,7 +15,7 @@ const ReservationForm = ({
   restaurant: restaurantProp, // Se recibe la prop con los datos del restaurante
   onSubmit = (reservationData) =>
     console.log("Reserva recibida (default):", reservationData),
-  onClose, // Función para cerrar el formulario/modal
+  onClose,
 }) => {
   // Se intenta obtener el restaurante de la prop o de location.state
   const location = useLocation();
@@ -45,7 +45,7 @@ const ReservationForm = ({
       user_id: user.id,
       restaurant_id: restaurant.id,
       date: formattedDate,
-      numeroPersonas: Number(people)
+      people: Number(people)
     };
     console.log("Payload enviado:", payload);
     onSubmit(payload);

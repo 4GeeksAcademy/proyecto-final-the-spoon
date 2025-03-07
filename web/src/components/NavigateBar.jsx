@@ -1,7 +1,7 @@
-import React, { useState, navigate } from 'react';
+import React, { useState } from 'react';
 import { useContext } from 'react';
 import { UserContext } from '../context/User';  // Importa el contexto de usuario
-import { Link } from 'react-router-dom';  // Importa Link de react-router-dom
+import { Link, useNavigate } from 'react-router-dom';  // Importa Link de react-router-dom
 import { Navbar, Nav, Container, Modal } from 'react-bootstrap';
 import UserLoginForm from '../forms/UserLoginForm';
 import UserRegisterForm from '../forms/UserRegisterForm';  // No lo quitamos
@@ -10,6 +10,7 @@ import logo from '../assets/The Spoon.png'
 const NavigateBar = () => {
   const [showModal, setShowModal] = useState(false);
   const [isLoginModal, setIsLoginModal] = useState(true);
+  const navigate = useNavigate();
 
   const { user, logout } = useContext(UserContext);  // Accede al contexto de usuario
   const isAuthenticated = !!user.id;  // Verifica si hay un usuario logueado (por la existencia de user.id)
@@ -69,7 +70,7 @@ const NavigateBar = () => {
         <Modal.Body>
           {isLoginModal ? (
             <UserLoginForm onClose={() => {
-              handleClose();  // Esto debe poner showModal en false
+              handleClose();  
               navigate("/feedrestaurantes");
             }} />
           ) : (

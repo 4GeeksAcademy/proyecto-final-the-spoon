@@ -2,7 +2,7 @@ import { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { postLogin, postLogout, postRegister } from "../services/api/auth";
 import { postRestaurant, getUserRestaurants } from "../services/api/restaurant";
-import { addReservation as addReservationData, getReservations as getReservationsData, deleteReservation as deleteReservationData, updateReservation as updateReservationData } from "../services/api/reservations";
+import { addReservation as addReservationData, getReservations as getReservationsData, deleteReservation as deleteReservationData} from "../services/api/reservations";
 import { getReviews as getReviewsData, addReview as addReviewData, deleteReview as deleteReviewData } from "../services/api/reviews";
 
 export const UserContext = createContext({
@@ -23,7 +23,6 @@ export const UserContext = createContext({
   addReservation: () => { },
   getReservations: () => { },
   deleteReservation: () => { },
-  updateReservation: () => { },
   getReviews: () => { },
   addReview: () => { },
   deleteReview: () => { },
@@ -145,13 +144,12 @@ const login = (email, password, redirect = true) => {
       logout,
       register,
       addRestaurant,
-      removeRestaurant: (restaurantId) => setRestaurants((prevRestaurants) => prevRestaurants.filter(r => r.id !== restaurantId)),
+      deleteRestaurant: (restaurantId) => setRestaurants((prevRestaurants) => prevRestaurants.filter(r => r.id !== restaurantId)),
       updateRestaurant: (updatedRestaurant) => setRestaurants((prevRestaurants) => prevRestaurants.map(r => r.id === updatedRestaurant.id ? updatedRestaurant : r)),
       getUserRestaurants,
       addReservation: addReservationData,
       getReservations: getReservationsData,
-      deleteReservationData,
-      updateReservationData,
+      deleteReservation: deleteReservationData,
       getReviews: getReviewsData,
       addReviewData,
       deleteReviewData

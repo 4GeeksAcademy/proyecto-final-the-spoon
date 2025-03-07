@@ -134,13 +134,10 @@ const RestauranteDetalle = () => {
             ) : (
               <div className="text-center">
                 <p>Inicia sesión para dejar un review.</p>
-                <button className="btn btn-primary" onClick={() => setShowLoginModal(true)}>
-                  Iniciar sesión
-                </button>
               </div>
             )}
             {reviews.length > 0 ? (
-              <ul className="list-group">
+              <ul className="list-group1">
                 {reviews.map((review) => (
                   <li key={review.id} className="list-group-item">
                     <p><strong>Rating:</strong> {review.rating}</p>
