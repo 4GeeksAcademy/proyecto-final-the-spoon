@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Navbar, Nav, Container, Modal } from 'react-bootstrap';
-import UserLoginForm from '../forms/UserLoginForm';
-import UserRegisterForm from '../forms/UserRegisterForm';  // No lo quitamos
+import React, { useState, navigate } from 'react';
 import { useContext } from 'react';
 import { UserContext } from '../context/User';  // Importa el contexto de usuario
 import { Link } from 'react-router-dom';  // Importa Link de react-router-dom
+import { Navbar, Nav, Container, Modal } from 'react-bootstrap';
+import UserLoginForm from '../forms/UserLoginForm';
+import UserRegisterForm from '../forms/UserRegisterForm';  // No lo quitamos
 import logo from '../assets/The Spoon.png'
 
 const NavigateBar = () => {
